@@ -1,1 +1,271 @@
-# D-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление школами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+
+        .header {
+            background-color: #0078d7;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        .header .add-button {
+            background-color: white;
+            color: #0078d7;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .header .add-button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .search-bar {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td[contenteditable="true"] {
+            background-color: #f9f9f9;
+            cursor: text;
+        }
+
+        .highlight {
+            background-color: yellow;
+        }
+
+        .action-buttons {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .action-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .action-buttons .accept {
+            background-color: #0078d7;
+            color: white;
+        }
+
+        .action-buttons .accept:hover {
+            background-color: #005bb5;
+        }
+
+        .action-buttons .reject {
+            background-color: #d9534f;
+            color: white;
+        }
+
+        .action-buttons .reject:hover {
+            background-color: #c9302c;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .status.accepted {
+            color: green;
+        }
+
+        .status.rejected {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Управление школами</h1>
+        <button class="add-button" onclick="createApplication()">+</button>
+    </div>
+    <div class="search-bar">
+        <label for="searchInput">Поиск по ID:</label>
+        <input type="text" id="searchInput" placeholder="Введите ID" oninput="searchApplication()">
+    </div>
+    <table id="applicationsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Полное название</th>
+                <th>БИН/ИНН</th>
+                <th>Местоположение</th>
+                <th>Телефон</th>
+                <th>Почта</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Applications will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <div class="action-buttons" id="actionButtons">
+        <button class="accept" onclick="acceptApplication()">Принять</button>
+        <button class="reject" onclick="rejectApplication()">Отклонить</button>
+    </div>
+
+    <script>
+        let applicationId = 1;
+
+        function createApplication() {
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            const row = document.createElement("tr");
+
+            row.innerHTML = `
+                <td>${applicationId++}</td>
+                <td contenteditable="true">Название ${applicationId}</td>
+                <td contenteditable="true">Полное название ${applicationId}</td>
+                <td contenteditable="true">123456789</td>
+                <td contenteditable="true">Город</td>
+                <td contenteditable="true">+123456789</td>
+                <td contenteditable="true">example@mail.com</td>
+                <td class="status"></td>
+            `;
+
+            row.addEventListener("click", () => showActionButtons(row));
+            table.appendChild(row);
+            saveApplications();
+        }
+
+        function showActionButtons(row) {
+            const actionButtons = document.getElementById("actionButtons");
+            actionButtons.style.display = "block";
+            actionButtons.dataset.selectedRowIndex = row.rowIndex - 1;
+        }
+
+        function acceptApplication() {
+            const selectedRowIndex = document.getElementById("actionButtons").dataset.selectedRowIndex;
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            const row = table.rows[selectedRowIndex];
+            const statusCell = row.querySelector(".status");
+            statusCell.textContent = "Принята";
+            statusCell.classList.add("accepted");
+            saveApplications();
+            hideActionButtons();
+        }
+
+        function rejectApplication() {
+            const selectedRowIndex = document.getElementById("actionButtons").dataset.selectedRowIndex;
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            const row = table.rows[selectedRowIndex];
+            const statusCell = row.querySelector(".status");
+            statusCell.textContent = "Отклонена";
+            statusCell.classList.add("rejected");
+            saveApplications();
+            hideActionButtons();
+        }
+
+        function hideActionButtons() {
+            const actionButtons = document.getElementById("actionButtons");
+            actionButtons.style.display = "none";
+            delete actionButtons.dataset.selectedRowIndex;
+        }
+
+        function saveApplications() {
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            const rows = Array.from(table.rows);
+            const applications = rows.map(row => ({
+                id: row.cells[0].textContent,
+                shortName: row.cells[1].textContent,
+                fullName: row.cells[2].textContent,
+                binInn: row.cells[3].textContent,
+                location: row.cells[4].textContent,
+                phone: row.cells[5].textContent,
+                email: row.cells[6].textContent,
+                status: row.cells[7].textContent
+            }));
+            localStorage.setItem("applications", JSON.stringify(applications));
+        }
+
+        function loadApplications() {
+            const applications = JSON.parse(localStorage.getItem("applications")) || [];
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            applications.forEach(app => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td contenteditable="true">${app.shortName}</td>
+                    <td contenteditable="true">${app.fullName}</td>
+                    <td contenteditable="true">${app.binInn}</td>
+                    <td contenteditable="true">${app.location}</td>
+                    <td contenteditable="true">${app.phone}</td>
+                    <td contenteditable="true">${app.email}</td>
+                    <td class="status ${app.status === "Принята" ? "accepted" : app.status === "Отклонена" ? "rejected" : ""}">${app.status}</td>
+                `;
+                row.addEventListener("click", () => showActionButtons(row));
+                table.appendChild(row);
+            });
+            applicationId = applications.length > 0 ? parseInt(applications[applications.length - 1].id) + 1 : 1;
+        }
+
+        function searchApplication() {
+            const searchInput = document.getElementById("searchInput").value.trim();
+            const table = document.getElementById("applicationsTable").querySelector("tbody");
+            const rows = Array.from(table.rows);
+
+            rows.forEach(row => {
+                row.classList.remove("highlight");
+                if (row.cells[0].textContent === searchInput) {
+                    row.classList.add("highlight");
+                    row.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+            });
+        }
+
+        window.onload = loadApplications;
+    </script>
+</body>
+</html>
