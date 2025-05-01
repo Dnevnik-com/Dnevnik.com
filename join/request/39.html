@@ -184,3 +184,31 @@
     </script>
 </body>
 </html>
+
+<script>
+    function handleSubmit(event) {
+        event.preventDefault(); // Останавливаем стандартное поведение формы
+
+        const form = document.getElementById('application-form');
+        const formData = new FormData(form);
+
+        // Отправка данных на сервер
+        fetch('https://dnevnik-com.github.io/Dnevnik.com/ticket/school', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                // Показать сообщение об успехе
+                document.getElementById('success-message').style.display = 'block';
+                form.style.display = 'none';
+            } else {
+                alert('Ошибка отправки заявки. Попробуйте снова.');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка подключения к серверу.');
+        });
+    }
+</script>
