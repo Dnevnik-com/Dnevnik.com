@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма заявки</title>
+    <style>
+        /* Общий стиль для страницы */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #7f7fd5, #86a8e7, #91eae4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Контейнер формы */
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            width: 400px;
+        }
+
+        /* Заголовок формы */
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Поля ввода */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        /* Красная звездочка для обязательных полей */
+        .form-group label .required {
+            color: red;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: #7f7fd5;
+            outline: none;
+            box-shadow: 0 0 5px rgba(127, 127, 213, 0.5);
+        }
+
+        /* Кнопка отправки */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #7f7fd5, #86a8e7);
+            border: none;
+            padding: 10px 15px;
+            font-size: 18px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #86a8e7, #91eae4);
+        }
+
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Стилизованный блок для успешного сообщения */
+        .success-message {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            color: green;
+            font-size: 18px;
+            animation: popUp 0.5s ease-in-out;
+        }
+
+        /* Анимация галочки */
+        .success-message .checkmark {
+            font-size: 24px;
+        }
+
+        @keyframes popUp {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Форма заявки</h2>
+        <form id="application-form" action="https://dnevnik-com.github.io/Dnevnik.com/ticket/school" method="POST" onsubmit="handleSubmit(event)">
+            <!-- Поле Название -->
+            <div class="form-group">
+                <label for="name">Название <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <!-- Поле Полное название -->
+            <div class="form-group">
+                <label for="full-name">Полное название <span class="required">*</span></label>
+                <input type="text" id="full-name" name="full-name" required>
+            </div>
+
+            <!-- Поле БИН/ИНН -->
+            <div class="form-group">
+                <label for="bin">БИН/ИНН <span class="required">*</span></label>
+                <input type="text" id="bin" name="bin" required>
+            </div>
+
+            <!-- Поле Местоположение -->
+            <div class="form-group">
+                <label for="location">Местоположение <span class="required">*</span></label>
+                <input type="text" id="location" name="location" required>
+            </div>
+
+            <!-- Поле Телефон -->
+            <div class="form-group">
+                <label for="phone">Телефон <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <!-- Поле Почта -->
+            <div class="form-group">
+                <label for="email">Почта <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <!-- Кнопка отправить -->
+            <button type="submit" class="submit-btn">Отправить заявку</button>
+        </form>
+
+        <!-- Успешное сообщение -->
+        <div id="success-message" class="success-message">
+            <span class="checkmark">✔</span> Заявка успешно отправлена!
+        </div>
+    </div>
+
+    <script>
+        function handleSubmit(event) {
+            event.preventDefault(); // Останавливаем стандартное поведение формы
+
+            // Имитируем успешную отправку
+            const form = document.getElementById('application-form');
+            const successMessage = document.getElementById('success-message');
+
+            // Скрываем форму и показываем сообщение об успехе
+            form.style.display = 'none';
+            successMessage.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
