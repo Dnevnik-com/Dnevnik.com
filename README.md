@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,262 +10,284 @@
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
+            color: #333;
         }
 
-        .header {
+        header {
             background-color: #0078d7;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
         }
 
-        .header h1 {
-            font-size: 20px;
+        header h1 {
             margin: 0;
+            font-size: 24px;
         }
 
-        .header .add-button {
-            background-color: white;
-            color: #0078d7;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
+        .content {
+            padding: 20px;
         }
 
-        .header .add-button:hover {
-            background-color: #e6e6e6;
-        }
-
-        .search-bar {
-            margin: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-bar input {
-            padding: 8px;
-            font-size: 14px;
+        .form-container {
+            background-color: #fff;
             border: 1px solid #ddd;
             border-radius: 5px;
-            width: 200px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container input, .form-container button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #0078d7;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #005bb5;
+        }
+
+        .table-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        th, td {
+        table th, table td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: left;
         }
 
-        th {
-            background-color: #f2f2f2;
+        table th {
+            background-color: #f1f1f1;
         }
 
-        td[contenteditable="true"] {
-            background-color: #f9f9f9;
-            cursor: text;
-        }
-
-        .highlight {
-            background-color: yellow;
-        }
-
-        .action-buttons {
-            display: none;
-            margin-top: 10px;
-        }
-
-        .action-buttons button {
-            padding: 10px 20px;
+        .delete-button, .edit-button {
+            background-color: #ff4d4d;
+            color: #fff;
             border: none;
+            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-            margin-right: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        .action-buttons .accept {
+        .edit-button {
             background-color: #0078d7;
-            color: white;
         }
 
-        .action-buttons .accept:hover {
+        .delete-button:hover {
+            background-color: #e60000;
+        }
+
+        .edit-button:hover {
             background-color: #005bb5;
         }
 
-        .action-buttons .reject {
-            background-color: #d9534f;
-            color: white;
-        }
-
-        .action-buttons .reject:hover {
-            background-color: #c9302c;
-        }
-
-        .status {
-            font-weight: bold;
-        }
-
-        .status.accepted {
-            color: green;
-        }
-
-        .status.rejected {
-            color: red;
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
+    <header>
         <h1>Управление школами</h1>
-        <button class="add-button" onclick="createApplication()">+</button>
-    </div>
-    <div class="search-bar">
-        <label for="searchInput">Поиск по ID:</label>
-        <input type="text" id="searchInput" placeholder="Введите ID" oninput="searchApplication()">
-    </div>
-    <table id="applicationsTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Название</th>
-                <th>Полное название</th>
-                <th>БИН/ИНН</th>
-                <th>Местоположение</th>
-                <th>Телефон</th>
-                <th>Почта</th>
-                <th>Статус</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Applications will be dynamically added here -->
-        </tbody>
-    </table>
+    </header>
 
-    <div class="action-buttons" id="actionButtons">
-        <button class="accept" onclick="acceptApplication()">Принять</button>
-        <button class="reject" onclick="rejectApplication()">Отклонить</button>
+    <div class="content">
+        <!-- Форма для добавления и редактирования заявок -->
+        <div class="form-container">
+            <h3 id="form-title">Добавить заявку</h3>
+            <input type="text" id="schoolName" placeholder="Название школы" required>
+            <input type="text" id="location" placeholder="Населённый пункт" required>
+            <input type="text" id="type" placeholder="Тип ОО" required>
+            <input type="datetime-local" id="createdAt" placeholder="Дата создания" required>
+            <button onclick="saveSchool()">Сохранить</button>
+        </div>
+
+        <!-- Таблица со школами -->
+        <div class="table-container">
+            <table id="schoolsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Населённый пункт</th>
+                        <th>Тип ОО</th>
+                        <th>Создана</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные будут загружены из localStorage -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="message" class="message">
+            Письмо по удалению Организации отправлено
+        </div>
     </div>
 
     <script>
-        let applicationId = 1;
+        let schoolId = 60773; // Начальный ID для новых школ
+        let editIndex = null; // Индекс редактируемой строки
 
-        function createApplication() {
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            const row = document.createElement("tr");
+        // Инициализация данных
+        const initialData = [
+            {
+                id: 60770,
+                name: 'Бизнес-школа "Founderschool"',
+                location: 'Кокшетау (Акмолинская область, Казахстан)',
+                type: 'Дополнительное образование детей',
+                createdAt: '2022-08-24T09:32'
+            },
+            {
+                id: 60771,
+                name: 'ZIYATKER TURAN',
+                location: 'Карасуйский район (Шымкент, Казахстан)',
+                type: 'Общеобразовательная организация',
+                createdAt: '2022-08-17T04:06'
+            },
+            {
+                id: 60772,
+                name: 'ТОО "Нұр Бала - 2021"',
+                location: 'Аул Когершин (Келесский район, Туркестанская область)',
+                type: 'Общеобразовательная организация',
+                createdAt: '2022-08-15T04:07'
+            }
+        ];
 
-            row.innerHTML = `
-                <td>${applicationId++}</td>
-                <td contenteditable="true">Название ${applicationId}</td>
-                <td contenteditable="true">Полное название ${applicationId}</td>
-                <td contenteditable="true">123456789</td>
-                <td contenteditable="true">Город</td>
-                <td contenteditable="true">+123456789</td>
-                <td contenteditable="true">example@mail.com</td>
-                <td class="status"></td>
-            `;
-
-            row.addEventListener("click", () => showActionButtons(row));
-            table.appendChild(row);
-            saveApplications();
+        // Загрузка данных из localStorage
+        function loadSchools() {
+            const storedData = localStorage.getItem('schools');
+            return storedData ? JSON.parse(storedData) : initialData;
         }
 
-        function showActionButtons(row) {
-            const actionButtons = document.getElementById("actionButtons");
-            actionButtons.style.display = "block";
-            actionButtons.dataset.selectedRowIndex = row.rowIndex - 1;
+        // Сохранение данных в localStorage
+        function saveSchools(data) {
+            localStorage.setItem('schools', JSON.stringify(data));
         }
 
-        function acceptApplication() {
-            const selectedRowIndex = document.getElementById("actionButtons").dataset.selectedRowIndex;
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            const row = table.rows[selectedRowIndex];
-            const statusCell = row.querySelector(".status");
-            statusCell.textContent = "Принята";
-            statusCell.classList.add("accepted");
-            saveApplications();
-            hideActionButtons();
-        }
+        // Отображение данных в таблице
+        function renderTable() {
+            const schools = loadSchools();
+            const tableBody = document.getElementById('schoolsTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Очистка таблицы
 
-        function rejectApplication() {
-            const selectedRowIndex = document.getElementById("actionButtons").dataset.selectedRowIndex;
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            const row = table.rows[selectedRowIndex];
-            const statusCell = row.querySelector(".status");
-            statusCell.textContent = "Отклонена";
-            statusCell.classList.add("rejected");
-            saveApplications();
-            hideActionButtons();
-        }
-
-        function hideActionButtons() {
-            const actionButtons = document.getElementById("actionButtons");
-            actionButtons.style.display = "none";
-            delete actionButtons.dataset.selectedRowIndex;
-        }
-
-        function saveApplications() {
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            const rows = Array.from(table.rows);
-            const applications = rows.map(row => ({
-                id: row.cells[0].textContent,
-                shortName: row.cells[1].textContent,
-                fullName: row.cells[2].textContent,
-                binInn: row.cells[3].textContent,
-                location: row.cells[4].textContent,
-                phone: row.cells[5].textContent,
-                email: row.cells[6].textContent,
-                status: row.cells[7].textContent
-            }));
-            localStorage.setItem("applications", JSON.stringify(applications));
-        }
-
-        function loadApplications() {
-            const applications = JSON.parse(localStorage.getItem("applications")) || [];
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            applications.forEach(app => {
-                const row = document.createElement("tr");
+            schools.forEach((school, index) => {
+                const row = tableBody.insertRow();
                 row.innerHTML = `
-                    <td>${app.id}</td>
-                    <td contenteditable="true">${app.shortName}</td>
-                    <td contenteditable="true">${app.fullName}</td>
-                    <td contenteditable="true">${app.binInn}</td>
-                    <td contenteditable="true">${app.location}</td>
-                    <td contenteditable="true">${app.phone}</td>
-                    <td contenteditable="true">${app.email}</td>
-                    <td class="status ${app.status === "Принята" ? "accepted" : app.status === "Отклонена" ? "rejected" : ""}">${app.status}</td>
+                    <td>${school.id}</td>
+                    <td>${school.name}</td>
+                    <td>${school.location}</td>
+                    <td>${school.type}</td>
+                    <td>${new Date(school.createdAt).toLocaleString()}</td>
+                    <td>
+                        <button class="edit-button" onclick="editSchool(${index})">Редактировать</button>
+                        <button class="delete-button" onclick="deleteSchool(${index})">Удалить</button>
+                    </td>
                 `;
-                row.addEventListener("click", () => showActionButtons(row));
-                table.appendChild(row);
             });
-            applicationId = applications.length > 0 ? parseInt(applications[applications.length - 1].id) + 1 : 1;
         }
 
-        function searchApplication() {
-            const searchInput = document.getElementById("searchInput").value.trim();
-            const table = document.getElementById("applicationsTable").querySelector("tbody");
-            const rows = Array.from(table.rows);
+        // Сохранение новой или редактируемой школы
+        function saveSchool() {
+            const name = document.getElementById('schoolName').value;
+            const location = document.getElementById('location').value;
+            const type = document.getElementById('type').value;
+            const createdAt = document.getElementById('createdAt').value;
 
-            rows.forEach(row => {
-                row.classList.remove("highlight");
-                if (row.cells[0].textContent === searchInput) {
-                    row.classList.add("highlight");
-                    row.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (name && location && type && createdAt) {
+                const schools = loadSchools();
+
+                if (editIndex !== null) {
+                    // Редактирование существующей школы
+                    schools[editIndex] = { ...schools[editIndex], name, location, type, createdAt };
+                    editIndex = null;
+                    document.getElementById('form-title').textContent = 'Добавить заявку';
+                } else {
+                    // Добавление новой школы
+                    schools.push({ id: schoolId++, name, location, type, createdAt });
                 }
-            });
+
+                saveSchools(schools);
+                renderTable();
+                clearForm();
+            } else {
+                alert('Пожалуйста, заполните все поля.');
+            }
         }
 
-        window.onload = loadApplications;
+        // Редактирование школы
+        function editSchool(index) {
+            const schools = loadSchools();
+            const school = schools[index];
+
+            document.getElementById('schoolName').value = school.name;
+            document.getElementById('location').value = school.location;
+            document.getElementById('type').value = school.type;
+            document.getElementById('createdAt').value = school.createdAt;
+            document.getElementById('form-title').textContent = 'Редактировать заявку';
+
+            editIndex = index;
+        }
+
+        // Удаление школы
+        function deleteSchool(index) {
+            const schools = loadSchools();
+            schools.splice(index, 1); // Удаление элемента из массива
+            saveSchools(schools); // Сохранение изменений
+            renderTable(); // Перерисовка таблицы
+            showMessage(); // Показ сообщения
+        }
+
+        // Очистка формы
+        function clearForm() {
+            document.getElementById('schoolName').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('type').value = '';
+            document.getElementById('createdAt').value = '';
+        }
+
+        // Показ сообщения
+        function showMessage() {
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000); // Скрыть сообщение через 3 секунды
+        }
+
+        // Инициализация страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+        });
     </script>
 </body>
 </html>
