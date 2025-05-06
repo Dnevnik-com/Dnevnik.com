@@ -1,505 +1,293 @@
 <!DOCTYPE html>
-<html>
-<head lang="ru">
-    <meta name="google" value="notranslate"/>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0"/>
-        <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <link rel="icon" href="https://static.dnevnik.ru/img/icons/favicon.ico" sizes="16x16 24x24 32x32 48x48 64x64" type="image/x-icon"/>
-        <link rel="shortcut icon" href="https://static.dnevnik.ru/img/icons/favicon.ico" sizes="16x16 24x24 32x32 48x48 64x64" type="image/x-icon"/>
-    
-        <!-- non-retina iPhone pre iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/57x57.png" sizes="57x57"/>
-        <!-- non-retina iPad pre iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/72x72.png" sizes="72x72"/>
-        <!-- non-retina iPad iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/76x76.png" sizes="76x76"/>
-        <!-- retina iPhone pre iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/114x114.png" sizes="114x114"/>
-        <!-- retina iPhone iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/120x120.png" sizes="120x120"/>
-        <!-- retina iPad pre iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/144x144.png" sizes="144x144"/>
-        <!-- retina iPad iOS 7 -->
-        <link rel="apple-touch-icon" href="https://static.dnevnik.ru/img/icons/favicons/apple/152x152.png" sizes="152x152"/>
-    
-        <!-- Windows 8 tile -->
-        <meta name="msapplication-TileImage" content="https://static.dnevnik.ru/img/icons/favicons/microsoft/144x144.png"/>
-        <meta name="msapplication-TileColor" content="#FFFFFF"/>
-        <meta name="application-name" content="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443;"/>
-    
-        <!-- IE11 tiles -->
-        <meta name="msapplication-square70x70logo" content="https://static.dnevnik.ru/img/icons/favicons/microsoft/70x70.png"/>
-        <meta name="msapplication-square150x150logo" content="https://static.dnevnik.ru/img/icons/favicons/microsoft/150x150.png"/>
-        <meta name="msapplication-wide310x150logo" content="https://static.dnevnik.ru/img/icons/favicons/microsoft/310x150.png"/>
-        <meta name="msapplication-square310x310logo" content="https://static.dnevnik.ru/img/icons/favicons/microsoft/310x310.png.png" />
-    
-    
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление школами</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
 
-    <title>&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443;</title>
+        header {
+            background-color: #0078d7;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
 
-    
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
 
-            <link rel="stylesheet" href="https://static.dnevnik.ru/assets/styles/main.min.ca6a1daa.css?v=ca6a1daa" media="all" type="text/css" />
-        <link rel="stylesheet" href="https://static.dnevnik.ru/styles/main/common.css?v=143157b6" media="all" type="text/css"/>
-        <link rel="stylesheet" href="https://static.dnevnik.ru/blocks/blocks.css?v=23313946" media="all" type="text/css" />
-    <link rel="stylesheet" href="https://static.dnevnik.ru/client/notifications.css?v=cd15f86a" type="text/css" />
+        .content {
+            padding: 20px;
+        }
 
-    
-<script type="text/javascript">var dnevnik = {"urls":{"domain":"dnevnik-com.github.io/Dnevnik.com","taskStateUrl":"https://dnevnik.ru/TaskStateHandler","moderate":null,"whiteList":["dnevnik.ru","mosreg.ru","microsoft.com","lego.com","surveymonkey.ru","surveymonkey.com","gosuslugi.ru","adfox.ru","facebook.com","ok.ru","twitter.com","instagram.com","apple.com","google.com","dnevnik.ru","youtube.com","youtu.be","research.net","csdnevnik.ru","globallab.org","yaklass.ru","foxford.ru","sberbank.ru","magnit-info.ru","letovo.ru","office.com","sharepoint.com","onenote.com","office365.com","magnitznaniy.ru","magnit.ru","wikipedia.org","vk.com","yandex.ru","mail.ru","google.ru","google.com","ok.ru","avito.ru","instagram.com","facebook.com","aliexpress.com","gismeteo.ru","rambler.ru","2gis.ru","fotostrana.ru","twitter.com","livejournal.com","lenta.ru","hh.ru","kinopoisk.ru","ria.ru","yadi.sk","pikabu.ru","booking.com","rbc.ru","twitch.tv","yandex.com","mosregtest.ru","imumk.ru","mfactory.club","analyticsapp.ru","skysmart.ru","skyeng.link","hotwheels-challenge.ru","go.skyeng.ru","skyeng.ru","doma.uchi.ru","uchi.ru","uchitel.club","eduko.app","teacher.eduko.ru","eduko.ru","eduko.page.link/","mosreg.statusapp.ru","http://mosreg.statusapp.ru","https://vk.cc/","https://dnevnik.clickmeeting.com/","dnevnik.clickmeeting.com","https://dnevnik.clickmeeting.com/dnevnik-zadaniya/register?utm_source=dnevnik","https://dnevnik.clickmeeting.com/dnevnik-zadaniya/register?utm_source=dnevnik&utm_medium=post&utm_campaign=1811","clickmeeting.com","dnevnik.statusapp.ru","statusapp.ru","дневник.рф","xn--b1addnkoc.xn--p1ai","https://hw.lecta.ru/","hw.lecta.ru","lecta.ru","https://tsenp.mob-edu.ru","https://sso.mob-edu.ru","tsenp.mob-edu.ru","mob-edu.ru","sso.mob-edu.ru","https://forms.yandex.ru/u/67ee2a06e010db53ef9c8917/?page=2","https://forms.yandex.ru","https://cp.99ballov.ru/user/dnevnik/test-provide","https://urok55.ru","urok55.ru","cp.99ballov.ru/user/dnevnik/test-provide"],"userCounters":"https://dnevnik.ru/counters","emailSettings":"https://dnevnik.ru/v2/user/settings?view=email","smilesSpriteUrl":"https://static.dnevnik.ru/images/sprites/emojione.sprites.svg","tinyMceBaseUrl":"https://static.dnevnik.ru/assets/scripts/vendors/tinymce","gaAutoLinkUrls":null,"adblockDummyUrl":"https://static.dnevnik.ru/images/banners/adblockDummies/dnevnikDummy.jpg"},"settings":{"yandexMetrikaIds":["17969140"],"yandexMetrikaСlickmapEnabled":false,"enableAdFoxZeroPixel":true,"yandexMetrikaId":"17969140","environmentPrefix":"","yandexMetrikaWebvisorEnabled":false},"fileUploadSettings":{"stateUrl":"https://content.dnevnik.ru/gettaskstatus","resultUrl":"https://content.dnevnik.ru/getresult","deleteFileUrl":"https://content.dnevnik.ru/delete","deleteFolderUrl":"https://content.dnevnik.ru/deletefolder","defaultFileSizeLimit":"2147483648"},"user":null,"auth":{"isAuthenticated":false,"updateInterval":600000,"loginUrl":"https://login.dnevnik.ru/auth","masterLoginUrl":null},"visitParams":{"__RedesignAbGroup2":"groupA"},"localizationSchoolType":null,"contextRegionUrl":""};</script>
+        .form-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-            <script type="text/javascript" src="https://static.dnevnik.ru/assets/scripts/modules/redesign.min.100721f5.js?v=100721f5"></script>
-    <script type="text/javascript" src="https://static.dnevnik.ru/assets/scripts/vendors/requirejs/require-2.3.7.js?v=084c85b2"></script>
-    <script type="text/javascript">
-        require.config({
-            baseUrl: "https://static.dnevnik.ru/assets/scripts/modules",
-            urlArgs: "v=ef8d1fe2",
+        .form-container input, .form-container button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #0078d7;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #005bb5;
+        }
+
+        .table-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f1f1f1;
+        }
+
+        .delete-button, .edit-button {
+            background-color: #ff4d4d;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-button {
+            background-color: #0078d7;
+        }
+
+        .delete-button:hover {
+            background-color: #e60000;
+        }
+
+        .edit-button:hover {
+            background-color: #005bb5;
+        }
+
+        .message {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Управление школами</h1>
+    </header>
+
+    <div class="content">
+        <!-- Форма для добавления и редактирования заявок -->
+        <div class="form-container">
+            <h3 id="form-title">Добавить заявку</h3>
+            <input type="text" id="schoolName" placeholder="Название школы" required>
+            <input type="text" id="location" placeholder="Населённый пункт" required>
+            <input type="text" id="type" placeholder="Тип ОО" required>
+            <input type="datetime-local" id="createdAt" placeholder="Дата создания" required>
+            <button onclick="saveSchool()">Сохранить</button>
+        </div>
+
+        <!-- Таблица со школами -->
+        <div class="table-container">
+            <table id="schoolsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Населённый пункт</th>
+                        <th>Тип ОО</th>
+                        <th>Создана</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные будут загружены из localStorage -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="message" class="message">
+            Письмо по удалению Организации отправлено
+        </div>
+    </div>
+
+    <script>
+        let schoolId = 60773; // Начальный ID для новых школ
+        let editIndex = null; // Индекс редактируемой строки
+
+        // Инициализация данных
+        const initialData = [
+            {
+                id: 60770,
+                name: 'Бизнес-школа "Founderschool"',
+                location: 'Кокшетау (Акмолинская область, Казахстан)',
+                type: 'Дополнительное образование детей',
+                createdAt: '2022-08-24T09:32'
+            },
+            {
+                id: 60771,
+                name: 'ZIYATKER TURAN',
+                location: 'Карасуйский район (Шымкент, Казахстан)',
+                type: 'Общеобразовательная организация',
+                createdAt: '2022-08-17T04:06'
+            },
+            {
+                id: 60772,
+                name: 'ТОО "Нұр Бала - 2021"',
+                location: 'Аул Когершин (Келесский район, Туркестанская область)',
+                type: 'Общеобразовательная организация',
+                createdAt: '2022-08-15T04:07'
+            }
+        ];
+
+        // Загрузка данных из localStorage
+        function loadSchools() {
+            const storedData = localStorage.getItem('schools');
+            return storedData ? JSON.parse(storedData) : initialData;
+        }
+
+        // Сохранение данных в localStorage
+        function saveSchools(data) {
+            localStorage.setItem('schools', JSON.stringify(data));
+        }
+
+        // Отображение данных в таблице
+        function renderTable() {
+            const schools = loadSchools();
+            const tableBody = document.getElementById('schoolsTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Очистка таблицы
+
+            schools.forEach((school, index) => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${school.id}</td>
+                    <td>${school.name}</td>
+                    <td>${school.location}</td>
+                    <td>${school.type}</td>
+                    <td>${new Date(school.createdAt).toLocaleString()}</td>
+                    <td>
+                        <button class="edit-button" onclick="editSchool(${index})">Редактировать</button>
+                        <button class="delete-button" onclick="deleteSchool(${index})">Удалить</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Сохранение новой или редактируемой школы
+        function saveSchool() {
+            const name = document.getElementById('schoolName').value;
+            const location = document.getElementById('location').value;
+            const type = document.getElementById('type').value;
+            const createdAt = document.getElementById('createdAt').value;
+
+            if (name && location && type && createdAt) {
+                const schools = loadSchools();
+
+                if (editIndex !== null) {
+                    // Редактирование существующей школы
+                    schools[editIndex] = { ...schools[editIndex], name, location, type, createdAt };
+                    editIndex = null;
+                    document.getElementById('form-title').textContent = 'Добавить заявку';
+                } else {
+                    // Добавление новой школы
+                    schools.push({ id: schoolId++, name, location, type, createdAt });
+                }
+
+                saveSchools(schools);
+                renderTable();
+                clearForm();
+            } else {
+                alert('Пожалуйста, заполните все поля.');
+            }
+        }
+
+        // Редактирование школы
+        function editSchool(index) {
+            const schools = loadSchools();
+            const school = schools[index];
+
+            document.getElementById('schoolName').value = school.name;
+            document.getElementById('location').value = school.location;
+            document.getElementById('type').value = school.type;
+            document.getElementById('createdAt').value = school.createdAt;
+            document.getElementById('form-title').textContent = 'Редактировать заявку';
+
+            editIndex = index;
+        }
+
+        // Удаление школы
+        function deleteSchool(index) {
+            const schools = loadSchools();
+            schools.splice(index, 1); // Удаление элемента из массива
+            saveSchools(schools); // Сохранение изменений
+            renderTable(); // Перерисовка таблицы
+            showMessage(); // Показ сообщения
+        }
+
+        // Очистка формы
+        function clearForm() {
+            document.getElementById('schoolName').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('type').value = '';
+            document.getElementById('createdAt').value = '';
+        }
+
+        // Показ сообщения
+        function showMessage() {
+            const message = document.getElementById('message');
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 3000); // Скрыть сообщение через 3 секунды
+        }
+
+        // Инициализация страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
         });
     </script>
-            <script type="text/javascript" src="https://static.dnevnik.ru/assets/scripts/modules/main-redesign.min.bbd7fce2.js?v=bbd7fce2"></script>
-    <script type="text/javascript" src="https://static.dnevnik.ru/blocks/blocks.js?v=10c220a7"></script>
-    <script type="text/javascript" src="https://static.dnevnik.ru/javascripts/local/ru.js?v=0320e479"></script>
-
-</head>
-<body class="">
-    <script>
-        window.environmentPrefix = "";
-        window.environmentPrefix = "";
-    </script>
-
-    
-
-
-<header class="header-anon" id="header-anon">
-
-    <div class="colored-line">
-        <div class="colored-line__item colored-line__item_blue"></div>
-        <div class="colored-line__item colored-line__item_green"></div>
-        <div class="colored-line__item colored-line__item_yellow"></div>
-        <div class="colored-line__item colored-line__item_orange"></div>
-        <div class="colored-line__item colored-line__item_violet"></div>
-    </div>
-
-    <div class="header-anon__content">
-
-        <div class="header-anon__logotype" id="logo">
-            <a href="https://dnevnik.ru">
-                <img src="https://static.dnevnik.ru/img/logotypes/logotype.png" alt="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443;"/>
-            </a>
-        </div>
-
-        <div class="header-anon__menu-wrapper">
-                <div class="header-anon__menu">
-                    
-<nav class="menu">
-    <ul class="menu__layout">
-            <li class="menu__layout_unit">
-                <a class="menu__item menu__item_border
-                   
-                   menu__item_no-left-padding
-                   "
-                   href=https://dnevnik-com.github.io/about>&#x41E; &#x43A;&#x43E;&#x43C;&#x43F;&#x430;&#x43D;&#x438;&#x438;</a>
-            </li>
-            <li class="menu__layout_unit">
-                <a class="menu__item menu__item_border
-                   
-                   
-                   "
-                   href=https://dnevnik-com.github.io/features>&#x412;&#x43E;&#x437;&#x43C;&#x43E;&#x436;&#x43D;&#x43E;&#x441;&#x442;&#x438;</a>
-            </li>
-            <li class="menu__layout_unit">
-                <a class="menu__item menu__item_border
-                   
-                   
-                   menu__item_noborder menu__item_no-right-padding"
-                   href=https://dnevnik.ru/support>&#x41F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430;</a>
-            </li>
-    </ul>
-</nav>
-            </div>
-            <div class="header-anon__buttons" id="anon-buttons">
-                <div class="header-anon__button">
-                    
-<a href="https://dnevnik-com.github.io/Dnevnik.com/login" title="&#x412;&#x43E;&#x439;&#x442;&#x438;" class="button button_blue button_padding-20    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x412;&#x43E;&#x439;&#x442;&#x438;
-</a>
-                </div>
-                    <div class="header-anon__button">
-                        
-<a href="https://support.dnevnik.ru/97" title="&#x41F;&#x43E;&#x434;&#x43A;&#x43B;&#x44E;&#x447;&#x438;&#x442;&#x44C; &#x41E;&#x41E;" class="button button_green button_padding-20 button_margin-left-20    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x43A;&#x43B;&#x44E;&#x447;&#x438;&#x442;&#x44C; &#x41E;&#x41E;
-</a>
-                    </div>
-
-            </div>
-        </div>
-    </div>
-</header>
-<script type="text/javascript">
-
-    var button = document.getElementById('localization-button');
-    moveLocalizationButton();
-    window.addEventListener('resize', function(event) {
-        moveLocalizationButton();
-    }, true);
-    
-    function moveLocalizationButton() {
-        if (window.innerWidth > 1200) {
-            jQuery("#localization-button").detach().prependTo('#anon-buttons');
-            button.classList.remove("localization-mobile");
-        }
-        else {
-            jQuery("#localization-button").detach().appendTo('#logo');
-            button.classList.add("localization-mobile");
-        }
-    }
-</script>
-
-
-<div class="main main_no-padding ">
-    
-    <h1 class="header-text">
-    Дневник.ру — <span class="header-text_gray">цифровая образовательная платформа, которая делает образование<br />в России качественным и доступным!</span></h1>
-
-<div class="slider">
-    <div class="slider__layout">
-        <div class="slider__line">
-            <div class="slider__item slider__item_teachers slider__item_hidden">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-24 col-xs-24">
-                            <div class="slider__item__content">
-                                <div class="slider__item__content__image slider__item__content__image_teacher">
-                                    <img class="slider__item__content__image__teacher" src="https://static.dnevnik.ru/img/slider/teacher.png" alt="Преподавателям" />
-                                </div>
-                                <div class="slider__item__content__text">
-                                    <div class="slider__item__content__text_title">
-                                        <div class="slider__item__content__text_title-name">Преподавателям</div>
-                                    </div>
-                                    <div class="slider__item__content__text_description">
-    Получите доступ к передовым технологиям<br />
-    автоматизации учебного процесса, инструментам<br />
-    онлайн - образования и современным способам<br />
-    общения с родителями.<br /></div>
-                                </div>
-                                    <div class="slider__item__content__button">
-                                        
-<a href="features#/teachers" title="&#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;" class="button button_grey-rounded    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;
-</a>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="slider__item slider__item_parents slider__item_hidden">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-24 col-xs-24">
-                            <div class="slider__item__content">
-                                <div class="slider__item__content__image slider__item__content__image_parents">
-                                    <img class="slider__item__content__image__parents" src="https://static.dnevnik.ru/img/slider/parents.png" alt="Родителям" />
-                                </div>
-                                <div class="slider__item__content__text">
-                                    <div class="slider__item__content__text_title">
-                                        <div class="slider__item__content__text_title-name">
-                                            Родителям
-                                        </div>
-                                    </div>
-                                    <div class="slider__item__content__text_description">
-    Станьте ближе к вашему ребенку с Дневник.ру!<br />
-    Следите за успехами и увлечениями своего ребёнка,<br />
-    активно участвуйте в образовательном процессе вместе!<br /></div>
-                                </div>
-                                    <div class="slider__item__content__button">
-                                        
-<a href="features#/parents" title="&#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;" class="button button_grey-rounded    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;
-</a>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="slider__item slider__item_childrens slider__item_hidden">
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-24 col-xs-24">
-                            <div class="slider__item__content">
-                                <div class="slider__item__content__image slider__item__content__image_childrens">
-                                    <img class="slider__item__content__image__childrens" src="https://static.dnevnik.ru/img/slider/childrens.png" alt="Учащимся" />
-                                </div>
-                                <div class="slider__item__content__text">
-                                    <div class="slider__item__content__text_title">
-                                        <div class="slider__item__content__text_title-name">
-                                            Учащимся
-                                        </div>
-                                    </div>
-                                    <div class="slider__item__content__text_description">
-    Дневник.ру тебе понравится! Всё необходимое<br />
-    для учёбы, внеклассной работы, творческих<br />
-    побед и самовыражения всегда под рукой.<br /></div>
-                                </div>
-                                    <div class="slider__item__content__button">
-                                        
-<a href="features#/students" title="&#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;" class="button button_grey-rounded    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;
-</a>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <div class="slider__item slider__item_officials slider__item_hidden">
-                    <div class=" container">
-                    <div class="row">
-                        <div class="col-md-24 col-xs-24">
-                            <div class="slider__item__content">
-                                <div class="slider__item__content__image slider__item__content__image_officials">
-                                    <img class="slider__item__content__image__officials" src="https://static.dnevnik.ru/img/slider/officials.png" alt="Госорганам" />
-                                </div>
-                                <div class="slider__item__content__text">
-                                    <div class="slider__item__content__text_title">
-                                        <div class="slider__item__content__text_title-name">
-                                            Госорганам
-                                        </div>
-                                    </div>
-                                    <div class="slider__item__content__text_description">
-    Дневник.ру для органов управления образованием — <br />
-    это средство онлайн - мониторинга и эффективный<br />
-    канал оперативного информирования<br />
-    подведомственных организаций.<br /></div>
-                                </div>
-                                    <div class="slider__item__content__button">
-                                        
-<a href="features#/governments" title="&#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;" class="button button_grey-rounded    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x440;&#x43E;&#x431;&#x43D;&#x435;&#x435;
-</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-    </div>
-    <div class="slider__arrows hidden-xs hidden-sm">
-        <div class="slider__arrows__item slider__arrows__item_prev"></div>
-        <div class="slider__arrows__item slider__arrows__item_next"></div>
-    </div>
-    <div class="slider__bar"></div>
-    <div class="slider__icons">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-md-offset-4 col-xs-4 col-xs-offset-4">
-                    <div class="slider__icons__item">
-
-                      
-                        <div class="slider__icons__item__image slider__icons__item__image_teacher slider__icons__item__image_active "></div>
-                        <div class="slider__icons__item__label">Преподавателям</div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-xs-4">
-                    <div class="slider__icons__item">
-                 
-                        <div class="slider__icons__item__image slider__icons__item__image_parents "></div>
-                        <div class="slider__icons__item__label">Родителям</div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-xs-4">
-                    <div class="slider__icons__item">
-                      
-                        <div class="slider__icons__item__image slider__icons__item__image_childrens "></div>
-                        <div class="slider__icons__item__label">Учащимся</div>
-                    </div>
-                </div>
-                    <div class="col-md-4 col-xs-4">
-                        <div class="slider__icons__item">
-                            <div class="slider__icons__item__image slider__icons__item__image_officials "></div>
-                            <div class="slider__icons__item__label">Госорганам</div>
-                        </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-    </div>
-<script>require(['Slider/Slider'], function () { for(var i = 0, l = arguments.length; i < l; i += 1) { arguments[i](JSON.parse('null')); } });</script>
-
-</div> 
-
-
-<footer class="footer">
-    <div class="footer__menu">
-        <div>
-            <div class="footer__menu__links">
-                    <div class="footer__column_25">
-                            <div class="footer__menu__links__title">&#x41E; &#x43A;&#x43E;&#x43C;&#x43F;&#x430;&#x43D;&#x438;&#x438;</div>
-                            <ul class="footer__menu__links__layout">
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/about" class="footer__menu__links__item">&#x41E; &#x43D;&#x430;&#x441;</a>
-                                    </li>
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/news" class="footer__menu__links__item">&#x41D;&#x43E;&#x432;&#x43E;&#x441;&#x442;&#x438;</a>
-                                    </li>
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/contacts" class="footer__menu__links__item">&#x41A;&#x43E;&#x43D;&#x442;&#x430;&#x43A;&#x442;&#x44B;</a>
-                                    </li>
-                            </ul>
-                    </div>
-                    <div class="footer__column_25">
-                            <div class="footer__menu__links__title">&#x412;&#x43E;&#x437;&#x43C;&#x43E;&#x436;&#x43D;&#x43E;&#x441;&#x442;&#x438;</div>
-                            <ul class="footer__menu__links__layout">
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/features#/teachers" class="footer__menu__links__item">&#x41F;&#x440;&#x435;&#x43F;&#x43E;&#x434;&#x430;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F;&#x43C;</a>
-                                    </li>
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/features#/parents" class="footer__menu__links__item">&#x420;&#x43E;&#x434;&#x438;&#x442;&#x435;&#x43B;&#x44F;&#x43C;</a>
-                                    </li>
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/features#/students" class="footer__menu__links__item">&#x423;&#x447;&#x430;&#x449;&#x438;&#x43C;&#x441;&#x44F;</a>
-                                    </li>
-                                    <li class="footer__menu__links__layout_item">
-                                        <a href="https://dnevnik-com.github.io/features#/governments" class="footer__menu__links__item">&#x413;&#x43E;&#x441;&#x43E;&#x440;&#x433;&#x430;&#x43D;&#x430;&#x43C;</a>
-                                    </li>
-                            </ul>
-                    </div>
-                <div class="footer__column_25">
-                    <div class="footer__menu__links__last-column-wrapper">
-                            <div class="footer__menu__links__title footer__menu__links__title_no-margin-top">
-                                &#x41F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430;
-                            </div>
-                            <div class="footer__menu__links__support">
-                                    <a href="https://support.dnevnik.ru" class="footer__menu__links__support__link">&#x41F;&#x43E;&#x440;&#x442;&#x430;&#x43B; &#x441;&#x43B;&#x443;&#x436;&#x431;&#x44B; &#x43F;&#x43E;&#x434;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x438;</a>
-                            </div>
-
-<div class="localization-select" id="id-dd9fc27fb944435d8d95be0ed795b8df">
-    <div class="localization-select__wrapper localization-select__wrapper_focus">
-        <div class="localization-select__text localization-select__text_rus">
-            &#x420;&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;
-        </div>
-        <select multiple="multiple" size="5" class="localization-select__select">
-                <option value="ru-RU" selected=selected></option>
-                <option value="en-US" ></option>
-                <option value="es-ES" ></option>
-                <option value="pt-BR" ></option>
-                <option value="fr-CD" ></option>
-        </select>
-    </div>
-    <ul class="localization-list">
-            <li class="localization-list__item localization-list__item_hidden" data-value="ru-RU">
-                <div class="localization-select__text localization-select__text_rus">&#x420;&#x443;&#x441;&#x441;&#x43A;&#x438;&#x439;</div>
-            </li>
-            <li class="localization-list__item" data-value="en-US">
-                <div class="localization-select__text localization-select__text_eng">English</div>
-            </li>
-            <li class="localization-list__item" data-value="es-ES">
-                <div class="localization-select__text localization-select__text_esp">Espa&#xF1;ol</div>
-            </li>
-            <li class="localization-list__item" data-value="pt-BR">
-                <div class="localization-select__text localization-select__text_por">Portugu&#xEA;s</div>
-            </li>
-            <li class="localization-list__item" data-value="fr-CD">
-                <div class="localization-select__text localization-select__text_fre">Fran&#xE7;ais</div>
-            </li>
-    </ul>
-</div><script>require(['LocalizationSelect/LocalizationSelect'], function () { for(var i = 0, l = arguments.length; i < l; i += 1) { arguments[i](JSON.parse('\x7b\x22id\x22\x3a\x22id-dd9fc27fb944435d8d95be0ed795b8df\x22,\x22localizationCookieName\x22\x3a\x22Dnevnik_localization\x22,\x22localizationCookieDomain\x22\x3a\x22.dnevnik.ru\x22\x7d')); } });</script>
-                    </div>
-                </div>
-            </div>
-        </div>
-            <div>
-                <div class="footer__menu__buttons">
-                        <div class="footer__column_25">
-                            
-<div class="sociallinks">
-        <a class="sociallinks__button sociallinks__button_telegram " href="https://t.me/dnevnik_ru" target="_blank" title="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443; &#x432; Telegram"></a>
-        <a class="sociallinks__button sociallinks__button_vkontakte " href="http://vkontakte.ru/club19853844" target="_blank" title="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443; &#x432; &#x412;&#x41A;&#x43E;&#x43D;&#x442;&#x430;&#x43A;&#x442;&#x435;"></a>
-        <a class="sociallinks__button sociallinks__button_odnoklassniki " href="http://www.odnoklassniki.ru/dnevnik.ru" target="_blank" title="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443; &#x432; &#x41E;&#x434;&#x43D;&#x43E;&#x43A;&#x43B;&#x430;&#x441;&#x441;&#x43D;&#x438;&#x43A;&#x430;&#x445;"></a>
-        <a class="sociallinks__button sociallinks__button_youtube " href="https://www.youtube.com/user/DnevnikVideoRussia" target="_blank" title="&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443; &#x43D;&#x430; YouTube"></a>
-</div>
-                        </div>
-                        <div class="footer__column_25 footer__join">
-                            
-<a href="https://support.dnevnik.ru/97" title="&#x41F;&#x43E;&#x434;&#x43A;&#x43B;&#x44E;&#x447;&#x438;&#x442;&#x44C; &#x41E;&#x41E;" class="button button_green button_full-width    " onclick="" 
-   style="cursor: pointer"
-   data-category="" data-action="" data-target="">
-    &#x41F;&#x43E;&#x434;&#x43A;&#x43B;&#x44E;&#x447;&#x438;&#x442;&#x44C; &#x41E;&#x41E;
-</a>
-                        </div>
-                </div>
-            </div>
-    </div>
-    <div class="footer__copyright">
-        <div class="footer__copyright-content">
-            
-            <div class="footer__copyright-item">
-                <div class="footer__copyright__terms">
-                        <div class="footer__copyright__terms__speech-bubble footer__copyright__terms__speech-bubble_hidden">
-                            <p class="paragraph">
-    Информация, размещенная в Единой образовательной сети "Дневник.ру",
-    относится к информационной продукции, допускаемой к обороту для детей,
-    достигших возраста шести лет в соответствии со ст. 8 <![CDATA[&nbsp;]]><a class="link" href="https://help.dnevnik.ru/hc/ru/articles/203474708">ФЗ №436 от 29.12.2010 г.</a></p>
-                        </div>
-                        <img class="footer__copyright__terms__six-plus" src="https://static.dnevnik.ru/img/six-plus.png" alt="6+ "/>
-
-                        <a href="https://dnevnik-com.github.io/agreements/terms" class="footer__copyright__terms__link">&#x41F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44C;&#x441;&#x43A;&#x43E;&#x435; &#x441;&#x43E;&#x433;&#x43B;&#x430;&#x448;&#x435;&#x43D;&#x438;&#x435;</a>
-                </div>
-            </div>
-            <div class="footer__copyright-item">
-                <div class="footer__copyright__label">&#xA9; 2007-2025 &#x41E;&#x41E;&#x41E; &#xAB;&#x414;&#x43D;&#x435;&#x432;&#x43D;&#x438;&#x43A;.&#x440;&#x443;&#xBB;</div>
-            </div>
-        </div>
-    </div>
-
-</footer>
-<script>require(['Footer/Footer'], function () { for(var i = 0, l = arguments.length; i < l; i += 1) { arguments[i](JSON.parse('null')); } });</script>
-
-    
-<script type="text/javascript">
-    require(['yandexMetrika/yandexMetrikaCounter']);
-</script>
-
-    <script type="text/javascript">
-        require(['analytics/commonYaMetrika']);
-    </script>
-
-<noscript>
-    <div>
-            <img src="//mc.yandex.ru/watch/17969140" style="position: absolute; left: -9999px;" alt="" />
-    </div>
-</noscript>
-        <script type="text/javascript">
-            require(['ab/ab'], function (ab) {
-                window.onload = function () {
-                    if (!window['yaCounter' + dnevnik.settings.yandexMetrikaId]) {
-                        console.debug('Yandex.Metrika not loaded!');
-                   }
-   
-                    ab.init({
-                        subdomain: '',
-                       group: 'groupA'
-                    });
-   
-                };
-            });
-        </script>
-    
-
 </body>
 </html>
