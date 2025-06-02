@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О компании "Dневник"</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: #f7f9fa;
+            margin: 0;
+            padding: 0;
+            color: #222;
+        }
+        header {
+            background: #2d6cdf;
+            color: #fff;
+            padding: 32px 0 24px 0;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(45,108,223,0.08);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+        }
+        main {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(45,108,223,0.07);
+            padding: 32px 28px;
+        }
+        h2 {
+            color: #2d6cdf;
+            margin-top: 0;
+        }
+        .history {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+        .contacts {
+            background: #f0f4fa;
+            border-radius: 8px;
+            padding: 18px 20px;
+        }
+        .contacts h3 {
+            margin-top: 0;
+            color: #2d6cdf;
+        }
+        .contact-item {
+            margin-bottom: 8px;
+        }
+        @media (max-width: 600px) {
+            main {
+                padding: 18px 8px;
+            }
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Компания "Dневник"</h1>
+    </header>
+    <main>
+        <h2>Наша история</h2>
+        <div class="history">
+            Компания Дневник основана в 2018 году. Ее материнская компания — Дневник.ру. В 2020 мы отказались от материнской компании. После этого нам было очень тяжело. Но в 2023 нас взяли под контроль компании такие как eMaktab.uz, Kundelik.kz.
+        </div>
+        <div class="contacts">
+            <h3>Контакты</h3>
+            <div class="contact-item">
+                Email: <a href="mailto:support@dnevnikcom.atlassian.net">support@dnevnikcom.atlassian.net</a>
+            </div>
+            <div class="contact-item">
+                Телефон: <a href="tel:+892945339910">+8 929 453 39910</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html></div>
