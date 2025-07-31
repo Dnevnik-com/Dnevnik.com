@@ -199,7 +199,7 @@
                 Современная платформа для управления образовательным процессом. Объединяем учителей, учеников и родителей в единой цифровой экосистеме.
             </div>
             <div class="hero-btns">
-                <a href="http://dnevnikv2.com.tilda.ws/" class="btn hero-main" id="start-btn">Начать работу&nbsp;→</a>
+                <a href="http://dnevnik.com-v2.tilda.ws" class="btn hero-main" id="start-btn">Начать работу&nbsp;→</a>
                 <a href="https://dnevnikcom.atlassian.net/servicedesk/customer/portal/1/group/38/create/50" class="btn-outline" target="_blank">Подключить школу</a>
             </div>
         </div>
