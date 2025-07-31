@@ -183,7 +183,7 @@
         </nav>
         <div class="header-btns">
             <a href="https://dnevnikcom.atlassian.net/servicedesk/customer/portal/1/group/38/create/50" class="btn-outline" target="_blank">Подключить ОО</a>
-            <a href="http://dnevnikv2.com.tilda.ws/" class="btn">Войти</a>
+            <a href="http://dnevnik.com-v2.tilda.ws" class="btn">Войти</a>
             <a href="https://dnevnikcom.atlassian.net/servicedesk/customer/portals" class="btn-outline" target="_blank">Поддержка</a>
         </div>
     </div>
