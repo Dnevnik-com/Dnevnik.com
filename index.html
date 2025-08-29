@@ -1,182 +1,449 @@
+```html name=index.html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <title>Электронный дневник</title>
-    <meta name="viewport" content="width=1200">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-        body { margin: 0; background: #f5f7fa; font-family: Arial, sans-serif; }
-        header { background: #fff; border-bottom: 1px solid #eaeaea; padding: 0; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #174bbd;
+            --accent: #4fd37e;
+            --accent2: #3bb0f9;
+            --bg: #f3f6fa;
+            --card-bg: #fff;
+            --header-bg: #f9fbff;
+            --footer-bg: #182341;
+            --text-main: #27324a;
+            --text-light: #6c7a99;
+            --shadow-main: 0 8px 36px #2563eb18;
+            --radius: 14px;
+        }
+        html, body {
+            padding: 0; margin: 0;
+            background: var(--bg);
+            font-family: 'Inter', Arial, sans-serif;
+            color: var(--text-main);
+        }
+        body {
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+        header {
+            background: var(--header-bg);
+            box-shadow: 0 2px 24px #2563eb12;
+            padding: 0;
+            border-bottom: 1px solid #e6edf7;
+            position: sticky;
+            top: 0; left: 0; z-index: 99;
+        }
         .header-inner {
-            display: flex; align-items: center; max-width: 1200px; margin: 0 auto; height: 88px; justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between;
+            max-width: 1240px; margin: 0 auto; height: 94px; padding: 0 32px;
         }
         .logo-block {
-            display: flex; flex-direction: row; align-items: center; gap: 10px; margin-right: 40px;
+            display: flex; align-items: center; gap: 16px;
         }
         .logo-img {
-            width: 64px;
-            height: 64px;
-            object-fit: cover;
-            box-shadow: 0 2px 12px #2563eb33;
-            margin-right: 18px;
-            background: #fff;
-            border: 2px solid #e0e7ef;
-            display: inline-block;
-            vertical-align: middle;
-            border-radius: 10px; /* слегка скругленные края, не круг */
+            width: 68px; height: 68px; object-fit: cover;
+            background: #fff; border: 2.5px solid #e0e7ef; box-shadow: 0 4px 20px #2563eb22;
+            border-radius: 13px;
+            transition: box-shadow .18s;
+        }
+        .logo-block:hover .logo-img {
+            box-shadow: 0 8px 36px #2563eb34, 0 2px 8px #0001;
+        }
+        .logo-text-block {
+            display: flex; flex-direction: column; align-items: flex-start;
         }
         .logo-modern {
             font-family: 'Montserrat', Arial, sans-serif;
-            font-size: 2.1rem;
+            font-size: 2.25rem;
             font-weight: 700;
-            letter-spacing: 1.5px;
-            color: #2563eb;
-            background: linear-gradient(90deg,#2563eb,#3bb0f9,#4fd37e);
+            letter-spacing: 2px;
+            background: linear-gradient(90deg,var(--primary),var(--accent2),var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-fill-color: transparent;
-            text-shadow: 0 2px 12px #2563eb22;
-            display: block;
-            line-height: 1.13;
+            text-shadow: 0 2px 16px #2563eb22;
+            margin-bottom: 2px;
+            line-height: 1;
+        }
+        .logo-modern .black {
+            color: #222;
+            background: none !important;
+            -webkit-text-fill-color: #222;
+            text-fill-color: #222;
         }
         .logo-sub {
-            font-size: 1.06rem;
-            color: #666;
-            margin: 0;
-            margin-top: 2px;
-            line-height: 1;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin: 0 0 0 3px;
             font-weight: 500;
-            letter-spacing: 0.04em;
             font-family: 'Montserrat', Arial, sans-serif;
         }
-        nav { display: flex; gap: 28px; align-items: center;}
+
+        nav { display: flex; gap: 36px; align-items: center; }
         .nav-link {
-            color: #222;
+            color: var(--text-main);
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 1.08rem;
             white-space: nowrap;
-            display: inline-block;
-            line-height: 1.1;
-            font-family: inherit;
-            font-weight: 500;
-            padding: 0 3px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            transition: color .16s, border-bottom .18s;
+            padding: 2px 4px;
+            border-bottom: 2px solid transparent;
         }
-        .nav-link:hover { color: #1976d2; }
-        .nav-link[href="#about"] {
-            /* О компании всегда в одну строку */
-            white-space: nowrap;
+        .nav-link:hover, .nav-link:focus {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent2);
         }
-        .header-btns { display: flex; gap: 8px; align-items: center; }
+        .header-btns {
+            display: flex; gap: 14px; align-items: center;
+        }
         .btn, .btn-outline {
-            font-size: 1rem; border-radius: 6px; padding: 7px 18px; border: none; cursor: pointer; font-weight: 500;
-            transition: background 0.17s, color 0.17s;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 1.08rem;
+            font-weight: 600;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            padding: 8px 23px;
+            letter-spacing: 0.01em;
             white-space: nowrap;
+            transition: background .16s, color .16s, box-shadow .16s;
+            display: flex; align-items: center;
             text-decoration: none !important;
-            line-height: 1.2;
         }
-        .btn { background: #2563eb; color: #fff; border: 1px solid #2563eb;}
-        .btn:hover { background: #174bbd;}
-        .btn-outline { background: #fff; color: #2563eb; border: 1px solid #2563eb;}
-        .btn-outline:hover { background: #f3f7ff;}
-        .header-btns a { display: inline-block; text-decoration: none !important; white-space: nowrap; }
-        .main { max-width: 1200px; margin: 0 auto; background: #fff; border-radius: 0 0 12px 12px;}
-        .hero { padding: 46px 0 18px 0; display: flex; align-items: center; flex-wrap: wrap;}
-        .hero-left { flex: 1 1 400px; padding-left: 46px; min-width: 330px;}
-        .hero-title { font-size: 2.7rem; font-weight: bold; line-height: 1.1; color: #2d3a5a; margin-bottom: 20px;}
-        .hero-title span { color: #2563eb;}
-        .hero-desc { font-size: 1.2rem; color: #334155; margin-bottom: 34px;}
-        .hero-btns { display: flex; gap: 14px;}
-        .hero-right { flex: 1 1 320px; min-width: 310px; display: flex; align-items: center; justify-content: center; transition: transform 0.3s cubic-bezier(.52,1.64,.37,.66);}
-        .card-hero { background: #fff; border-radius: 18px; box-shadow: 0 6px 32px #2563eb18; padding: 28px 34px; min-width: 270px; transition: box-shadow 0.18s;}
-        .card-row { display: flex; align-items: center; margin-bottom: 18px;}
+        .btn {
+            background: linear-gradient(90deg,#2563eb 70%,#3bb0f9 100%);
+            color: #fff;
+            box-shadow: 0 2px 8px #2563eb19;
+            border: 1.5px solid var(--primary);
+        }
+        .btn:hover {
+            background: linear-gradient(90deg,#174bbd 70%,#2fa4e7 100%);
+            box-shadow: 0 6px 16px #2563eb33;
+        }
+        .btn-outline {
+            background: #fff;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+        .btn-outline:hover {
+            background: #f0f7ff;
+            color: #0f265c;
+            border-color: var(--primary-dark);
+        }
+        .btn.hero-main {
+            font-size: 1.18rem;
+            padding: 12px 38px;
+            border-radius: 23px;
+            box-shadow: 0 4px 16px #2563eb15;
+            letter-spacing: 0.03em;
+        }
+        .header-btns a {
+            text-decoration: none !important;
+            display: flex;
+            align-items: center;
+        }
+
+        main.main {
+            max-width: 1240px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 0 0 22px 22px;
+            box-shadow: 0 10px 40px #2563eb10;
+            min-height: 70vh;
+            padding-bottom: 30px;
+        }
+        .hero {
+            padding: 56px 0 22px 0;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0 22px;
+        }
+        .hero-left {
+            flex: 1 1 420px;
+            min-width: 340px;
+            padding-left: 54px;
+        }
+        .hero-title {
+            font-size: 2.85rem;
+            font-weight: 900;
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: var(--text-main);
+            line-height: 1.08;
+            margin-bottom: 24px;
+            letter-spacing: 0.02em;
+        }
+        .hero-title span {
+            color: var(--primary);
+        }
+        .hero-desc {
+            font-size: 1.22rem;
+            color: #334155;
+            margin-bottom: 34px;
+            line-height: 1.5;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        .hero-right {
+            flex: 1 1 340px;
+            min-width: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.33s cubic-bezier(.52,1.64,.37,.66);
+        }
+        .card-hero {
+            background: linear-gradient(120deg,#f7faff 80%,#d2e9ff 100%);
+            border-radius: 21px;
+            box-shadow: 0 8px 36px #2563eb18;
+            padding: 36px 42px;
+            min-width: 295px;
+            min-height: 200px;
+            transition: box-shadow 0.18s;
+        }
+        .card-row {
+            display: flex; align-items: center; margin-bottom: 22px;
+        }
         .card-row:last-child { margin-bottom: 0;}
-        .card-icon { font-size: 1.45rem; margin-right: 12px; }
-        .card-title { font-weight: 500; color: #3a52c1;}
-        .card-status { margin-left: 12px; background: #e6f6e6; color: #2ea043; border-radius: 8px; font-size: 0.9rem; padding: 2px 9px;}
-        /* Увеличение фото-карточки при наведении на "Начать работу" */
-        .btn.hero-main:hover ~ .hero-right,
-        .hero-btns .btn.hero-main:hover ~ .hero-right {
-            /* если ~ не работает, используем JS, см. ниже */
+        .card-icon { font-size: 1.65rem; margin-right: 18px; }
+        .card-title { font-weight: 600; color: #2c48c1; }
+        .card-status {
+            margin-left: 14px;
+            background: #e6f6e6;
+            color: #2ea043;
+            border-radius: 10px;
+            font-size: 1rem;
+            padding: 2px 13px;
+            font-weight: 500;
+            box-shadow: 0 1px 7px #4fd37e22;
         }
-        /* ----------- spacing between blocks ----------- */
-        .section { padding: 44px 0 10px 0; text-align: center; }
-        .section-title { font-size: 2rem; font-weight: bold; color: #20294a; margin-bottom: 10px;}
-        .section-desc { font-size: 1.1rem; color: #444; margin-bottom: 36px;}
+        /* Вторая и третья карточка */
+        .card-row:nth-child(2) .card-status {
+            background:#f3ecff; color:#8e4aff;
+        }
+        .card-row:nth-child(3) .card-status {
+            background:#e6f2ff; color:var(--primary);
+        }
+
+        /* Stats */
         .stats {
-            background: #f6fbff;
-            padding: 38px 0 32px 0;
+            background: linear-gradient(90deg,#f7fbff 60%,#e5f3ff 100%);
+            padding: 44px 0 38px 0;
             display: flex;
             justify-content: center;
-            gap: 100px;
-            margin-bottom: 60px;
+            gap: 90px;
+            border-radius: 13px;
+            margin: 36px 0 58px 0;
+            box-shadow: 0 4px 24px #2563eb0c;
         }
-        .main > .section { margin-top: 60px; }
-        .stat { text-align: center; }
-        .stat-value { font-size: 2.1rem; font-weight: bold; color: #2563eb;}
-        .stat-label { font-size: 1.1rem; color: #222;}
+        .stat {
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 7px;
+        }
+        .stat-label {
+            font-size: 1.13rem;
+            color: #222;
+            opacity: 0.85;
+        }
+
+        /* Features */
+        .section { padding: 50px 0 24px 0; text-align: center; }
+        .section-title {
+            font-size: 2.15rem;
+            font-weight: bold;
+            color: #20294a;
+            margin-bottom: 10px;
+            letter-spacing: 0.01em;
+        }
+        .section-desc {
+            font-size: 1.14rem;
+            color: #444;
+            margin-bottom: 36px;
+        }
         .features-grid {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 36px 22px;
-            max-width: 1000px;
+            gap: 36px 28px;
+            max-width: 1040px;
             margin: 0 auto;
         }
         .feature-card {
-            background: #f6f8fb;
-            border-radius: 12px;
-            padding: 30px 28px;
-            width: 280px;
-            box-shadow: 0 2px 6px #0001;
-            transition: transform 0.18s cubic-bezier(.52,1.64,.37,.66), box-shadow 0.18s;
+            background: #f5f8fd;
+            border-radius: 16px;
+            padding: 34px 34px;
+            width: 300px;
+            box-shadow: 0 2px 10px #2563eb13;
+            transition: transform 0.18s cubic-bezier(.52,1.64,.37,.66), box-shadow 0.18s, background 0.18s;
+            display: flex; flex-direction: column; align-items: center;
         }
-        .feature-icon { font-size: 2.2rem; color: #2563eb; margin-bottom: 10px;}
-        .feature-title { font-size: 1.18rem; font-weight: 600; margin-bottom: 7px;}
-        .feature-desc { color: #333; font-size: 1rem;}
+        .feature-icon {
+            font-size: 2.4rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+        .feature-title {
+            font-size: 1.21rem;
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+        .feature-desc {
+            color: #333;
+            font-size: 1.03rem;
+        }
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 32px #2563eb26;
-            background: #f3f7ff;
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 14px 40px #2563eb26;
+            background: #f0f6ff;
         }
-        .benefits { background: linear-gradient(90deg, #3366ff 0%, #8f6cfa 100%); color: #fff; padding: 54px 0 40px 0; min-height: 330px;}
-        .benefits-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: flex-start; gap: 70px;}
-        .benefits-list { flex: 1 1 420px; }
-        .benefits-title { font-size: 2rem; font-weight: bold; margin-bottom: 12px;}
-        .benefits-desc { font-size: 1.1rem; margin-bottom: 26px;}
-        .benefit-item { margin-bottom: 15px; font-size: 1.07rem;}
-        .benefit-item .tick { color: #5eea57; font-size: 1.1em; margin-right: 6px;}
-        .benefits-rating { flex: 1 1 340px; background: #fff2; border-radius: 16px; padding: 24px 28px;}
-        .rating-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 10px;}
-        .stars { color: #ffe44d; font-size: 1.3rem; margin-bottom: 6px;}
-        .rating-score { font-size: 1.17rem; color: #fff; margin-bottom: 18px;}
-        .review { background: #fff3; border-radius: 10px; padding: 14px 15px; color: #fff; margin-bottom: 10px;}
+
+        /* Benefits */
+        .benefits {
+            background: linear-gradient(90deg, #3366ff 0%, #8f6cfa 100%);
+            color: #fff;
+            padding: 62px 0 48px 0;
+            min-height: 330px;
+        }
+        .benefits-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 80px;
+        }
+        .benefits-list {
+            flex: 1 1 450px;
+        }
+        .benefits-title {
+            font-size: 2.1rem;
+            font-weight: bold;
+            margin-bottom: 13px;
+            letter-spacing: 0.01em;
+        }
+        .benefits-desc {
+            font-size: 1.13rem;
+            margin-bottom: 28px;
+        }
+        .benefit-item {
+            margin-bottom: 16px;
+            font-size: 1.13rem;
+            letter-spacing: 0.01em;
+            display: flex; align-items: center;
+        }
+        .benefit-item .tick {
+            color: #5eea57;
+            font-size: 1.22em;
+            margin-right: 9px;
+        }
+        .benefits-rating {
+            flex: 1 1 370px;
+            background: #fff2;
+            border-radius: 18px;
+            padding: 30px 34px;
+            box-shadow: 0 2px 12px #fff3;
+        }
+        .rating-title {
+            font-weight: bold;
+            font-size: 1.21rem;
+            margin-bottom: 13px;
+        }
+        .stars {
+            color: #ffe44d;
+            font-size: 1.45rem;
+            margin-bottom: 8px;
+        }
+        .rating-score {
+            font-size: 1.22rem;
+            color: #fff;
+            margin-bottom: 23px;
+        }
+        .review {
+            background: #fff3;
+            border-radius: 13px;
+            padding: 15px 17px;
+            color: #fff;
+            margin-bottom: 13px;
+            font-size: 1.07rem;
+        }
         .review:last-child { margin-bottom: 0;}
-        .review-author { font-size: 0.9rem; margin-top: 7px; opacity: 0.9;}
-        .footer {
-            background: #192035; color: #fff; padding: 40px 0 28px 0; margin-top: 0; font-size: 1rem;
+        .review-author {
+            font-size: 0.95rem;
+            margin-top: 8px;
+            opacity: 0.93;
         }
-        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 70px; }
-        .footer-col { flex: 1 1 250px; }
-        .footer-logo { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 14px;}
+
+        /* Footer */
+        .footer {
+            background: var(--footer-bg);
+            color: #fff;
+            padding: 48px 0 33px 0;
+            margin-top: 0;
+            font-size: 1rem;
+            border-radius: 22px 22px 0 0;
+        }
+        .footer-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            gap: 80px;
+        }
+        .footer-col { flex: 1 1 270px; }
+        .footer-logo { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;}
         .footer-logo-row { display: flex; align-items: center; }
-        .footer-title { font-weight: bold; font-size: 1.1rem; }
-        .logo-modern.footer { font-size:1.25rem;}
+        .footer-title { font-weight: bold; font-size: 1.13rem; margin-bottom: 12px; }
+        .logo-modern.footer {
+            font-size:1.32rem;
+            margin-bottom: 2px;
+        }
         .footer-links { margin: 0; padding: 0; list-style: none;}
-        .footer-links li { margin-bottom: 7px;}
+        .footer-links li { margin-bottom: 8px;}
         .footer-link { color: #fff; text-decoration: none; }
         .footer-link:hover { text-decoration: underline;}
-        .footer-copy { margin-top: 35px; color: #bbb; font-size: 0.97rem;}
-        .footer-bottom { text-align: center; color: #bbb; font-size: 0.95rem; margin-top: 16px;}
-        @media (max-width: 1024px) {
-            .main, .header-inner, .benefits-inner, .footer-inner { max-width: 98vw; }
-            .section { padding-left: 13px; padding-right: 13px; }
-            .hero { flex-direction: column; gap: 28px;}
+        .footer-copy { margin-top: 38px; color: #bbb; font-size: 1.01rem;}
+        .footer-bottom {
+            text-align: center;
+            color: #bbb;
+            font-size: 1.03rem;
+            margin-top: 18px;
+        }
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .header-inner, main.main, .benefits-inner, .footer-inner { max-width: 98vw; }
+            .hero { flex-direction: column; gap: 32px;}
             .hero-left { padding-left: 0;}
-            .benefits-inner { flex-direction: column; gap: 34px;}
-            .footer-inner { flex-direction: column; gap: 22px; }
-            .features-grid { gap: 28px 0; }
+            .benefits-inner { flex-direction: column; gap: 38px;}
+            .footer-inner { flex-direction: column; gap: 28px; }
+            .features-grid { gap: 24px 0; }
+        }
+        @media (max-width: 700px) {
+            .header-inner, .footer-inner, main.main {
+                flex-direction: column; gap: 0; padding: 0 10px;
+            }
+            .section, .benefits, .stats { padding-left: 6px; padding-right: 6px; }
+            nav { gap: 15px; }
+        }
+        /* Кнопка: слова в один ряд */
+        .btn, .btn-outline, .btn.hero-main {
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -184,9 +451,11 @@
 <header>
     <div class="header-inner">
         <div class="logo-block">
-            <a href="https://ibb.co/sd1GVLDt"><img src="https://i.ibb.co/PvWn6Bbt/1semptember-730-Photoroom.png" alt="1semptember-730-Photoroom" border="0" class="logo-img"></a>
-            <span>
-                <span class="logo-modern">D<span style="color:#222;">н</span>евник</span>
+            <a href="https://ibb.co/sd1GVLDt">
+                <img src="https://i.ibb.co/PvWn6Bbt/1semptember-730-Photoroom.png" alt="1semptember-730-Photoroom" border="0" class="logo-img">
+            </a>
+            <span class="logo-text-block">
+                <span class="logo-modern">D<span class="black">н</span>евник</span>
                 <span class="logo-sub">Современная платформа для образования</span>
             </span>
         </div>
@@ -198,7 +467,7 @@
         </nav>
         <div class="header-btns">
             <a href="https://dnevnikcom.atlassian.net/servicedesk/customer/portal/1/group/38/create/50" class="btn-outline" target="_blank">Подключить ОО</a>
-            <a href="http://dnevnik.com-v2.tilda.ws" class="btn">Войти</a>
+            <a href="http://dnevnik.com-v2.tilda.ws" class="btn hero-main">Войти</a>
             <a href="https://dnevnikcom.atlassian.net/servicedesk/customer/portals" class="btn-outline" target="_blank">Поддержка</a>
         </div>
     </div>
@@ -211,7 +480,7 @@
                 Цифровая трансформация <span>образования</span>
             </div>
             <div class="hero-desc">
-                Современная платформа для управления образовательным процессом. Объединяем учителей, учеников и ро[...]
+                Современная платформа для управления образовательным процессом. Объединяем учителей, учеников и родителей для нового уровня эффективности.
             </div>
             <div class="hero-btns">
                 <a href="http://dnevnik.com-v2.tilda.ws" class="btn hero-main" id="start-btn">Начать работу&nbsp;→</a>
@@ -228,12 +497,12 @@
                 <div class="card-row">
                     <span class="card-icon">📅</span>
                     <span class="card-title">Расписание</span>
-                    <span class="card-status" style="background:#f3ecff; color:#8e4aff;">6 уроков сегодня</span>
+                    <span class="card-status">6 уроков сегодня</span>
                 </div>
                 <div class="card-row">
                     <span class="card-icon">💬</span>
                     <span class="card-title">Сообщения</span>
-                    <span class="card-status" style="background:#e6f2ff; color:#2563eb;">3 новых уведомления</span>
+                    <span class="card-status">3 новых уведомления</span>
                 </div>
             </div>
         </div>
@@ -299,7 +568,7 @@
         <div class="benefits-inner">
             <div class="benefits-list">
                 <div class="benefits-title">Преимущества использования</div>
-                <div class="benefits-desc">Наша платформа помогает образовательным организациям повысить эффективность и каче�[...]
+                <div class="benefits-desc">Наша платформа помогает образовательным организациям повысить эффективность и качество образовательного процесса.</div>
                 <div class="benefit-item"><span class="tick">✔️</span>Экономия времени на ведении документооборота</div>
                 <div class="benefit-item"><span class="tick">✔️</span>Повышение качества образовательного процесса</div>
                 <div class="benefit-item"><span class="tick">✔️</span>Улучшение взаимодействия с родителями</div>
@@ -332,9 +601,8 @@
                 </div>
                 <span class="logo-sub" style="color:#cfcfcf; font-size:1rem; margin:2px 0 0 2px;">Современная платформа для образования</span>
             </div>
-            <div style="color: #ccc; margin-top:4px;"></div>
             <div style="font-size:1rem; margin-top: 16px;">
-                Мы создаем инновационные решения для цифровой трансформации образования, объединяя всех участнико�[...]
+                Мы создаем инновационные решения для цифровой трансформации образования, объединяя всех участников образовательного процесса.
             </div>
         </div>
         <div class="footer-col">
@@ -368,10 +636,9 @@
     // Кнопка "Начать работу" увеличивает фото справа при наведении
     const startBtn = document.getElementById('start-btn');
     const heroPhoto = document.getElementById('hero-photo');
-
     if(startBtn && heroPhoto) {
         startBtn.addEventListener('mouseenter', () => {
-            heroPhoto.style.transform = 'scale(1.08)';
+            heroPhoto.style.transform = 'scale(1.09)';
             heroPhoto.style.transition = 'transform 0.33s cubic-bezier(.52,1.64,.37,.66)';
             heroPhoto.style.zIndex = '10';
         });
@@ -384,3 +651,4 @@
 </script>
 </body>
 </html>
+```
