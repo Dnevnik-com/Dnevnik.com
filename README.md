@@ -12,7 +12,19 @@
             display: flex; align-items: center; max-width: 1200px; margin: 0 auto; height: 88px; justify-content: space-between;
         }
         .logo-block {
-            display: flex; flex-direction: column; align-items: flex-start; justify-content: center; margin-right: 40px;
+            display: flex; flex-direction: row; align-items: center; gap: 10px; margin-right: 40px;
+        }
+        .logo-img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            box-shadow: 0 2px 12px #2563eb33;
+            margin-right: 18px;
+            background: #fff;
+            border: 2px solid #e0e7ef;
+            display: inline-block;
+            vertical-align: middle;
+            border-radius: 10px; /* слегка скругленные края, не круг */
         }
         .logo-modern {
             font-family: 'Montserrat', Arial, sans-serif;
@@ -172,8 +184,11 @@
 <header>
     <div class="header-inner">
         <div class="logo-block">
-            <span class="logo-modern">D<span style="color:#222;">н</span>евник</span>
-            <span class="logo-sub">Современная платформа для образования</span>
+            <a href="https://ibb.co/sd1GVLDt"><img src="https://i.ibb.co/PvWn6Bbt/1semptember-730-Photoroom.png" alt="1semptember-730-Photoroom" border="0" class="logo-img"></a>
+            <span>
+                <span class="logo-modern">D<span style="color:#222;">н</span>евник</span>
+                <span class="logo-sub">Современная платформа для образования</span>
+            </span>
         </div>
         <nav>
             <a href="#features" class="nav-link">Возможности</a>
@@ -196,7 +211,7 @@
                 Цифровая трансформация <span>образования</span>
             </div>
             <div class="hero-desc">
-                Современная платформа для управления образовательным процессом. Объединяем учителей, учеников и родителей в единой цифровой экосистеме.
+                Современная платформа для управления образовательным процессом. Объединяем учителей, учеников и ро[...]
             </div>
             <div class="hero-btns">
                 <a href="http://dnevnik.com-v2.tilda.ws" class="btn hero-main" id="start-btn">Начать работу&nbsp;→</a>
@@ -284,7 +299,7 @@
         <div class="benefits-inner">
             <div class="benefits-list">
                 <div class="benefits-title">Преимущества использования</div>
-                <div class="benefits-desc">Наша платформа помогает образовательным организациям повысить эффективность и качество образовательного процесса.</div>
+                <div class="benefits-desc">Наша платформа помогает образовательным организациям повысить эффективность и каче�[...]
                 <div class="benefit-item"><span class="tick">✔️</span>Экономия времени на ведении документооборота</div>
                 <div class="benefit-item"><span class="tick">✔️</span>Повышение качества образовательного процесса</div>
                 <div class="benefit-item"><span class="tick">✔️</span>Улучшение взаимодействия с родителями</div>
@@ -319,7 +334,7 @@
             </div>
             <div style="color: #ccc; margin-top:4px;"></div>
             <div style="font-size:1rem; margin-top: 16px;">
-                Мы создаем инновационные решения для цифровой трансформации образования, объединяя всех участников образовательного процесса.
+                Мы создаем инновационные решения для цифровой трансформации образования, объединяя всех участнико�[...]
             </div>
         </div>
         <div class="footer-col">
