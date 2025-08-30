@@ -314,18 +314,7 @@
 
             <div class="clear"></div>
         </div>
-        
-
-
-        
-
-
-        
-
-
-        
-
-        
+    
 
 
     </div>
@@ -413,9 +402,6 @@
                 };
             });
         </script>
-
-
-
     <div id="talk_popup_widget"><div class="T6N3R" style=""><div class="R8Xk3" data-test-id="messenger-widget"><div class="idXNR"></div><div class="x1JNf"><div class="n5hUx"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" viewBox="0 0 12 10"><g><g transform="rotate(-225 5.2 2.8)"><path fill="none" stroke="#92cbde" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="20" stroke-width="2" d="M2.588-1.53v0h5.809v5.88"></path></g></g></svg></div><div class="KT8aN"><div class="MF8i6"><span class="DeR8V rK7Sc R1MJ_">МД</span></div></div><div class="q6klx">Чаты</div><div class="cxr7V"><svg xmlns="http://www.w3.org/2000/svg" width="10" height="18" viewBox="0 0 10 10"><g><g transform="rotate(-315 5 5)"><path fill="#a9e3fc" d="M4 0a1 1 0 0 1 2 0v4h4a1 1 0 0 1 0 2H6v4a1 1 0 0 1-2 0V6H0a1 1 0 0 1 0-2h4z"></path></g></g></svg></div></div><div class="Ziy6o" data-test-id="close-widget"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16"><g><g fill="#92cbde" transform="rotate(45 4 8.5)"><path d="M4.857.333a1 1 0 0 1 1-1h.476a1 1 0 0 1 1 1v4.429h4.715a1 1 0 0 1 1 1v.476a1 1 0 0 1-1 1H7.333v4.429a1 1 0 0 1-1 1h-.476a1 1 0 0 1-1-1V7.238H.143a1 1 0 0 1-1-1v-.476a1 1 0 0 1 1-1h4.714z"></path></g></g></svg></div></div><div class="uGDow"><div class="UVEvN PeTGr"><div class="LPQ20 pEXL2"><div class="xPz2c"><div class="Cr83X"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><g><g><path fill="#8da5b1" d="M16 8a7.969 7.969 0 0 1-1.922 5.202L18 17.126l-.875.875-3.922-3.922A8 8 0 1 1 16 8zM1.371 8A6.629 6.629 0 1 0 14.63 8 6.629 6.629 0 0 0 1.37 8z"></path></g></g></svg><input type="text" class="VUERh" placeholder="Поиск" data-test-id="search-contacts-field" value=""></div></div><div class="Yox5y" data-test-id="roster"><div><div class="TLMy3">Ошибка загрузки чатов школы</div><div class="avYDH">❌</div></div></div><div><div class="ZPLPa"><div class="DvKsS"></div><span>Нравятся чаты?</span><a href="https://forms.yandex.ru/cloud/66faa36ec417f3fd1fffeb8d/" target="_blank" rel="noopener noreferrer" data-test-id="share-opinion"><span>Поделитесь мнением</span><svg xmlns="http://www.w3.org/2000/svg" width="6" height="10" viewBox="0 0 8 12"><g><g transform="rotate(-45 3.5 5)"><path fill="#2291be" d="M4.328 1c.553 0 1 .348 1 .778v5.444c0 .273-.18.513-.454.652-.139.274-.379.454-.652.454h-5.444c-.43 0-.778-.447-.778-1 0-.552.348-1 .778-1h4.55v-4.55c0-.43.448-.778 1-.778z"></path></g></g></svg></a></div></div></div><div class="EW6tV X1ctB"><div class="qmHy8 hdxYJ" data-test-id="chat-window-head"><div class="bIYGW"><svg xmlns="http://www.w3.org/2000/svg" width="7" height="12" viewBox="0 0 7 12"><g><g transform="rotate(45 3.5 6)"><path fill="#0087c0" d="M4 3a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1h6a1 1 0 0 0 0-2H4z"></path></g></g></svg><span>Назад</span></div></div><div class="w0I1p"><svg xmlns="http://www.w3.org/2000/svg" width="93" height="88" viewBox="0 0 93 88"><g><g><path fill="#f0f0f0" d="M31.06-.07c12.772 0 23.836 8.672 27.322 21.018l.11.4-4.83 1.291C50.88 12.237 41.672 4.93 31.06 4.93 18.108 4.93 7.6 15.723 7.6 29.097c0 4.898 1.397 9.555 3.979 13.488a2.5 2.5 0 0 1 .378 1.768 16.688 16.688 0 0 1-4.106 8.582l-.217.233.254.035c.227.027.456.045.687.054l.347.006c2.569 0 4.952-1.129 6.621-3.078a2.5 2.5 0 0 1 3.237-.485 22.945 22.945 0 0 0 5.384 2.493l.577.174-1.382 4.805a28.25 28.25 0 0 1-5.137-2.035l-.377-.2-.086.076a13.625 13.625 0 0 1-8.458 3.245l-.379.005a13.54 13.54 0 0 1-7.576-2.29c-1.533-1.03-1.46-3.308.135-4.237 2.642-1.538 4.563-4.113 5.328-7.147l.033-.143-.028-.046c-2.647-4.386-4.112-9.445-4.21-14.736l-.005-.567C2.6 12.99 15.315-.07 31.06-.07zm59.175 56.736c0 5.84-1.645 11.44-4.69 16.268l-.016.023.028.113a12.473 12.473 0 0 0 5.693 7.587l.306.177c1.65.924 1.717 3.273.123 4.29a15.162 15.162 0 0 1-8.165 2.375c-3.592 0-6.98-1.242-9.644-3.437l-.195-.165-.285.15a31.315 31.315 0 0 1-13.772 3.447l-.584.005c-17.228 0-31.202-13.795-31.202-30.833 0-17.038 13.974-30.834 31.202-30.834 17.226 0 31.201 13.796 31.201 30.834zm-57.403 0c0 14.262 11.72 25.833 26.202 25.833 4.932 0 9.648-1.34 13.74-3.835a2.5 2.5 0 0 1 3.171.474c1.887 2.122 4.615 3.361 7.57 3.361.492 0 .98-.035 1.46-.103l.348-.058-.144-.143a17.398 17.398 0 0 1-4.703-8.951l-.068-.382a2.5 2.5 0 0 1 .4-1.821 25.403 25.403 0 0 0 4.428-14.375c0-14.262-11.723-25.834-26.202-25.834-14.481 0-26.202 11.571-26.202 25.834z"></path></g></g></svg><div>Выберите чат, чтобы начать общение</div></div><div class="hVcQV" data-test-id="chat-window"><div class="dpg1D"></div></div></div></div></div></div></div>
     <div id="create_chat_widget"></div>
     <link rel="stylesheet" href="https://static.emaktab.uz/client/talk.css?v=1ef56473" type="text/css">
@@ -432,11 +418,4 @@
     </script>
     <script src="https://static.emaktab.uz/client/talk.js?v=a401abe0" type="text/javascript"></script>
     <script src="https://static.emaktab.uz/client/create_chat_widget.js?v=da594062" type="text/javascript"></script>
-
-
-    
-    
-
-
-
 <div id="tooltip_modal" class="BfEIc"></div></body></html>
