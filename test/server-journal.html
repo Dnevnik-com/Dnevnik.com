@@ -1,1 +1,993 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Журнал 10-а | Литература</title>
+  <style>
+    body {
+      background: #faf8ff;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      margin: 0;
+      color: #23272f;
+    }
+    #passwordModal {
+      position: fixed;
+      z-index: 9999;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: rgba(240,240,255,0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #passwordBox {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 6px 32px #b1c8ef77;
+      padding: 36px 48px 32px 48px;
+      text-align: center;
+      min-width: 320px;
+    }
+    #passwordBox input[type="password"] {
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid #b2b6c2;
+      width: 180px;
+      margin-bottom: 14px;
+      margin-top: 12px;
+    }
+    #passwordBox button {
+      background: #3887ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 32px;
+      font-size: 17px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    #passwordBox .error {
+      color: #c73232;
+      margin-top: 9px;
+      font-size: 14px;
+      min-height: 21px;
+    }
 
+    .container {
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 20px 0 0 0;
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+    }
+    .header {
+      padding: 12px 32px 0 40px;
+      background: #faf8ff;
+      font-size: 13px;
+      color: #999;
+    }
+    .breadcrumbs {
+      font-size: 13px;
+      color: #8b95b6;
+    }
+    .breadcrumbs a {
+      color: #8b95b6;
+      text-decoration: none;
+    }
+    .breadcrumbs span {
+      margin: 0 6px;
+    }
+    .journal-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+    .subject-link {
+      font-size: 20px;
+      color: #3887ff;
+      text-decoration: none;
+      margin-left: 12px;
+      font-weight: 500;
+    }
+    .sub-header {
+      color: #9097b2;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+    .teacher-link {
+      color: #3887ff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .top-btns {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-left: auto;
+    }
+    .top-btn {
+      background: #f2f6ff;
+      border: 1px solid #e1e9fa;
+      border-radius: 8px;
+      font-size: 13px;
+      padding: 7px 18px;
+      color: #3887ff;
+      cursor: pointer;
+      margin: 0 0 0 6px;
+      transition: background 0.2s;
+    }
+    .top-btn.primary {
+      background: #3887ff;
+      color: #fff;
+      border: none;
+      font-weight: 500;
+    }
+    .top-btn:hover {
+      background: #dde8ff;
+    }
+
+    .main {
+      display: flex;
+      width: 100%;
+      gap: 0;
+    }
+    .left {
+      width: 60%;
+      min-width: 660px;
+      background: #fff;
+      border-radius: 12px 0 0 12px;
+      box-shadow: 0 1px 3px #e3e6f0;
+      padding: 0 0 12px 0;
+      overflow-x: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .lessons-drawer {
+      position: relative;
+      width: 0;
+      min-width: 0;
+      z-index: 2;
+      transition: width 0.18s cubic-bezier(.7,-0.3,.45,1.3), min-width 0.18s;
+      background: transparent;
+      overflow: visible;
+    }
+    .lessons-drawer.open {
+      width: 520px;
+      min-width: 420px;
+      transition: width 0.18s cubic-bezier(.7,-0.3,.45,1.3), min-width 0.18s;
+      background: #fff;
+      border-radius: 0 12px 12px 0;
+      box-shadow: 0 1px 10px #e3e6f0;
+      overflow: visible;
+    }
+    .drawer-handle {
+      position: absolute;
+      left: -18px;
+      top: 60px;
+      width: 32px;
+      height: 108px;
+      background: #3887ff;
+      border-radius: 0 8px 8px 0;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      writing-mode: vertical-rl;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      box-shadow: 0 1px 3px #b1c8ef;
+      transition: left 0.15s;
+      user-select: none;
+    }
+    .drawer-handle.closed {
+      left: -18px;
+    }
+    .drawer-handle.open {
+      left: -18px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px 0 16px;
+      align-items: center;
+    }
+    .tab {
+      border: 1px solid #e1e9fa;
+      background: #f2f6ff;
+      border-radius: 8px;
+      color: #3887ff;
+      padding: 5px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-right: 2px;
+      transition: background 0.2s;
+    }
+    .tab.active {
+      background: #3887ff;
+      color: #fff;
+      border-color: #3887ff;
+    }
+    .tab:last-child {
+      margin-right: 0;
+    }
+    .import-btn {
+      margin-left: auto;
+      background: #f2f6ff;
+      border: 1px solid #e1e9fa;
+      border-radius: 8px;
+      font-size: 13px;
+      padding: 6px 18px;
+      color: #3887ff;
+      cursor: pointer;
+    }
+    .import-btn:hover {
+      background: #dde8ff;
+    }
+
+    .journal-table-wrapper {
+      overflow-x: auto;
+      padding: 0 16px 0 16px;
+    }
+    .journal-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 15px;
+      margin-top: 14px;
+    }
+    .journal-table thead tr th {
+      background: #f2f6ff;
+      color: #8b95b6;
+      font-weight: 400;
+      border: 1px solid #e1e9fa;
+      padding: 2px 5px;
+      text-align: center;
+      font-size: 13px;
+      position: relative;
+    }
+    .journal-table th.fio {
+      width: 180px;
+      text-align: left;
+      font-size: 14px;
+    }
+    .journal-table th.today,
+    .journal-table td.today {
+      background: linear-gradient(to bottom, #e5f4ff 0%, #f5fafd 100%);
+      border-left: 2px solid #3887ff !important;
+      border-right: 2px solid #3887ff !important;
+      z-index: 2;
+      box-shadow: 0 0 0 1px #3887ff inset;
+    }
+    .journal-table th .today-label {
+      color: #3887ff;
+      font-size: 11px;
+      font-weight: bold;
+      position: absolute;
+      top: 1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e5f4ff;
+      border-radius: 5px;
+      padding: 0 5px;
+      z-index: 3;
+      margin-top: -13px;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .journal-table tbody tr td {
+      border: 1px solid #e1e9fa;
+      text-align: center;
+      height: 32px;
+      min-width: 28px;
+      padding: 0;
+      font-size: 15px;
+      position: relative;
+      background: #fff;
+    }
+    .journal-table td.fio {
+      text-align: left;
+      padding-left: 10px;
+      font-size: 15px;
+      background: #f8f9fd;
+      font-weight: 500;
+    }
+    .otb, .worktype {
+      color: #c8ccd6;
+      font-size: 11px;
+      font-weight: normal;
+      user-select: none;
+      cursor: pointer;
+      display: block;
+      margin-top: 0;
+      transition: color .2s;
+    }
+    .worktype.active {
+      color: #3887ff;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    .otb-today {
+      color: #3887ff !important;
+      font-weight: bold;
+    }
+    .mark {
+      font-weight: 500;
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      line-height: 22px;
+      border-radius: 5px;
+      vertical-align: middle;
+      margin: 2px auto;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border 0.12s;
+      background: #fff;
+    }
+    .mark.mark-5 { color: #289b11; background: #e3f6e0; }
+    .mark.mark-4 { color: #1a7cc7; background: #e9f3fb; }
+    .mark.mark-3 { color: #e09a26; background: #fff8e2; }
+    .mark.mark-2 { color: #c73232; background: #fbeaea; }
+    .mark:focus {
+      outline: none;
+      border: 1.5px solid #3887ff;
+      background: #d5e4fd;
+    }
+
+    .drawer-content {
+      padding: 0 16px 16px 24px;
+      margin-top: 16px;
+    }
+    .lessons-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 14px;
+      font-size: 15px;
+    }
+    .lessons-table th, .lessons-table td {
+      border: 1px solid #e1e9fa;
+      padding: 6px 8px;
+      text-align: left;
+      font-size: 14px;
+      background: #fff;
+    }
+    .lessons-table th {
+      background: #f2f6ff;
+      color: #8b95b6;
+      font-weight: normal;
+      text-align: center;
+      font-size: 13px;
+    }
+    .lessons-table td {
+      vertical-align: top;
+    }
+    .edit-btn, .save-btn, .cancel-btn {
+      padding: 2px 8px;
+      font-size: 13px;
+      border-radius: 6px;
+      border: none;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+    .edit-btn {
+      background: #f2f6ff;
+      color: #3887ff;
+      border: 1px solid #e1e9fa;
+    }
+    .edit-btn:hover {
+      background: #dde8ff;
+    }
+    .save-btn {
+      background: #3887ff;
+      color: #fff;
+      border: none;
+    }
+    .cancel-btn {
+      background: #f8f9fd;
+      color: #9097b2;
+      border: 1px solid #e1e9fa;
+    }
+    .lesson-input, .hw-input {
+      min-width: 180px;
+      font-size: 14px;
+      border: 1px solid #e1e9fa;
+      border-radius: 6px;
+      padding: 2px 5px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+    @media (max-width: 1200px) {
+      .main { flex-direction: column; }
+      .left, .lessons-drawer.open { width: 100%; min-width: 0; border-radius: 12px; }
+      .drawer-handle { left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Модальное окно пароля -->
+  <div id="passwordModal">
+    <div id="passwordBox">
+      <h2>Вход в журнал</h2>
+      <div>
+        <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="off" onkeydown="if(event.key==='Enter'){checkPassword();}">
+      </div>
+      <button onclick="checkPassword()">Войти</button>
+      <div class="error" id="passwordError"></div>
+    </div>
+  </div>
+
+  <div class="header" style="display:none;" id="journalHeader">
+    <div class="breadcrumbs">
+      <a href="#">Стартовая учителя</a> <span>/</span>
+      <a href="#">Журналы</a> <span>/</span>
+      <span>10-а, Литература</span>
+    </div>
+    <div style="display:flex; align-items: center; margin-top: 12px;">
+      <div>
+        <span class="journal-title">Журнал 10-а</span>
+        <a class="subject-link" href="#">Литература</a>
+        <div class="sub-header">2022/2023 учебный год <span style="margin-left: 14px;">Учитель: <a class="teacher-link" href="#">Дроздова Л.А.</a></span></div>
+      </div>
+      <div class="top-btns">
+        <button class="top-btn">замечание к журналу</button>
+        <button class="top-btn">запись для класса</button>
+      </div>
+    </div>
+  </div>
+  <div class="container" id="journalContainer" style="display:none;">
+    <div class="main">
+      <div class="left">
+        <!-- Таблица оценок -->
+        <div class="tabs">
+          <button class="tab active">1 семестр</button>
+          <button class="tab">2</button>
+          <button class="tab">итог</button>
+          <button class="import-btn">импорт</button>
+        </div>
+        <div class="journal-table-wrapper">
+          <table class="journal-table" id="marksTable">
+            <thead>
+              <tr id="datesHeaderRow">
+                <th class="fio">ФИО</th>
+                <th data-date="2022-09-01">
+                  01.09<br>
+                  <span class="worktype" data-col="0" onclick="toggleWorkType(event,0)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-02">
+                  02.09<br>
+                  <span class="worktype" data-col="1" onclick="toggleWorkType(event,1)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-06">
+                  06.09<br>
+                  <span class="worktype" data-col="2" onclick="toggleWorkType(event,2)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-09">
+                  09.09<br>
+                  <span class="worktype" data-col="3" onclick="toggleWorkType(event,3)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-13">
+                  13.09<br>
+                  <span class="worktype" data-col="4" onclick="toggleWorkType(event,4)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-16">
+                  16.09<br>
+                  <span class="worktype" data-col="5" onclick="toggleWorkType(event,5)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-21">
+                  21.09<br>
+                  <span class="worktype" data-col="6" onclick="toggleWorkType(event,6)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-23">
+                  23.09<br>
+                  <span class="worktype" data-col="7" onclick="toggleWorkType(event,7)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-27">
+                  27.09<br>
+                  <span class="worktype" data-col="8" onclick="toggleWorkType(event,8)">ОТВ</span>
+                </th>
+                <th data-date="2022-09-30">
+                  30.09<br>
+                  <span class="worktype" data-col="9" onclick="toggleWorkType(event,9)">ОТВ</span>
+                </th>
+                <th data-date="2022-10-04">
+                  04.10<br>
+                  <span class="worktype" data-col="10" onclick="toggleWorkType(event,10)">ОТВ</span>
+                </th>
+                <th data-date="2022-10-07">
+                  07.10<br>
+                  <span class="worktype" data-col="11" onclick="toggleWorkType(event,11)">ОТВ</span>
+                </th>
+                <th data-date="2022-10-11">
+                  11.10<br>
+                  <span class="worktype" data-col="12" onclick="toggleWorkType(event,12)">ОТВ</span>
+                </th>
+                <th data-date="2022-10-14">
+                  14.10<br>
+                  <span class="worktype" data-col="13" onclick="toggleWorkType(event,13)">ОТВ</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="marksTbody">
+              <!-- JS заполнит -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="drawer" class="lessons-drawer open">
+        <div class="drawer-handle open" id="drawerHandle" onclick="toggleDrawer()">
+          <span id="drawerHandleText">Скрыть темы/дз &raquo;</span>
+        </div>
+        <div class="drawer-content" id="drawerContent">
+          <div class="tabs">
+            <button class="tab active">1 семестр</button>
+            <button class="tab">2</button>
+            <button class="tab">год</button>
+            <button class="import-btn">импорт</button>
+          </div>
+          <table class="lessons-table" id="lessonsTable">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Тема урока</th>
+                <th>Домашнее задание к следующему уроку</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>01.09.2022</td>
+                <td>
+                  <span class="lesson-text" data-row="0"></span>
+                  <input type="text" class="lesson-input" style="display:none" value="" data-row="0">
+                  <button class="edit-btn" onclick="editLesson(0)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveLesson(0)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelLesson(0)">✖</button>
+                </td>
+                <td>
+                  <span class="hw-text" data-row="0"></span>
+                  <input type="text" class="hw-input" style="display:none" value="" data-row="0">
+                  <button class="edit-btn" onclick="editHW(0)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveHW(0)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelHW(0)">✖</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>02.09.2022</td>
+                <td>
+                  <span class="lesson-text" data-row="1"></span>
+                  <input type="text" class="lesson-input" style="display:none" value="" data-row="1">
+                  <button class="edit-btn" onclick="editLesson(1)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveLesson(1)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelLesson(1)">✖</button>
+                </td>
+                <td>
+                  <span class="hw-text" data-row="1"></span>
+                  <input type="text" class="hw-input" style="display:none" value="" data-row="1">
+                  <button class="edit-btn" onclick="editHW(1)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveHW(1)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelHW(1)">✖</button>
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>06.09.2022</td>
+                <td>
+                  <span class="lesson-text" data-row="2"></span>
+                  <input type="text" class="lesson-input" style="display:none" value="" data-row="2">
+                  <button class="edit-btn" onclick="editLesson(2)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveLesson(2)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelLesson(2)">✖</button>
+                </td>
+                <td>
+                  <span class="hw-text" data-row="2"></span>
+                  <input type="text" class="hw-input" style="display:none" value="" data-row="2">
+                  <button class="edit-btn" onclick="editHW(2)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveHW(2)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelHW(2)">✖</button>
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>09.09.2022</td>
+                <td>
+                  <span class="lesson-text" data-row="3"></span>
+                  <input type="text" class="lesson-input" style="display:none" value="" data-row="3">
+                  <button class="edit-btn" onclick="editLesson(3)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveLesson(3)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelLesson(3)">✖</button>
+                </td>
+                <td>
+                  <span class="hw-text" data-row="3"></span>
+                  <input type="text" class="hw-input" style="display:none" value="" data-row="3">
+                  <button class="edit-btn" onclick="editHW(3)">✏️</button>
+                  <button class="save-btn" style="display:none" onclick="saveHW(3)">💾</button>
+                  <button class="cancel-btn" style="display:none" onclick="cancelHW(3)">✖</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> <!-- main -->
+  </div> <!-- container -->
+
+  <script>
+    // --- Пароль (0000) ---
+    function checkPassword() {
+      const inp = document.getElementById('passwordInput');
+      const err = document.getElementById('passwordError');
+      if (inp.value === "0000") {
+        document.getElementById('passwordModal').style.display = "none";
+        document.getElementById('journalHeader').style.display = "";
+        document.getElementById('journalContainer').style.display = "";
+      } else {
+        err.textContent = "Неверный пароль!";
+      }
+    }
+    setTimeout(function(){
+      document.getElementById('passwordInput').focus();
+    }, 300);
+
+    // --- Данные журнала ---
+    const LS_KEY = "dnevnik-journal-v1";
+    let defaultData = {
+      students: [
+        "Ахтямиров Арби",
+        "Арсанукаева Зухрат",
+        "Астамиров Юсуп",
+        "Вахаев Хеда",
+        "Висматова Эмина"
+      ],
+      lessons: [
+        "Торжественная линейка. День знаний",
+        "Русская литература 19 века в контексте мировой культуры",
+        "Образ русской литературы в первой половине 19 века",
+        "Р.п. Подготовка к сочинению по произведениям русской литературы 19 века"
+      ],
+      homeworks: [
+        "",
+        "написать сообщение о любимом писателе",
+        "сделать анализ любого произведения, написанного в 19 веке",
+        "написать черновик сочинения по одной из пяти предложенных тем: Тема маленького человека. Я и другие. Разговор с собой"
+      ],
+      marks: [
+        [null,5,null,5,null,5,null,null,5,null,null,null,5,null],
+        [null,4,null,4,null,4,null,null,4,null,null,null,4,null],
+        [null,null,5,null,null,5,null,3,null,3,null,null,3,null],
+        [null,5,3,4,2,null,null,null,4,null,null,null,4,null],
+        [null,4,5,3,null,null,3,null,null,null,4,null,null,4]
+      ],
+      worktypes: Array(14).fill("ОТВ") // по умолчанию "ОТВ" для всех дат
+    };
+    const DATES = [
+      "2022-09-01",
+      "2022-09-02",
+      "2022-09-06",
+      "2022-09-09",
+      "2022-09-13",
+      "2022-09-16",
+      "2022-09-21",
+      "2022-09-23",
+      "2022-09-27",
+      "2022-09-30",
+      "2022-10-04",
+      "2022-10-07",
+      "2022-10-11",
+      "2022-10-14"
+    ];
+    const MARKS = [5, 4, 3, 2];
+    const ALL_WORKTYPES = ["ОТВ", "ПР", "САМ", "КР", "ДР", "КОНТР", "ЛАБ", "ТЕСТ", "ПРОЕКТ"];
+
+    function loadData() {
+      let data = localStorage.getItem(LS_KEY);
+      if (data) {
+        try {
+          let parsed = JSON.parse(data);
+          // миграция worktypes
+          if (!parsed.worktypes || parsed.worktypes.length !== DATES.length) {
+            parsed.worktypes = Array(DATES.length).fill("ОТВ");
+          }
+          return parsed;
+        } catch(e) {
+          return JSON.parse(JSON.stringify(defaultData));
+        }
+      }
+      return JSON.parse(JSON.stringify(defaultData));
+    }
+    function saveData() {
+      localStorage.setItem(LS_KEY, JSON.stringify(journalData));
+    }
+
+    let journalData = loadData();
+
+    // ---- Оценки ----
+    function renderMarksTable() {
+      let tbody = document.getElementById('marksTbody');
+      tbody.innerHTML = "";
+      let today = new Date();
+      let todayIdx = -1;
+      let todayISO = today.toISOString().slice(0,10);
+      for (let idx = 0; idx < DATES.length; idx++) {
+        if (DATES[idx] === todayISO) {
+          todayIdx = idx;
+          break;
+        }
+      }
+      // Подсветка заголовка и надпись "сегодня"
+      let headerCells = document.querySelectorAll('#datesHeaderRow th[data-date]');
+      headerCells.forEach(function(th, idx){
+        th.classList.remove('today');
+        let label = th.querySelector('.today-label');
+        if (label) label.remove();
+        if (idx === todayIdx) {
+          th.classList.add('today');
+          let d = document.createElement('div');
+          d.className = 'today-label';
+          d.textContent = "сегодня";
+          th.appendChild(d);
+        }
+        // Подсветка работы на уроке для сегодня
+        let worktypeSpan = th.querySelector('.worktype');
+        if (worktypeSpan) {
+          worktypeSpan.classList.remove('otb-today');
+          if (idx === todayIdx) worktypeSpan.classList.add('otb-today');
+        }
+      });
+
+      for (let i = 0; i < journalData.students.length; i++) {
+        let row = document.createElement('tr');
+        // ФИО
+        let fioTd = document.createElement('td');
+        fioTd.className = "fio";
+        fioTd.textContent = journalData.students[i];
+        row.appendChild(fioTd);
+
+        for (let j = 0; j < DATES.length; j++) {
+          let td = document.createElement('td');
+          if (j === todayIdx) td.classList.add('today');
+          td.tabIndex = 0;
+          td.setAttribute('data-student', i);
+          td.setAttribute('data-date', j);
+          td.onclick = function() {
+            editMarkCell(this, i, j);
+          };
+          td.onkeydown = function(e) {
+            if (!this.hasAttribute('data-edit')) {
+              editMarkCell(td, i, j, true);
+              setTimeout(() => td.querySelector('input')?.focus(), 0);
+            }
+          };
+          let mark = journalData.marks[i][j];
+          if (mark) {
+            let span = document.createElement('span');
+            span.className = "mark mark-" + mark;
+            span.textContent = mark;
+            span.tabIndex = -1;
+            td.appendChild(span);
+          }
+          row.appendChild(td);
+        }
+        tbody.appendChild(row);
+      }
+      // подсветить активный worktype
+      updateWorktypesUI();
+    }
+
+    // --- Работа на уроке (ОТВ/ПР/...) ---
+    function toggleWorkType(e, col) {
+      e.stopPropagation();
+      let cur = journalData.worktypes[col] || "ОТВ";
+      let idx = ALL_WORKTYPES.indexOf(cur);
+      let nextIdx = (idx + 1) % ALL_WORKTYPES.length;
+      journalData.worktypes[col] = ALL_WORKTYPES[nextIdx];
+      saveData();
+      updateWorktypesUI();
+    }
+    function updateWorktypesUI() {
+      let ths = document.querySelectorAll("#datesHeaderRow .worktype");
+      ths.forEach((span, idx) => {
+        span.textContent = journalData.worktypes[idx] || "ОТВ";
+        span.className = "worktype" + (isTodayCol(idx) ? " otb-today" : "");
+      });
+    }
+    function isTodayCol(idx) {
+      let todayISO = new Date().toISOString().slice(0,10);
+      return DATES[idx] === todayISO;
+    }
+
+    // ---- Оценки ----
+    function editMarkCell(cell, i, j, focus) {
+      // Запретить повторное открытие
+      if (cell.hasAttribute('data-edit')) return;
+      cell.setAttribute('data-edit', '1');
+      cell.innerHTML = "";
+      let input = document.createElement('input');
+      input.type = "text";
+      input.value = journalData.marks[i][j] ? journalData.marks[i][j] : "";
+      input.className = "mark";
+      input.style.width = "26px";
+      input.style.textAlign = "center";
+      input.style.background = "inherit";
+      input.style.fontWeight = "bold";
+      input.style.border = "1.5px solid #3887ff";
+      input.style.borderRadius = "5px";
+      input.style.margin = "1px auto";
+      input.style.fontSize = "16px";
+      input.maxLength = 1;
+      input.setAttribute('inputmode', 'numeric');
+      input.setAttribute('pattern', '[2-5]');
+      input.onblur = function() {
+        applyMarkInput(cell, i, j, input.value);
+      };
+      input.onkeydown = function(e) {
+        if (e.key === "Enter" || e.key === "Tab") {
+          input.blur();
+        } else if (e.key === "Escape") {
+          cell.removeAttribute('data-edit');
+          renderMarksTable();
+        }
+      };
+      input.oninput = function(e) {
+        let v = input.value.trim();
+        if (v.length > 1) v = v.slice(-1);
+        if (v === "") {
+          journalData.marks[i][j] = null;
+          saveData();
+          renderMarksTable();
+          setTimeout(() => {
+            let nextCell = findNextCell(cell, i, j, 1);
+            nextCell && nextCell.focus();
+          }, 10);
+        } else if (["2","3","4","5"].includes(v)) {
+          journalData.marks[i][j] = parseInt(v);
+          saveData();
+          renderMarksTable();
+          setTimeout(() => {
+            let nextCell = findNextCell(cell, i, j, 1);
+            nextCell && nextCell.focus();
+          }, 10);
+        } else {
+          input.value = "";
+        }
+      };
+      cell.appendChild(input);
+      if (focus) setTimeout(() => input.focus(), 0);
+      else input.focus();
+    }
+    function applyMarkInput(cell, i, j, value) {
+      let v = value.trim();
+      if (v === "") {
+        journalData.marks[i][j] = null;
+      } else if (["2","3","4","5"].includes(v)) {
+        journalData.marks[i][j] = parseInt(v);
+      }
+      saveData();
+      cell.removeAttribute('data-edit');
+      renderMarksTable();
+    }
+    function findNextCell(cell, i, j, dir) {
+      let tbody = document.getElementById('marksTbody');
+      let rows = tbody.querySelectorAll('tr');
+      let ni = i, nj = j+dir;
+      if (nj >= DATES.length) { nj = 0; ni++; }
+      if (ni >= rows.length) return null;
+      let tds = rows[ni].querySelectorAll('td:not(.fio)');
+      return tds[nj];
+    }
+
+    // ---- Темы/дз ----
+    function fillLessonTable() {
+      for (let i = 0; i < journalData.lessons.length; i++) {
+        document.querySelector('.lesson-text[data-row="'+i+'"]').textContent = journalData.lessons[i];
+        document.querySelector('.lesson-input[data-row="'+i+'"]').value = journalData.lessons[i];
+        document.querySelector('.hw-text[data-row="'+i+'"]').textContent = journalData.homeworks[i];
+        document.querySelector('.hw-input[data-row="'+i+'"]').value = journalData.homeworks[i];
+      }
+    }
+    function editLesson(row) {
+      document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = 'none';
+      document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = '';
+      document.querySelectorAll('.edit-btn')[row*2].style.display = 'none';
+      document.querySelectorAll('.save-btn')[row*2].style.display = '';
+      document.querySelectorAll('.cancel-btn')[row*2].style.display = '';
+    }
+    function saveLesson(row) {
+      let val = document.querySelector('.lesson-input[data-row="'+row+'"]').value;
+      journalData.lessons[row] = val;
+      saveData();
+      fillLessonTable();
+      cancelLesson(row);
+    }
+    function cancelLesson(row) {
+      document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = '';
+      document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = 'none';
+      document.querySelectorAll('.edit-btn')[row*2].style.display = '';
+      document.querySelectorAll('.save-btn')[row*2].style.display = 'none';
+      document.querySelectorAll('.cancel-btn')[row*2].style.display = 'none';
+      document.querySelector('.lesson-input[data-row="'+row+'"]').value = journalData.lessons[row];
+    }
+    function editHW(row) {
+      document.querySelector('.hw-text[data-row="'+row+'"]').style.display = 'none';
+      document.querySelector('.hw-input[data-row="'+row+'"]').style.display = '';
+      document.querySelectorAll('.edit-btn')[row*2+1].style.display = 'none';
+      document.querySelectorAll('.save-btn')[row*2+1].style.display = '';
+      document.querySelectorAll('.cancel-btn')[row*2+1].style.display = '';
+    }
+    function saveHW(row) {
+      let val = document.querySelector('.hw-input[data-row="'+row+'"]').value;
+      journalData.homeworks[row] = val;
+      saveData();
+      fillLessonTable();
+      cancelHW(row);
+    }
+    function cancelHW(row) {
+      document.querySelector('.hw-text[data-row="'+row+'"]').style.display = '';
+      document.querySelector('.hw-input[data-row="'+row+'"]').style.display = 'none';
+      document.querySelectorAll('.edit-btn')[row*2+1].style.display = '';
+      document.querySelectorAll('.save-btn')[row*2+1].style.display = 'none';
+      document.querySelectorAll('.cancel-btn')[row*2+1].style.display = 'none';
+      document.querySelector('.hw-input[data-row="'+row+'"]').value = journalData.homeworks[row];
+    }
+
+    // ---- Шторка ----
+    let drawerOpen = true;
+    function toggleDrawer() {
+      drawerOpen = !drawerOpen;
+      const drawer = document.getElementById('drawer');
+      const handle = document.getElementById('drawerHandle');
+      const content = document.getElementById('drawerContent');
+      if (drawerOpen) {
+        drawer.classList.add('open');
+        handle.classList.remove('closed');
+        handle.classList.add('open');
+        content.style.display = '';
+        document.getElementById('drawerHandleText').innerHTML = 'Скрыть темы/дз &raquo;';
+      } else {
+        drawer.classList.remove('open');
+        handle.classList.remove('open');
+        handle.classList.add('closed');
+        content.style.display = 'none';
+        document.getElementById('drawerHandleText').innerHTML = '&laquo; Показать темы/дз';
+      }
+    }
+
+    // --- Init ---
+    function initJournal() {
+      renderMarksTable();
+      fillLessonTable();
+    }
+    window.onload = function() { 
+      if (document.getElementById('journalContainer').style.display !== 'none') {
+        initJournal();
+      }
+    };
+    // Если вход разрешён (например, после reload и пароля)
+    if (window.location.hash === "#open") {
+      document.getElementById('passwordModal').style.display = "none";
+      document.getElementById('journalHeader').style.display = "";
+      document.getElementById('journalContainer').style.display = "";
+      initJournal();
+    }
+    (function() {
+      let ok = false;
+      let origCheckPassword = checkPassword;
+      checkPassword = function() {
+        origCheckPassword();
+        if (document.getElementById('passwordModal').style.display === "none") {
+          window.location.hash = "#open";
+          initJournal();
+        }
+      };
+    })();
+  </script>
+</body>
+</html>
