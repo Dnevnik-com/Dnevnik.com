@@ -255,6 +255,13 @@
       text-align: left;
       font-size: 14px;
     }
+    .journal-table th.avg {
+      width: 80px;
+      font-size: 13px;
+      color: #3887ff;
+      background: #f0f7ff;
+      font-weight: bold;
+    }
     .journal-table th.today,
     .journal-table td.today {
       background: linear-gradient(to bottom, #e5f4ff 0%, #f5fafd 100%);
@@ -296,6 +303,15 @@
       font-size: 15px;
       background: #f8f9fd;
       font-weight: 500;
+    }
+    .journal-table td.avg {
+      background: #f0f7ff;
+      color: #3887ff;
+      font-weight: bold;
+      font-size: 15px;
+      border-left: 2px solid #cbe4ff;
+      border-right: 2px solid #cbe4ff;
+      letter-spacing: 0.5px;
     }
     .otb, .worktype {
       color: #c8ccd6;
@@ -512,6 +528,7 @@
                   14.10<br>
                   <span class="worktype" data-col="13" onclick="toggleWorkType(event,13)">ОТВ</span>
                 </th>
+                <th class="avg">Средний<br>балл</th>
               </tr>
             </thead>
             <tbody id="marksTbody">
@@ -751,6 +768,8 @@
         fioTd.textContent = journalData.students[i];
         row.appendChild(fioTd);
 
+        // Оценки
+        let marksSum = 0, marksCount = 0;
         for (let j = 0; j < DATES.length; j++) {
           let td = document.createElement('td');
           if (j === todayIdx) td.classList.add('today');
@@ -773,9 +792,21 @@
             span.textContent = mark;
             span.tabIndex = -1;
             td.appendChild(span);
+            marksSum += mark;
+            marksCount++;
           }
           row.appendChild(td);
         }
+        // Средний балл
+        let avgTd = document.createElement('td');
+        avgTd.className = "avg";
+        if (marksCount > 0) {
+          avgTd.textContent = (marksSum / marksCount).toFixed(2).replace(/\.00$/, "");
+        } else {
+          avgTd.textContent = "-";
+        }
+        row.appendChild(avgTd);
+
         tbody.appendChild(row);
       }
       // подсветить активный worktype
@@ -880,7 +911,7 @@
       let ni = i, nj = j+dir;
       if (nj >= DATES.length) { nj = 0; ni++; }
       if (ni >= rows.length) return null;
-      let tds = rows[ni].querySelectorAll('td:not(.fio)');
+      let tds = rows[ni].querySelectorAll('td:not(.fio):not(.avg)');
       return tds[nj];
     }
 
