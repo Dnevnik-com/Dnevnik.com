@@ -1,77 +1,307 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Настройка классов</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    .logo { width: 120px; margin-bottom: 20px; }
-    .class-block { border: 1px solid #ccc; padding: 16px; margin-bottom: 20px; border-radius: 8px; }
-    .students-list { margin-left: 20px; }
-    button { margin: 2px; }
-    .inline { display: inline-block; }
-    .input-sm { width: 120px; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 560px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(60, 72, 88, 0.08);
+      padding: 32px 24px 24px 24px;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 28px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #2e3a59;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .add-class-block {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+      justify-content: center;
+    }
+    .input-sm {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #dbe1e8;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fafb;
+      transition: border .2s;
+    }
+    .input-sm:focus {
+      border-color: #3b82f6;
+      outline: none;
+      background: #fff;
+    }
+    .btn {
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background .15s;
+    }
+    .btn:hover {
+      background: #2563eb;
+    }
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #334155;
+    }
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
+    .class-list {
+      margin-top: 12px;
+    }
+    .class-block {
+      border-radius: 10px;
+      margin-bottom: 16px;
+      background: #f0f6ff;
+      box-shadow: 0 2px 6px rgba(60,72,88,0.06);
+      padding: 0;
+      overflow: hidden;
+      border: none;
+      transition: box-shadow .2s;
+    }
+    .class-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 16px 20px 16px 20px;
+      background: #e0edff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #234173;
+      border: none;
+      outline: none;
+      transition: background .16s;
+      user-select: none;
+    }
+    .class-header:active {
+      background: #d1e5ff;
+    }
+    .class-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .arrow {
+      transition: transform .3s;
+      font-size: 1.2rem;
+      color: #3b82f6;
+      margin-right: 8px;
+    }
+    .arrow.open {
+      transform: rotate(90deg);
+    }
+    .students-section {
+      padding: 16px 28px 20px 48px;
+      background: #fafbff;
+      border-top: 1px solid #e1e7ef;
+      animation: fadeIn .3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: none;}
+    }
+    .students-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 12px 0;
+    }
+    .students-list li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f3f7fa;
+      border-radius: 6px;
+      padding: 8px 12px;
+      margin-bottom: 7px;
+      font-size: 1rem;
+      color: #3a4660;
+    }
+    .students-list li:last-child {
+      margin-bottom: 0;
+    }
+    .add-student-block {
+      display: flex;
+      gap: 8px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 8px; }
+      .students-section { padding: 12px 10px 16px 18px;}
+      .class-header { padding: 12px 12px 12px 12px;}
+    }
   </style>
 </head>
 <body>
-  <img class="logo" src="https://thumb.tildacdn.com/tild6539-3262-4636-b334-326130356633/-/format/webp/d_NEW_LOGO-Photoroom.png.webp" alt="Логотип">
-  <h1>Управление классами</h1>
-
-  <div>
-    <input id="newClassName" placeholder="Название нового класса" class="input-sm">
-    <button onclick="addClass()">Добавить класс</button>
+  <div class="container">
+    <img class="logo" src="https://thumb.tildacdn.com/tild6539-3262-4636-b334-326130356633/-/format/webp/d_NEW_LOGO-Photoroom.png.webp" alt="Логотип">
+    <h1>Управление классами</h1>
+    <div class="add-class-block">
+      <input id="newClassName" placeholder="Название нового класса" class="input-sm">
+      <button class="btn" onclick="addClass()">Добавить класс</button>
+    </div>
+    <div class="class-list" id="classes"></div>
   </div>
-  <div id="classes"></div>
-
   <script>
-    // Примерная структура данных
+    // Данные
     let classes = [
       { id: 1, name: '1А', students: ['Иванов', 'Петров'] },
       { id: 2, name: '2Б', students: ['Сидоров'] }
     ];
     let classIdCounter = 3;
+    let openClassId = null; // id раскрытого класса
 
     function renderClasses() {
       const classesDiv = document.getElementById('classes');
       classesDiv.innerHTML = '';
       classes.forEach(cls => {
-        const classDiv = document.createElement('div');
-        classDiv.className = 'class-block';
+        // Block
+        const block = document.createElement('div');
+        block.className = 'class-block';
 
-        // Название и кнопки
-        classDiv.innerHTML = `
-          <b>Класс:</b>
-          <span id="name-${cls.id}">${cls.name}</span>
-          <button onclick="editClass(${cls.id})">Переименовать</button>
-          <button onclick="removeClass(${cls.id})">Удалить класс</button>
-          <br>
-          <b>Ученики:</b>
-          <ul class="students-list" id="students-${cls.id}">
-            ${cls.students.map((s, i) => 
-              `<li>${s}
-                <button onclick="removeStudent(${cls.id}, ${i})">Удалить</button>
-              </li>`
-            ).join('')}
-          </ul>
-          <input id="student-input-${cls.id}" class="input-sm" placeholder="Добавить ученика">
-          <button onclick="addStudent(${cls.id})">Добавить ученика</button>
-        `;
-        classesDiv.appendChild(classDiv);
+        // Header
+        const header = document.createElement('div');
+        header.className = 'class-header';
+        header.onclick = (e) => {
+          // Только если не клик по кнопке
+          if (e.target.tagName === 'BUTTON') return;
+          openClassId = openClassId === cls.id ? null : cls.id;
+          renderClasses();
+        };
+
+        // Arrow
+        const arrow = document.createElement('span');
+        arrow.className = 'arrow' + (openClassId === cls.id ? ' open' : '');
+        arrow.innerHTML = '▶';
+
+        // Название
+        const nameSpan = document.createElement('span');
+        nameSpan.textContent = cls.name;
+        nameSpan.style.flex = '1';
+
+        // Actions
+        const actions = document.createElement('div');
+        actions.className = 'class-actions';
+
+        // Edit
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn btn-secondary';
+        editBtn.textContent = 'Переименовать';
+        editBtn.onclick = (e) => {
+          e.stopPropagation();
+          editClass(cls.id);
+        };
+        actions.appendChild(editBtn);
+
+        // Remove
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'btn btn-secondary';
+        removeBtn.textContent = 'Удалить';
+        removeBtn.onclick = (e) => {
+          e.stopPropagation();
+          removeClass(cls.id);
+        };
+        actions.appendChild(removeBtn);
+
+        // Header children
+        header.appendChild(arrow);
+        header.appendChild(nameSpan);
+        header.appendChild(actions);
+
+        block.appendChild(header);
+
+        // Students section
+        if (openClassId === cls.id) {
+          const studentsSection = document.createElement('div');
+          studentsSection.className = 'students-section';
+
+          // List
+          const ul = document.createElement('ul');
+          ul.className = 'students-list';
+          cls.students.forEach((student, i) => {
+            const li = document.createElement('li');
+            li.textContent = student;
+            // Remove student btn
+            const delBtn = document.createElement('button');
+            delBtn.className = 'btn btn-secondary';
+            delBtn.style.fontSize = '0.92em';
+            delBtn.textContent = 'Удалить';
+            delBtn.onclick = () => removeStudent(cls.id, i);
+            li.appendChild(delBtn);
+            ul.appendChild(li);
+          });
+          studentsSection.appendChild(ul);
+
+          // Add student
+          const addStudentBlock = document.createElement('div');
+          addStudentBlock.className = 'add-student-block';
+          const input = document.createElement('input');
+          input.className = 'input-sm';
+          input.id = `student-input-${cls.id}`;
+          input.placeholder = 'Добавить ученика';
+          input.addEventListener('keydown', function(e){
+            if(e.key === 'Enter') addStudent(cls.id);
+          });
+          const addBtn = document.createElement('button');
+          addBtn.className = 'btn';
+          addBtn.textContent = 'Добавить';
+          addBtn.onclick = () => addStudent(cls.id);
+          addStudentBlock.appendChild(input);
+          addStudentBlock.appendChild(addBtn);
+          studentsSection.appendChild(addStudentBlock);
+
+          block.appendChild(studentsSection);
+
+          // Фокус на поле при открытии
+          setTimeout(() => {
+            const el = document.getElementById(`student-input-${cls.id}`);
+            if (el) el.focus();
+          }, 20);
+        }
+
+        classesDiv.appendChild(block);
       });
     }
 
     function addClass() {
-      const name = document.getElementById('newClassName').value.trim();
+      const nameInput = document.getElementById('newClassName');
+      const name = nameInput.value.trim();
       if (!name) return alert('Введите название класса');
       classes.push({ id: classIdCounter++, name, students: [] });
-      document.getElementById('newClassName').value = '';
+      nameInput.value = '';
+      openClassId = classes[classes.length-1].id; // Открыть новый класс
       renderClasses();
     }
 
     function removeClass(id) {
       if (!confirm('Удалить класс?')) return;
       classes = classes.filter(cls => cls.id !== id);
+      if (openClassId === id) openClassId = null;
       renderClasses();
     }
 
@@ -86,18 +316,27 @@
 
     function addStudent(classId) {
       const input = document.getElementById(`student-input-${classId}`);
+      if (!input) return;
       const name = input.value.trim();
       if (!name) return alert('Введите имя ученика');
       const cls = classes.find(cls => cls.id === classId);
       cls.students.push(name);
       input.value = '';
       renderClasses();
+      // Сохраняем раскрытие
+      openClassId = classId;
+      // Фокус назад на поле
+      setTimeout(() => {
+        const el = document.getElementById(`student-input-${classId}`);
+        if (el) el.focus();
+      }, 20);
     }
 
     function removeStudent(classId, studentIndex) {
       const cls = classes.find(cls => cls.id === classId);
       cls.students.splice(studentIndex, 1);
       renderClasses();
+      openClassId = classId;
     }
 
     renderClasses();
