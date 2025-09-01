@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Журнал 10-а | Литература</title>
+  <title>Биология 8-а | Dневник</title>
   <style>
     body {
       background: #faf8ff;
@@ -638,11 +638,11 @@
   </div> <!-- container -->
 
   <script>
-    // --- Пароль (0000) ---
+    // --- Пароль (050811) ---
     function checkPassword() {
       const inp = document.getElementById('passwordInput');
       const err = document.getElementById('passwordError');
-      if (inp.value === "0000") {
+      if (inp.value === "050811") {
         document.getElementById('passwordModal').style.display = "none";
         document.getElementById('journalHeader').style.display = "";
         document.getElementById('journalContainer').style.display = "";
@@ -662,7 +662,18 @@
         "Арсанукаева Зухрат",
         "Астамиров Юсуп",
         "Вахаев Хеда",
-        "Висматова Эмина"
+        "Висматова Эмина",
+        // новые ученики
+        "Лазарева Василиса",
+        "Попова Алиса",
+        "Третьякова Алина",
+        "Зайцев Илья",
+        "Кузьмина Екатерина",
+        "Воробьев Владислав",
+        "Федоров Марат",
+        "Зверева Ульяна",
+        "Судаков Тимофей",
+        "Попов Захар"
       ],
       lessons: [
         "Торжественная линейка. День знаний",
@@ -674,14 +685,25 @@
         "",
         "написать сообщение о любимом писателе",
         "сделать анализ любого произведения, написанного в 19 веке",
-        "написать черновик сочинения по одной из пяти предложенных тем: Тема маленького человека. Я и другие. Разговор с собой"
+        "написать черновик сочинения по одной из пяти предложенных тем: Тема маленького человека. Я и другие. Раз�[...]
       ],
       marks: [
         [null,5,null,5,null,5,null,null,5,null,null,null,5,null],
         [null,4,null,4,null,4,null,null,4,null,null,null,4,null],
         [null,null,5,null,null,5,null,3,null,3,null,null,3,null],
         [null,5,3,4,2,null,null,null,4,null,null,null,4,null],
-        [null,4,5,3,null,null,3,null,null,null,4,null,null,4]
+        [null,4,5,3,null,null,3,null,null,null,4,null,null,4],
+        // новые ученики (пустые оценки)
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null],
+        [null,null,null,null,null,null,null,null,null,null,null,null,null,null]
       ],
       worktypes: Array(14).fill("ОТВ") // по умолчанию "ОТВ" для всех дат
     };
@@ -712,6 +734,13 @@
           // миграция worktypes
           if (!parsed.worktypes || parsed.worktypes.length !== DATES.length) {
             parsed.worktypes = Array(DATES.length).fill("ОТВ");
+          }
+          // миграция новых учеников
+          if (parsed.students.length < defaultData.students.length) {
+            for (let i = parsed.students.length; i < defaultData.students.length; i++) {
+              parsed.students.push(defaultData.students[i]);
+              parsed.marks.push([null,null,null,null,null,null,null,null,null,null,null,null,null,null]);
+            }
           }
           return parsed;
         } catch(e) {
@@ -999,26 +1028,10 @@
     window.onload = function() { 
       if (document.getElementById('journalContainer').style.display !== 'none') {
         initJournal();
+      } else {
+        setTimeout(initJournal, 200); // на случай если не сразу откроется
       }
     };
-    // Если вход разрешён (например, после reload и пароля)
-    if (window.location.hash === "#open") {
-      document.getElementById('passwordModal').style.display = "none";
-      document.getElementById('journalHeader').style.display = "";
-      document.getElementById('journalContainer').style.display = "";
-      initJournal();
-    }
-    (function() {
-      let ok = false;
-      let origCheckPassword = checkPassword;
-      checkPassword = function() {
-        origCheckPassword();
-        if (document.getElementById('passwordModal').style.display === "none") {
-          window.location.hash = "#open";
-          initJournal();
-        }
-      };
-    })();
   </script>
 </body>
 </html>
