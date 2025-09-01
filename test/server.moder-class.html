@@ -150,6 +150,22 @@
       display: flex;
       gap: 8px;
     }
+    .graduation-checkbox {
+      margin-left: 8px;
+      font-size: 0.98em;
+      color: #3b82f6;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+    .graduation-checkbox input[type="checkbox"] {
+      margin-right: 4px;
+      accent-color: #3b82f6;
+    }
+    .graduation-label {
+      font-weight: 500;
+      color: #234173;
+    }
     @media (max-width: 600px) {
       .container { padding: 8px; }
       .students-section { padding: 12px 10px 16px 18px;}
@@ -168,13 +184,43 @@
     <div class="class-list" id="classes"></div>
   </div>
   <script>
-    // Данные
+    // --- Сохранение данных в localStorage ---
+    const STORAGE_KEY = 'moder-classes-v1';
+
+    function saveClasses() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        classes, classIdCounter, openClassId
+      }));
+    }
+
+    function loadClasses() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (data) {
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.classes && Array.isArray(parsed.classes)) classes = parsed.classes;
+          if (parsed.classIdCounter) classIdCounter = parsed.classIdCounter;
+          if ('openClassId' in parsed) openClassId = parsed.openClassId;
+        } catch {}
+      }
+    }
+
+    // --- Данные ---
     let classes = [
-      { id: 1, name: '1А', students: ['Иванов', 'Петров'] },
-      { id: 2, name: '2Б', students: ['Сидоров'] }
+      { id: 1, name: '1А', students: ['Иванов', 'Петров'], isGraduation: false },
+      { id: 2, name: '2Б', students: ['Сидоров'], isGraduation: false }
     ];
     let classIdCounter = 3;
     let openClassId = null; // id раскрытого класса
+
+    // --- Функции ---
+    function isGraduationAvailable(className) {
+      // Возвращает true, если класс 9* или 11*
+      const match = className.match(/^(\d+)/);
+      if (!match) return false;
+      const num = parseInt(match[1], 10);
+      return num === 9 || num === 11;
+    }
 
     function renderClasses() {
       const classesDiv = document.getElementById('classes');
@@ -185,161 +231,5 @@
         block.className = 'class-block';
 
         // Header
-        const header = document.createElement('div');
-        header.className = 'class-header';
-        header.onclick = (e) => {
-          // Только если не клик по кнопке
-          if (e.target.tagName === 'BUTTON') return;
-          openClassId = openClassId === cls.id ? null : cls.id;
-          renderClasses();
-        };
-
-        // Arrow
-        const arrow = document.createElement('span');
-        arrow.className = 'arrow' + (openClassId === cls.id ? ' open' : '');
-        arrow.innerHTML = '▶';
-
-        // Название
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = cls.name;
-        nameSpan.style.flex = '1';
-
-        // Actions
-        const actions = document.createElement('div');
-        actions.className = 'class-actions';
-
-        // Edit
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn btn-secondary';
-        editBtn.textContent = 'Переименовать';
-        editBtn.onclick = (e) => {
-          e.stopPropagation();
-          editClass(cls.id);
-        };
-        actions.appendChild(editBtn);
-
-        // Remove
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'btn btn-secondary';
-        removeBtn.textContent = 'Удалить';
-        removeBtn.onclick = (e) => {
-          e.stopPropagation();
-          removeClass(cls.id);
-        };
-        actions.appendChild(removeBtn);
-
-        // Header children
-        header.appendChild(arrow);
-        header.appendChild(nameSpan);
-        header.appendChild(actions);
-
-        block.appendChild(header);
-
-        // Students section
-        if (openClassId === cls.id) {
-          const studentsSection = document.createElement('div');
-          studentsSection.className = 'students-section';
-
-          // List
-          const ul = document.createElement('ul');
-          ul.className = 'students-list';
-          cls.students.forEach((student, i) => {
-            const li = document.createElement('li');
-            li.textContent = student;
-            // Remove student btn
-            const delBtn = document.createElement('button');
-            delBtn.className = 'btn btn-secondary';
-            delBtn.style.fontSize = '0.92em';
-            delBtn.textContent = 'Удалить';
-            delBtn.onclick = () => removeStudent(cls.id, i);
-            li.appendChild(delBtn);
-            ul.appendChild(li);
-          });
-          studentsSection.appendChild(ul);
-
-          // Add student
-          const addStudentBlock = document.createElement('div');
-          addStudentBlock.className = 'add-student-block';
-          const input = document.createElement('input');
-          input.className = 'input-sm';
-          input.id = `student-input-${cls.id}`;
-          input.placeholder = 'Добавить ученика';
-          input.addEventListener('keydown', function(e){
-            if(e.key === 'Enter') addStudent(cls.id);
-          });
-          const addBtn = document.createElement('button');
-          addBtn.className = 'btn';
-          addBtn.textContent = 'Добавить';
-          addBtn.onclick = () => addStudent(cls.id);
-          addStudentBlock.appendChild(input);
-          addStudentBlock.appendChild(addBtn);
-          studentsSection.appendChild(addStudentBlock);
-
-          block.appendChild(studentsSection);
-
-          // Фокус на поле при открытии
-          setTimeout(() => {
-            const el = document.getElementById(`student-input-${cls.id}`);
-            if (el) el.focus();
-          }, 20);
-        }
-
-        classesDiv.appendChild(block);
-      });
-    }
-
-    function addClass() {
-      const nameInput = document.getElementById('newClassName');
-      const name = nameInput.value.trim();
-      if (!name) return alert('Введите название класса');
-      classes.push({ id: classIdCounter++, name, students: [] });
-      nameInput.value = '';
-      openClassId = classes[classes.length-1].id; // Открыть новый класс
-      renderClasses();
-    }
-
-    function removeClass(id) {
-      if (!confirm('Удалить класс?')) return;
-      classes = classes.filter(cls => cls.id !== id);
-      if (openClassId === id) openClassId = null;
-      renderClasses();
-    }
-
-    function editClass(id) {
-      const cls = classes.find(cls => cls.id === id);
-      const newName = prompt('Новое название класса:', cls.name);
-      if (newName && newName.trim()) {
-        cls.name = newName.trim();
-        renderClasses();
-      }
-    }
-
-    function addStudent(classId) {
-      const input = document.getElementById(`student-input-${classId}`);
-      if (!input) return;
-      const name = input.value.trim();
-      if (!name) return alert('Введите имя ученика');
-      const cls = classes.find(cls => cls.id === classId);
-      cls.students.push(name);
-      input.value = '';
-      renderClasses();
-      // Сохраняем раскрытие
-      openClassId = classId;
-      // Фокус назад на поле
-      setTimeout(() => {
-        const el = document.getElementById(`student-input-${classId}`);
-        if (el) el.focus();
-      }, 20);
-    }
-
-    function removeStudent(classId, studentIndex) {
-      const cls = classes.find(cls => cls.id === classId);
-      cls.students.splice(studentIndex, 1);
-      renderClasses();
-      openClassId = classId;
-    }
-
-    renderClasses();
-  </script>
-</body>
-</html>
+        const
+
