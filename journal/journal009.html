@@ -637,388 +637,406 @@
     </div> <!-- main -->
   </div> <!-- container -->
 
-  <script>
-    // --- Пароль (0000) ---
-    function checkPassword() {
-      const inp = document.getElementById('passwordInput');
-      const err = document.getElementById('passwordError');
-      if (inp.value === "0000") {
-        document.getElementById('passwordModal').style.display = "none";
-        document.getElementById('journalHeader').style.display = "";
-        document.getElementById('journalContainer').style.display = "";
-      } else {
-        err.textContent = "Неверный пароль!";
-      }
-    }
-    setTimeout(function(){
-      document.getElementById('passwordInput').focus();
-    }, 300);
-
-    // --- Данные журнала ---
-    const LS_KEY = "dnevnik-journal-v1";
-    let defaultData = {
-      students: [
-        "Ахтямиров Арби",
-        "Арсанукаева Зухрат",
-        "Астамиров Юсуп",
-        "Вахаев Хеда",
-        "Висматова Эмина"
-      ],
-      lessons: [
-        "Торжественная линейка. День знаний",
-        "Русская литература 19 века в контексте мировой культуры",
-        "Образ русской литературы в первой половине 19 века",
-        "Р.п. Подготовка к сочинению по произведениям русской литературы 19 века"
-      ],
-      homeworks: [
-        "",
-        "написать сообщение о любимом писателе",
-        "сделать анализ любого произведения, написанного в 19 веке",
-        "написать черновик сочинения по одной из пяти предложенных тем: Тема маленького человека. Я и другие. Разговор с собой"
-      ],
-      marks: [
-        [null,5,null,5,null,5,null,null,5,null,null,null,5,null],
-        [null,4,null,4,null,4,null,null,4,null,null,null,4,null],
-        [null,null,5,null,null,5,null,3,null,3,null,null,3,null],
-        [null,5,3,4,2,null,null,null,4,null,null,null,4,null],
-        [null,4,5,3,null,null,3,null,null,null,4,null,null,4]
-      ],
-      worktypes: Array(14).fill("ОТВ") // по умолчанию "ОТВ" для всех дат
-    };
-    const DATES = [
-      "2022-09-01",
-      "2022-09-02",
-      "2022-09-06",
-      "2022-09-09",
-      "2022-09-13",
-      "2022-09-16",
-      "2022-09-21",
-      "2022-09-23",
-      "2022-09-27",
-      "2022-09-30",
-      "2022-10-04",
-      "2022-10-07",
-      "2022-10-11",
-      "2022-10-14"
-    ];
-    const MARKS = [5, 4, 3, 2];
-    const ALL_WORKTYPES = ["ОТВ", "ПР", "САМ", "КР", "ДР", "КОНТР", "ЛАБ", "ТЕСТ", "ПРОЕКТ"];
-
-    function loadData() {
-      let data = localStorage.getItem(LS_KEY);
-      if (data) {
-        try {
-          let parsed = JSON.parse(data);
-          // миграция worktypes
-          if (!parsed.worktypes || parsed.worktypes.length !== DATES.length) {
-            parsed.worktypes = Array(DATES.length).fill("ОТВ");
-          }
-          return parsed;
-        } catch(e) {
-          return JSON.parse(JSON.stringify(defaultData));
-        }
-      }
-      return JSON.parse(JSON.stringify(defaultData));
-    }
-    function saveData() {
-      localStorage.setItem(LS_KEY, JSON.stringify(journalData));
-    }
-
-    let journalData = loadData();
-
-    // ---- Оценки ----
-    function renderMarksTable() {
-      let tbody = document.getElementById('marksTbody');
-      tbody.innerHTML = "";
-      let today = new Date();
-      let todayIdx = -1;
-      let todayISO = today.toISOString().slice(0,10);
-      for (let idx = 0; idx < DATES.length; idx++) {
-        if (DATES[idx] === todayISO) {
-          todayIdx = idx;
-          break;
-        }
-      }
-      // Подсветка заголовка и надпись "сегодня"
-      let headerCells = document.querySelectorAll('#datesHeaderRow th[data-date]');
-      headerCells.forEach(function(th, idx){
-        th.classList.remove('today');
-        let label = th.querySelector('.today-label');
-        if (label) label.remove();
-        if (idx === todayIdx) {
-          th.classList.add('today');
-          let d = document.createElement('div');
-          d.className = 'today-label';
-          d.textContent = "сегодня";
-          th.appendChild(d);
-        }
-        // Подсветка работы на уроке для сегодня
-        let worktypeSpan = th.querySelector('.worktype');
-        if (worktypeSpan) {
-          worktypeSpan.classList.remove('otb-today');
-          if (idx === todayIdx) worktypeSpan.classList.add('otb-today');
-        }
-      });
-
-      for (let i = 0; i < journalData.students.length; i++) {
-        let row = document.createElement('tr');
-        // ФИО
-        let fioTd = document.createElement('td');
-        fioTd.className = "fio";
-        fioTd.textContent = journalData.students[i];
-        row.appendChild(fioTd);
-
-        // Оценки
-        let marksSum = 0, marksCount = 0;
-        for (let j = 0; j < DATES.length; j++) {
-          let td = document.createElement('td');
-          if (j === todayIdx) td.classList.add('today');
-          td.tabIndex = 0;
-          td.setAttribute('data-student', i);
-          td.setAttribute('data-date', j);
-          td.onclick = function() {
-            editMarkCell(this, i, j);
-          };
-          td.onkeydown = function(e) {
-            if (!this.hasAttribute('data-edit')) {
-              editMarkCell(td, i, j, true);
-              setTimeout(() => td.querySelector('input')?.focus(), 0);
-            }
-          };
-          let mark = journalData.marks[i][j];
-          if (mark) {
-            let span = document.createElement('span');
-            span.className = "mark mark-" + mark;
-            span.textContent = mark;
-            span.tabIndex = -1;
-            td.appendChild(span);
-            marksSum += mark;
-            marksCount++;
-          }
-          row.appendChild(td);
-        }
-        // Средний балл
-        let avgTd = document.createElement('td');
-        avgTd.className = "avg";
-        if (marksCount > 0) {
-          avgTd.textContent = (marksSum / marksCount).toFixed(2).replace(/\.00$/, "");
-        } else {
-          avgTd.textContent = "-";
-        }
-        row.appendChild(avgTd);
-
-        tbody.appendChild(row);
-      }
-      // подсветить активный worktype
-      updateWorktypesUI();
-    }
-
-    // --- Работа на уроке (ОТВ/ПР/...) ---
-    function toggleWorkType(e, col) {
-      e.stopPropagation();
-      let cur = journalData.worktypes[col] || "ОТВ";
-      let idx = ALL_WORKTYPES.indexOf(cur);
-      let nextIdx = (idx + 1) % ALL_WORKTYPES.length;
-      journalData.worktypes[col] = ALL_WORKTYPES[nextIdx];
-      saveData();
-      updateWorktypesUI();
-    }
-    function updateWorktypesUI() {
-      let ths = document.querySelectorAll("#datesHeaderRow .worktype");
-      ths.forEach((span, idx) => {
-        span.textContent = journalData.worktypes[idx] || "ОТВ";
-        span.className = "worktype" + (isTodayCol(idx) ? " otb-today" : "");
-      });
-    }
-    function isTodayCol(idx) {
-      let todayISO = new Date().toISOString().slice(0,10);
-      return DATES[idx] === todayISO;
-    }
-
-    // ---- Оценки ----
-    function editMarkCell(cell, i, j, focus) {
-      // Запретить повторное открытие
-      if (cell.hasAttribute('data-edit')) return;
-      cell.setAttribute('data-edit', '1');
-      cell.innerHTML = "";
-      let input = document.createElement('input');
-      input.type = "text";
-      input.value = journalData.marks[i][j] ? journalData.marks[i][j] : "";
-      input.className = "mark";
-      input.style.width = "26px";
-      input.style.textAlign = "center";
-      input.style.background = "inherit";
-      input.style.fontWeight = "bold";
-      input.style.border = "1.5px solid #3887ff";
-      input.style.borderRadius = "5px";
-      input.style.margin = "1px auto";
-      input.style.fontSize = "16px";
-      input.maxLength = 1;
-      input.setAttribute('inputmode', 'numeric');
-      input.setAttribute('pattern', '[2-5]');
-      input.onblur = function() {
-        applyMarkInput(cell, i, j, input.value);
-      };
-      input.onkeydown = function(e) {
-        if (e.key === "Enter" || e.key === "Tab") {
-          input.blur();
-        } else if (e.key === "Escape") {
-          cell.removeAttribute('data-edit');
-          renderMarksTable();
-        }
-      };
-      input.oninput = function(e) {
-        let v = input.value.trim();
-        if (v.length > 1) v = v.slice(-1);
-        if (v === "") {
-          journalData.marks[i][j] = null;
-          saveData();
-          renderMarksTable();
-          setTimeout(() => {
-            let nextCell = findNextCell(cell, i, j, 1);
-            nextCell && nextCell.focus();
-          }, 10);
-        } else if (["2","3","4","5"].includes(v)) {
-          journalData.marks[i][j] = parseInt(v);
-          saveData();
-          renderMarksTable();
-          setTimeout(() => {
-            let nextCell = findNextCell(cell, i, j, 1);
-            nextCell && nextCell.focus();
-          }, 10);
-        } else {
-          input.value = "";
-        }
-      };
-      cell.appendChild(input);
-      if (focus) setTimeout(() => input.focus(), 0);
-      else input.focus();
-    }
-    function applyMarkInput(cell, i, j, value) {
-      let v = value.trim();
-      if (v === "") {
-        journalData.marks[i][j] = null;
-      } else if (["2","3","4","5"].includes(v)) {
-        journalData.marks[i][j] = parseInt(v);
-      }
-      saveData();
-      cell.removeAttribute('data-edit');
-      renderMarksTable();
-    }
-    function findNextCell(cell, i, j, dir) {
-      let tbody = document.getElementById('marksTbody');
-      let rows = tbody.querySelectorAll('tr');
-      let ni = i, nj = j+dir;
-      if (nj >= DATES.length) { nj = 0; ni++; }
-      if (ni >= rows.length) return null;
-      let tds = rows[ni].querySelectorAll('td:not(.fio):not(.avg)');
-      return tds[nj];
-    }
-
-    // ---- Темы/дз ----
-    function fillLessonTable() {
-      for (let i = 0; i < journalData.lessons.length; i++) {
-        document.querySelector('.lesson-text[data-row="'+i+'"]').textContent = journalData.lessons[i];
-        document.querySelector('.lesson-input[data-row="'+i+'"]').value = journalData.lessons[i];
-        document.querySelector('.hw-text[data-row="'+i+'"]').textContent = journalData.homeworks[i];
-        document.querySelector('.hw-input[data-row="'+i+'"]').value = journalData.homeworks[i];
-      }
-    }
-    function editLesson(row) {
-      document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = 'none';
-      document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = '';
-      document.querySelectorAll('.edit-btn')[row*2].style.display = 'none';
-      document.querySelectorAll('.save-btn')[row*2].style.display = '';
-      document.querySelectorAll('.cancel-btn')[row*2].style.display = '';
-    }
-    function saveLesson(row) {
-      let val = document.querySelector('.lesson-input[data-row="'+row+'"]').value;
-      journalData.lessons[row] = val;
-      saveData();
-      fillLessonTable();
-      cancelLesson(row);
-    }
-    function cancelLesson(row) {
-      document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = '';
-      document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = 'none';
-      document.querySelectorAll('.edit-btn')[row*2].style.display = '';
-      document.querySelectorAll('.save-btn')[row*2].style.display = 'none';
-      document.querySelectorAll('.cancel-btn')[row*2].style.display = 'none';
-      document.querySelector('.lesson-input[data-row="'+row+'"]').value = journalData.lessons[row];
-    }
-    function editHW(row) {
-      document.querySelector('.hw-text[data-row="'+row+'"]').style.display = 'none';
-      document.querySelector('.hw-input[data-row="'+row+'"]').style.display = '';
-      document.querySelectorAll('.edit-btn')[row*2+1].style.display = 'none';
-      document.querySelectorAll('.save-btn')[row*2+1].style.display = '';
-      document.querySelectorAll('.cancel-btn')[row*2+1].style.display = '';
-    }
-    function saveHW(row) {
-      let val = document.querySelector('.hw-input[data-row="'+row+'"]').value;
-      journalData.homeworks[row] = val;
-      saveData();
-      fillLessonTable();
-      cancelHW(row);
-    }
-    function cancelHW(row) {
-      document.querySelector('.hw-text[data-row="'+row+'"]').style.display = '';
-      document.querySelector('.hw-input[data-row="'+row+'"]').style.display = 'none';
-      document.querySelectorAll('.edit-btn')[row*2+1].style.display = '';
-      document.querySelectorAll('.save-btn')[row*2+1].style.display = 'none';
-      document.querySelectorAll('.cancel-btn')[row*2+1].style.display = 'none';
-      document.querySelector('.hw-input[data-row="'+row+'"]').value = journalData.homeworks[row];
-    }
-
-    // ---- Шторка ----
-    let drawerOpen = true;
-    function toggleDrawer() {
-      drawerOpen = !drawerOpen;
-      const drawer = document.getElementById('drawer');
-      const handle = document.getElementById('drawerHandle');
-      const content = document.getElementById('drawerContent');
-      if (drawerOpen) {
-        drawer.classList.add('open');
-        handle.classList.remove('closed');
-        handle.classList.add('open');
-        content.style.display = '';
-        document.getElementById('drawerHandleText').innerHTML = 'Скрыть темы/дз &raquo;';
-      } else {
-        drawer.classList.remove('open');
-        handle.classList.remove('open');
-        handle.classList.add('closed');
-        content.style.display = 'none';
-        document.getElementById('drawerHandleText').innerHTML = '&laquo; Показать темы/дз';
-      }
-    }
-
-    // --- Init ---
-    function initJournal() {
-      renderMarksTable();
-      fillLessonTable();
-    }
-    window.onload = function() { 
-      if (document.getElementById('journalContainer').style.display !== 'none') {
-        initJournal();
-      }
-    };
-    // Если вход разрешён (например, после reload и пароля)
-    if (window.location.hash === "#open") {
+ <script>
+  // --- Пароль (0000) ---
+  function checkPassword() {
+    const inp = document.getElementById('passwordInput');
+    const err = document.getElementById('passwordError');
+    if (inp.value === "0000") {
       document.getElementById('passwordModal').style.display = "none";
       document.getElementById('journalHeader').style.display = "";
       document.getElementById('journalContainer').style.display = "";
+      initJournal(); // Добавлено: сразу инициализировать журнал после входа
+    } else {
+      err.textContent = "Неверный пароль!";
+    }
+  }
+  setTimeout(function(){
+    document.getElementById('passwordInput').focus();
+  }, 300);
+
+  // --- Данные журнала ---
+  const LS_KEY = "dnevnik-journal-v1";
+  let defaultData = {
+    students: [
+      "Ахтямиров Арби",
+      "Арсанукаева Зухрат",
+      "Астамиров Юсуп",
+      "Вахаев Хеда",
+      "Висматова Эмина",
+      // новые ученики:
+      "Лазарева Василиса",
+      "Попова Алиса",
+      "Третьякова Алина",
+      "Зайцев Илья",
+      "Кузьмина Екатерина",
+      "Воробьев Владислав",
+      "Федоров Марат",
+      "Зверева Ульяна",
+      "Судаков Тимофей",
+      "Попов Захар"
+    ],
+    lessons: [
+      "Торжественная линейка. День знаний",
+      "Русская литература 19 века в контексте мировой культуры",
+      "Образ русской литературы в первой половине 19 века",
+      "Р.п. Подготовка к сочинению по произведениям русской литературы 19 века"
+    ],
+    homeworks: [
+      "",
+      "написать сообщение о любимом писателе",
+      "сделать анализ любого произведения, написанного в 19 веке",
+      "написать черновик сочинения по одной из пяти предложенных тем: Тема маленького человека. Я и другие. Раз�[...]
+    ],
+    marks: [
+      [null,5,null,5,null,5,null,null,5,null,null,null,5,null], // Ахтямиров Арби
+      [null,4,null,4,null,4,null,null,4,null,null,null,4,null], // Арсанукаева Зухрат
+      [null,null,5,null,null,5,null,3,null,3,null,null,3,null], // Астамиров Юсуп
+      [null,5,3,4,2,null,null,null,4,null,null,null,4,null],    // Вахаев Хеда
+      [null,4,5,3,null,null,3,null,null,null,4,null,null,4],    // Висматова Эмина
+      // Новые ученики — пустые массивы оценок
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Лазарева Василиса
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Попова Алиса
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Третьякова Алина
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Зайцев Илья
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Кузьмина Екатерина
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Воробьев Владислав
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Федоров Марат
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Зверева Ульяна
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null], // Судаков Тимофей
+      [null,null,null,null,null,null,null,null,null,null,null,null,null,null]  // Попов Захар
+    ],
+    worktypes: Array(14).fill("ОТВ") // по умолчанию "ОТВ" для всех дат
+  };
+  const DATES = [
+    "2022-09-01",
+    "2022-09-02",
+    "2022-09-06",
+    "2022-09-09",
+    "2022-09-13",
+    "2022-09-16",
+    "2022-09-21",
+    "2022-09-23",
+    "2022-09-27",
+    "2022-09-30",
+    "2022-10-04",
+    "2022-10-07",
+    "2022-10-11",
+    "2022-10-14"
+  ];
+  const MARKS = [5, 4, 3, 2];
+  const ALL_WORKTYPES = ["ОТВ", "ПР", "САМ", "КР", "ДР", "КОНТР", "ЛАБ", "ТЕСТ", "ПРОЕКТ"];
+
+  function loadData() {
+    let data = localStorage.getItem(LS_KEY);
+    if (data) {
+      try {
+        let parsed = JSON.parse(data);
+        // миграция worktypes
+        if (!parsed.worktypes || parsed.worktypes.length !== DATES.length) {
+          parsed.worktypes = Array(DATES.length).fill("ОТВ");
+        }
+        // миграция учеников, если стало больше — добавить пустые строки marks
+        if (parsed.students.length < defaultData.students.length) {
+          for (let i = parsed.students.length; i < defaultData.students.length; i++) {
+            parsed.students.push(defaultData.students[i]);
+            parsed.marks.push([null,null,null,null,null,null,null,null,null,null,null,null,null,null]);
+          }
+        }
+        return parsed;
+      } catch(e) {
+        return JSON.parse(JSON.stringify(defaultData));
+      }
+    }
+    return JSON.parse(JSON.stringify(defaultData));
+  }
+  function saveData() {
+    localStorage.setItem(LS_KEY, JSON.stringify(journalData));
+  }
+
+  let journalData = loadData();
+
+  // ---- Оценки ----
+  function renderMarksTable() {
+    let tbody = document.getElementById('marksTbody');
+    tbody.innerHTML = "";
+    let today = new Date();
+    let todayIdx = -1;
+    let todayISO = today.toISOString().slice(0,10);
+    for (let idx = 0; idx < DATES.length; idx++) {
+      if (DATES[idx] === todayISO) {
+        todayIdx = idx;
+        break;
+      }
+    }
+    // Подсветка заголовка и надпись "сегодня"
+    let headerCells = document.querySelectorAll('#datesHeaderRow th[data-date]');
+    headerCells.forEach(function(th, idx){
+      th.classList.remove('today');
+      let label = th.querySelector('.today-label');
+      if (label) label.remove();
+      if (idx === todayIdx) {
+        th.classList.add('today');
+        let d = document.createElement('div');
+        d.className = 'today-label';
+        d.textContent = "сегодня";
+        th.appendChild(d);
+      }
+      // Подсветка работы на уроке для сегодня
+      let worktypeSpan = th.querySelector('.worktype');
+      if (worktypeSpan) {
+        worktypeSpan.classList.remove('otb-today');
+        if (idx === todayIdx) worktypeSpan.classList.add('otb-today');
+      }
+    });
+
+    for (let i = 0; i < journalData.students.length; i++) {
+      let row = document.createElement('tr');
+      // ФИО
+      let fioTd = document.createElement('td');
+      fioTd.className = "fio";
+      fioTd.textContent = journalData.students[i];
+      row.appendChild(fioTd);
+
+      // Оценки
+      let marksSum = 0, marksCount = 0;
+      for (let j = 0; j < DATES.length; j++) {
+        let td = document.createElement('td');
+        if (j === todayIdx) td.classList.add('today');
+        td.tabIndex = 0;
+        td.setAttribute('data-student', i);
+        td.setAttribute('data-date', j);
+        td.onclick = function() {
+          editMarkCell(this, i, j);
+        };
+        td.onkeydown = function(e) {
+          if (!this.hasAttribute('data-edit')) {
+            editMarkCell(td, i, j, true);
+            setTimeout(() => td.querySelector('input')?.focus(), 0);
+          }
+        };
+        let mark = journalData.marks[i][j];
+        if (mark) {
+          let span = document.createElement('span');
+          span.className = "mark mark-" + mark;
+          span.textContent = mark;
+          span.tabIndex = -1;
+          td.appendChild(span);
+          marksSum += mark;
+          marksCount++;
+        }
+        row.appendChild(td);
+      }
+      // Средний балл
+      let avgTd = document.createElement('td');
+      avgTd.className = "avg";
+      if (marksCount > 0) {
+        avgTd.textContent = (marksSum / marksCount).toFixed(2).replace(/\.00$/, "");
+      } else {
+        avgTd.textContent = "-";
+      }
+      row.appendChild(avgTd);
+
+      tbody.appendChild(row);
+    }
+    // подсветить активный worktype
+    updateWorktypesUI();
+  }
+
+  // --- Работа на уроке (ОТВ/ПР/...) ---
+  function toggleWorkType(e, col) {
+    e.stopPropagation();
+    let cur = journalData.worktypes[col] || "ОТВ";
+    let idx = ALL_WORKTYPES.indexOf(cur);
+    let nextIdx = (idx + 1) % ALL_WORKTYPES.length;
+    journalData.worktypes[col] = ALL_WORKTYPES[nextIdx];
+    saveData();
+    updateWorktypesUI();
+  }
+  function updateWorktypesUI() {
+    let ths = document.querySelectorAll("#datesHeaderRow .worktype");
+    ths.forEach((span, idx) => {
+      span.textContent = journalData.worktypes[idx] || "ОТВ";
+      span.className = "worktype" + (isTodayCol(idx) ? " otb-today" : "");
+    });
+  }
+  function isTodayCol(idx) {
+    let todayISO = new Date().toISOString().slice(0,10);
+    return DATES[idx] === todayISO;
+  }
+
+  // ---- Оценки ----
+  function editMarkCell(cell, i, j, focus) {
+    // Запретить повторное открытие
+    if (cell.hasAttribute('data-edit')) return;
+    cell.setAttribute('data-edit', '1');
+    cell.innerHTML = "";
+    let input = document.createElement('input');
+    input.type = "text";
+    input.value = journalData.marks[i][j] ? journalData.marks[i][j] : "";
+    input.className = "mark";
+    input.style.width = "26px";
+    input.style.textAlign = "center";
+    input.style.background = "inherit";
+    input.style.fontWeight = "bold";
+    input.style.border = "1.5px solid #3887ff";
+    input.style.borderRadius = "5px";
+    input.style.margin = "1px auto";
+    input.style.fontSize = "16px";
+    input.maxLength = 1;
+    input.setAttribute('inputmode', 'numeric');
+    input.setAttribute('pattern', '[2-5]');
+    input.onblur = function() {
+      applyMarkInput(cell, i, j, input.value);
+    };
+    input.onkeydown = function(e) {
+      if (e.key === "Enter" || e.key === "Tab") {
+        input.blur();
+      } else if (e.key === "Escape") {
+        cell.removeAttribute('data-edit');
+        renderMarksTable();
+      }
+    };
+    input.oninput = function(e) {
+      let v = input.value.trim();
+      if (v.length > 1) v = v.slice(-1);
+      if (v === "") {
+        journalData.marks[i][j] = null;
+        saveData();
+        renderMarksTable();
+        setTimeout(() => {
+          let nextCell = findNextCell(cell, i, j, 1);
+          nextCell && nextCell.focus();
+        }, 10);
+      } else if (["2","3","4","5"].includes(v)) {
+        journalData.marks[i][j] = parseInt(v);
+        saveData();
+        renderMarksTable();
+        setTimeout(() => {
+          let nextCell = findNextCell(cell, i, j, 1);
+          nextCell && nextCell.focus();
+        }, 10);
+      } else {
+        input.value = "";
+      }
+    };
+    cell.appendChild(input);
+    if (focus) setTimeout(() => input.focus(), 0);
+    else input.focus();
+  }
+  function applyMarkInput(cell, i, j, value) {
+    let v = value.trim();
+    if (v === "") {
+      journalData.marks[i][j] = null;
+    } else if (["2","3","4","5"].includes(v)) {
+      journalData.marks[i][j] = parseInt(v);
+    }
+    saveData();
+    cell.removeAttribute('data-edit');
+    renderMarksTable();
+  }
+  function findNextCell(cell, i, j, dir) {
+    let tbody = document.getElementById('marksTbody');
+    let rows = tbody.querySelectorAll('tr');
+    let ni = i, nj = j+dir;
+    if (nj >= DATES.length) { nj = 0; ni++; }
+    if (ni >= rows.length) return null;
+    let tds = rows[ni].querySelectorAll('td:not(.fio):not(.avg)');
+    return tds[nj];
+  }
+
+  // ---- Темы/дз ----
+  function fillLessonTable() {
+    for (let i = 0; i < journalData.lessons.length; i++) {
+      document.querySelector('.lesson-text[data-row="'+i+'"]').textContent = journalData.lessons[i];
+      document.querySelector('.lesson-input[data-row="'+i+'"]').value = journalData.lessons[i];
+      document.querySelector('.hw-text[data-row="'+i+'"]').textContent = journalData.homeworks[i];
+      document.querySelector('.hw-input[data-row="'+i+'"]').value = journalData.homeworks[i];
+    }
+  }
+  function editLesson(row) {
+    document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = 'none';
+    document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = '';
+    document.querySelectorAll('.edit-btn')[row*2].style.display = 'none';
+    document.querySelectorAll('.save-btn')[row*2].style.display = '';
+    document.querySelectorAll('.cancel-btn')[row*2].style.display = '';
+  }
+  function saveLesson(row) {
+    let val = document.querySelector('.lesson-input[data-row="'+row+'"]').value;
+    journalData.lessons[row] = val;
+    saveData();
+    fillLessonTable();
+    cancelLesson(row);
+  }
+  function cancelLesson(row) {
+    document.querySelector('.lesson-text[data-row="'+row+'"]').style.display = '';
+    document.querySelector('.lesson-input[data-row="'+row+'"]').style.display = 'none';
+    document.querySelectorAll('.edit-btn')[row*2].style.display = '';
+    document.querySelectorAll('.save-btn')[row*2].style.display = 'none';
+    document.querySelectorAll('.cancel-btn')[row*2].style.display = 'none';
+    document.querySelector('.lesson-input[data-row="'+row+'"]').value = journalData.lessons[row];
+  }
+  function editHW(row) {
+    document.querySelector('.hw-text[data-row="'+row+'"]').style.display = 'none';
+    document.querySelector('.hw-input[data-row="'+row+'"]').style.display = '';
+    document.querySelectorAll('.edit-btn')[row*2+1].style.display = 'none';
+    document.querySelectorAll('.save-btn')[row*2+1].style.display = '';
+    document.querySelectorAll('.cancel-btn')[row*2+1].style.display = '';
+  }
+  function saveHW(row) {
+    let val = document.querySelector('.hw-input[data-row="'+row+'"]').value;
+    journalData.homeworks[row] = val;
+    saveData();
+    fillLessonTable();
+    cancelHW(row);
+  }
+  function cancelHW(row) {
+    document.querySelector('.hw-text[data-row="'+row+'"]').style.display = '';
+    document.querySelector('.hw-input[data-row="'+row+'"]').style.display = 'none';
+    document.querySelectorAll('.edit-btn')[row*2+1].style.display = '';
+    document.querySelectorAll('.save-btn')[row*2+1].style.display = 'none';
+    document.querySelectorAll('.cancel-btn')[row*2+1].style.display = 'none';
+    document.querySelector('.hw-input[data-row="'+row+'"]').value = journalData.homeworks[row];
+  }
+
+  // ---- Шторка ----
+  let drawerOpen = true;
+  function toggleDrawer() {
+    drawerOpen = !drawerOpen;
+    const drawer = document.getElementById('drawer');
+    const handle = document.getElementById('drawerHandle');
+    const content = document.getElementById('drawerContent');
+    if (drawerOpen) {
+      drawer.classList.add('open');
+      handle.classList.remove('closed');
+      handle.classList.add('open');
+      content.style.display = '';
+      document.getElementById('drawerHandleText').innerHTML = 'Скрыть темы/дз &raquo;';
+    } else {
+      drawer.classList.remove('open');
+      handle.classList.remove('open');
+      handle.classList.add('closed');
+      content.style.display = 'none';
+      document.getElementById('drawerHandleText').innerHTML = '&laquo; Показать темы/дз';
+    }
+  }
+
+  // --- Init ---
+  function initJournal() {
+    renderMarksTable();
+    fillLessonTable();
+  }
+  window.onload = function() { 
+    if (document.getElementById('journalContainer').style.display !== 'none') {
       initJournal();
     }
-    (function() {
-      let ok = false;
-      let origCheckPassword = checkPassword;
-      checkPassword = function() {
-        origCheckPassword();
-        if (document.getElementById('passwordModal').style.display === "none") {
-          window.location.hash = "#open";
+    else {
+      // При открытии журнала после ввода пароля
+      document.getElementById('passwordModal').addEventListener('transitionend', function(ev){
+        if (document.getElementById('journalContainer').style.display !== 'none') {
           initJournal();
         }
-      };
-    })();
-  </script>
-</body>
-</html>
+      });
+    }
+  };
+</script>
