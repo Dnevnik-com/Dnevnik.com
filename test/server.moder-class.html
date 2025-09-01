@@ -1,1 +1,106 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Настройка классов</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    .logo { width: 120px; margin-bottom: 20px; }
+    .class-block { border: 1px solid #ccc; padding: 16px; margin-bottom: 20px; border-radius: 8px; }
+    .students-list { margin-left: 20px; }
+    button { margin: 2px; }
+    .inline { display: inline-block; }
+    .input-sm { width: 120px; }
+  </style>
+</head>
+<body>
+  <img class="logo" src="https://thumb.tildacdn.com/tild6539-3262-4636-b334-326130356633/-/format/webp/d_NEW_LOGO-Photoroom.png.webp" alt="Логотип">
+  <h1>Управление классами</h1>
+
+  <div>
+    <input id="newClassName" placeholder="Название нового класса" class="input-sm">
+    <button onclick="addClass()">Добавить класс</button>
+  </div>
+  <div id="classes"></div>
+
+  <script>
+    // Примерная структура данных
+    let classes = [
+      { id: 1, name: '1А', students: ['Иванов', 'Петров'] },
+      { id: 2, name: '2Б', students: ['Сидоров'] }
+    ];
+    let classIdCounter = 3;
+
+    function renderClasses() {
+      const classesDiv = document.getElementById('classes');
+      classesDiv.innerHTML = '';
+      classes.forEach(cls => {
+        const classDiv = document.createElement('div');
+        classDiv.className = 'class-block';
+
+        // Название и кнопки
+        classDiv.innerHTML = `
+          <b>Класс:</b>
+          <span id="name-${cls.id}">${cls.name}</span>
+          <button onclick="editClass(${cls.id})">Переименовать</button>
+          <button onclick="removeClass(${cls.id})">Удалить класс</button>
+          <br>
+          <b>Ученики:</b>
+          <ul class="students-list" id="students-${cls.id}">
+            ${cls.students.map((s, i) => 
+              `<li>${s}
+                <button onclick="removeStudent(${cls.id}, ${i})">Удалить</button>
+              </li>`
+            ).join('')}
+          </ul>
+          <input id="student-input-${cls.id}" class="input-sm" placeholder="Добавить ученика">
+          <button onclick="addStudent(${cls.id})">Добавить ученика</button>
+        `;
+        classesDiv.appendChild(classDiv);
+      });
+    }
+
+    function addClass() {
+      const name = document.getElementById('newClassName').value.trim();
+      if (!name) return alert('Введите название класса');
+      classes.push({ id: classIdCounter++, name, students: [] });
+      document.getElementById('newClassName').value = '';
+      renderClasses();
+    }
+
+    function removeClass(id) {
+      if (!confirm('Удалить класс?')) return;
+      classes = classes.filter(cls => cls.id !== id);
+      renderClasses();
+    }
+
+    function editClass(id) {
+      const cls = classes.find(cls => cls.id === id);
+      const newName = prompt('Новое название класса:', cls.name);
+      if (newName && newName.trim()) {
+        cls.name = newName.trim();
+        renderClasses();
+      }
+    }
+
+    function addStudent(classId) {
+      const input = document.getElementById(`student-input-${classId}`);
+      const name = input.value.trim();
+      if (!name) return alert('Введите имя ученика');
+      const cls = classes.find(cls => cls.id === classId);
+      cls.students.push(name);
+      input.value = '';
+      renderClasses();
+    }
+
+    function removeStudent(classId, studentIndex) {
+      const cls = classes.find(cls => cls.id === classId);
+      cls.students.splice(studentIndex, 1);
+      renderClasses();
+    }
+
+    renderClasses();
+  </script>
+</body>
+</html>
