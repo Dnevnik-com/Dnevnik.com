@@ -637,22 +637,26 @@
     </div> <!-- main -->
   </div> <!-- container -->
 
-  <script>
-    // --- Пароль (0000) ---
-    function checkPassword() {
-      const inp = document.getElementById('passwordInput');
-      const err = document.getElementById('passwordError');
-      if (inp.value === "0000") {
-        document.getElementById('passwordModal').style.display = "none";
+ <script>
+  // --- Пароль (0000) ---
+  function checkPassword() {
+    const inp = document.getElementById('passwordInput');
+    const err = document.getElementById('passwordError');
+    if (inp.value === "0000") {
+      document.getElementById('passwordModal').style.display = "none";
+      setTimeout(function(){ // ДОБАВЛЕНО: небольшой таймаут для надёжного скрытия модального окна
         document.getElementById('journalHeader').style.display = "";
         document.getElementById('journalContainer').style.display = "";
-      } else {
-        err.textContent = "Неверный пароль!";
-      }
+        initJournal(); // Добавлено: сразу инициализировать журнал после входа
+      }, 50);
+    } else {
+      err.textContent = "Неверный пароль!";
     }
-    setTimeout(function(){
-      document.getElementById('passwordInput').focus();
-    }, 300);
+  }
+  setTimeout(function(){
+    document.getElementById('passwordInput').focus();
+  }, 300);
+
 
     // --- Данные журнала ---
     const LS_KEY = "dnevnik-journal-v1";
