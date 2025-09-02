@@ -59,21 +59,80 @@
       padding: 0;
       margin: 0;
     }
-    .lesson-list li {
+    .week-item {
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.7rem;
+      border-bottom: 1px solid #f1f1f1;
+    }
+    .week-title {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.7rem 0;
-      border-bottom: 1px solid #f1f1f1;
     }
-    .lesson-list li:last-child {
-      border-bottom: none;
+    .days-list {
+      list-style: none;
+      padding-left: 1.2em;
+      margin: 0;
+    }
+    .days-list li {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.7em;
+      padding: 0.3rem 0;
+      position: relative;
     }
     .checkbox {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       accent-color: #3B82F6;
       cursor: pointer;
+      vertical-align: middle;
+    }
+    .cross-btn {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      width: 24px;
+      height: 24px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      border-radius: 50%;
+      margin-left: 0.3em;
+    }
+    .cross-btn.active {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    .label-status {
+      margin-left: 0.7em;
+      font-size: 0.99em;
+      font-weight: 500;
+      vertical-align: middle;
+      transition: color 0.2s;
+      color: #222;
+    }
+    .label-status.visited {
+      color: #3B82F6;
+    }
+    .label-status.absent {
+      color: #ef4444;
+    }
+    .days-list li.absent {
+      background: #fee2e2;
+      border-radius: 6px;
+    }
+    .days-list li .date-label {
+      min-width: 60px;
+      display: inline-block;
     }
     .chart-block {
       margin-top: 2rem;
@@ -92,6 +151,28 @@
       text-align: center;
       margin-top: 5rem;
     }
+    .legend-color {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      margin-right: 0.4em;
+      vertical-align: middle;
+    }
+    .legend-blue {background: #3B82F6;}
+    .legend-grey {background: #E5E7EB;}
+    .legend-red {background: #ef4444;}
+    .footer {
+      width: 100%;
+      text-align: center;
+      padding: 1.2em 0 1em 0;
+      font-size: 1em;
+      color: #888;
+      background: #f7f8fa;
+      border-top: 1px solid #f1f1f1;
+      margin-top: 1.5em;
+      letter-spacing: 1px;
+    }
     @media (max-width: 600px) {
       .container {
         padding: 1rem;
@@ -104,6 +185,16 @@
       nav {
         justify-content: center;
       }
+      .week-item {
+        padding-bottom: 0.5rem;
+      }
+      .days-list {
+        padding-left: 0.5em;
+      }
+      .footer {
+        font-size: 0.95em;
+        padding: 0.9em 0 0.7em 0;
+      }
     }
   </style>
 </head>
@@ -111,20 +202,25 @@
   <header>
     <h1>Отчеты учителя</h1>
     <nav>
-      <button id="tab-lessons" class="active" onclick="showTab('lessons')">Уроки</button>
+      <button id="tab-lessons" class="active" onclick="showTab('lessons')">Недели</button>
       <button id="tab-class" onclick="showTab('class')">Отчеты класса</button>
     </nav>
   </header>
   <div class="container">
-    <!-- Уроки -->
+    <!-- Недели -->
     <div id="lessons-tab">
-      <h2>Мои уроки</h2>
+      <h2>Мои недели</h2>
       <ul class="lesson-list" id="lessonList">
-        <!-- Динамично добавляются уроки -->
+        <!-- Динамично добавляются недели с днями -->
       </ul>
       <div class="chart-block">
-        <h3>Диаграмма посещенных уроков</h3>
+        <h3>Диаграмма посещённых и отсутствия по дням</h3>
         <canvas id="lessonChart"></canvas>
+        <div style="margin-top: 1em; text-align: left;">
+          <span class="legend-color legend-blue"></span> Посещал &nbsp;
+          <span class="legend-color legend-red"></span> Не посещал &nbsp;
+          <span class="legend-color legend-grey"></span> Не отмечено
+        </div>
       </div>
     </div>
     <!-- Отчеты класса -->
@@ -135,45 +231,105 @@
       </div>
     </div>
   </div>
+  <div class="footer">
+    ©Dневник 2025
+  </div>
   <!-- Chart.js for diagram -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Демо список уроков
-    const lessons = [
-      { id: 1, name: 'Математика', attended: false },
-      { id: 2, name: 'Русский язык', attended: false },
-      { id: 3, name: 'История', attended: false },
-      { id: 4, name: 'Биология', attended: false },
-      { id: 5, name: 'Информатика', attended: false },
-      { id: 6, name: 'Физика', attended: false },
-      { id: 7, name: 'Английский язык', attended: false }
+    const weekData = [
+      { week: '1 неделя (01.09–05.09)', days: ['01.09', '02.09', '03.09', '04.09', '05.09'] },
+      { week: '2 неделя (08.09–12.09)', days: ['08.09', '09.09', '10.09', '11.09', '12.09'] },
+      { week: '3 неделя (15.09–19.09)', days: ['15.09', '16.09', '17.09', '18.09', '19.09'] },
+      { week: '4 неделя (22.09–26.09)', days: ['22.09', '23.09', '24.09', '25.09', '26.09'] },
+      { week: '5 неделя (29.09–03.10)', days: ['29.09', '30.09', '01.10', '02.10', '03.10'] },
+      { week: '6 неделя (06.10–10.10)', days: ['06.10', '07.10', '08.10', '09.10', '10.10'] },
+      { week: '7 неделя (13.10–17.10)', days: ['13.10', '14.10', '15.10', '16.10', '17.10'] },
+      { week: '8 неделя (18.10)', days: ['18.10'] }
     ];
+    const storageKey = 'serverReportDaysWeeks_v2';
 
-    // Отрисовка списка уроков с галочками
-    function renderLessons() {
+    // Статус: 0 - не отмечено, 1 - посещал, 2 - не посещал/отсутствовал
+    let weeks = weekData.map((week, wIdx) => ({
+      name: week.week,
+      days: week.days.map(day => ({ date: day, status: 0 }))
+    }));
+
+    function saveWeeks() {
+      localStorage.setItem(storageKey, JSON.stringify(weeks));
+    }
+    function loadWeeks() {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        try {
+          const arr = JSON.parse(saved);
+          if (Array.isArray(arr) && arr.length === weeks.length) {
+            for (let wi = 0; wi < arr.length; wi++) {
+              for (let di = 0; di < arr[wi].days.length && di < weeks[wi].days.length; di++) {
+                weeks[wi].days[di].status = arr[wi].days[di].status || 0;
+              }
+            }
+          }
+        } catch(e) {}
+      }
+    }
+
+    function renderWeeks() {
       const list = document.getElementById('lessonList');
       list.innerHTML = '';
-      lessons.forEach((lesson, idx) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <span>${lesson.name}</span>
-          <input type="checkbox" class="checkbox" ${lesson.attended ? 'checked' : ''} data-idx="${idx}" />
+      weeks.forEach((week, wIdx) => {
+        const weekLi = document.createElement('li');
+        weekLi.className = 'week-item';
+        let daysHtml = week.days.map((day, dIdx) => {
+          let statusText = '';
+          let statusClass = '';
+          let crossActive = '';
+          let checkActive = '';
+          if (day.status === 1) {
+            statusText = 'Посещал';
+            statusClass = 'visited';
+            checkActive = 'checked';
+          } else if (day.status === 2) {
+            statusText = 'Не посещал';
+            statusClass = 'absent';
+            crossActive = 'active';
+          }
+
+          // Если день отсутствует, чекбокс недоступен
+          return `
+            <li class="${day.status === 2 ? 'absent' : ''}">
+              <span class="date-label">${day.date}</span>
+              <input type="checkbox" class="checkbox" data-w="${wIdx}" data-d="${dIdx}" ${checkActive} ${day.status === 2 ? 'disabled' : ''} />
+              <button type="button" class="cross-btn ${crossActive}" title="Отметить отсутствие" data-w="${wIdx}" data-d="${dIdx}">×</button>
+              <span class="label-status ${statusClass}">${statusText}</span>
+            </li>
+          `;
+        }).join('');
+        weekLi.innerHTML = `
+          <div class="week-title">${week.name}</div>
+          <ul class="days-list">
+            ${daysHtml}
+          </ul>
         `;
-        list.appendChild(li);
+        list.appendChild(weekLi);
       });
     }
 
-    // Данные для диаграммы
     function getChartData() {
-      const attendedLessons = lessons.filter(l => l.attended).length;
-      const notAttended = lessons.length - attendedLessons;
+      let visitedDays = 0, absentDays = 0, totalDays = 0;
+      weeks.forEach(week => {
+        week.days.forEach(d => {
+          totalDays++;
+          if (d.status === 1) visitedDays++;
+          if (d.status === 2) absentDays++;
+        });
+      });
       return {
-        labels: ['Посещено', 'Не посещено'],
-        data: [attendedLessons, notAttended]
+        labels: ['Посещал', 'Не посещал', 'Не отмечено'],
+        data: [visitedDays, absentDays, totalDays - visitedDays - absentDays]
       };
     }
 
-    // Chart.js диаграмма
     let lessonChart;
     function renderChart() {
       const ctx = document.getElementById('lessonChart').getContext('2d');
@@ -185,9 +341,13 @@
         data: {
           labels: chartData.labels,
           datasets: [{
-            label: 'Уроки',
+            label: 'Дни',
             data: chartData.data,
-            backgroundColor: ['#3B82F6', '#E5E7EB'],
+            backgroundColor: [
+              '#3B82F6', // Посещал
+              '#ef4444', // Не посещал (красный)
+              '#E5E7EB'  // Не отмечено
+            ],
             borderWidth: 0
           }]
         },
@@ -206,16 +366,40 @@
       });
     }
 
-    // Обработка клика по чекбоксу
+    // Обработка кликов по чекбоксу и крестику
     document.addEventListener('click', function(e) {
+      // Галочка
       if (e.target.classList.contains('checkbox')) {
-        const idx = e.target.dataset.idx;
-        lessons[idx].attended = e.target.checked;
-        renderChart();
+        const wIdx = parseInt(e.target.dataset.w, 10);
+        const dIdx = parseInt(e.target.dataset.d, 10);
+        if (!isNaN(wIdx) && !isNaN(dIdx)) {
+          // Если чекбокс активен - статус 1 (посещал)
+          // Если снят - статус 0 (сбросить)
+          weeks[wIdx].days[dIdx].status = e.target.checked ? 1 : 0;
+          saveWeeks();
+          renderWeeks();
+          renderChart();
+        }
+      }
+      // Крестик
+      if (e.target.classList.contains('cross-btn')) {
+        const wIdx = parseInt(e.target.dataset.w, 10);
+        const dIdx = parseInt(e.target.dataset.d, 10);
+        if (!isNaN(wIdx) && !isNaN(dIdx)) {
+          if (weeks[wIdx].days[dIdx].status === 2) {
+            // Если уже отмечен крестик — сбросить
+            weeks[wIdx].days[dIdx].status = 0;
+          } else {
+            // Снять чекбокс если стоит
+            weeks[wIdx].days[dIdx].status = 2;
+          }
+          saveWeeks();
+          renderWeeks();
+          renderChart();
+        }
       }
     });
 
-    // Переключение вкладок
     function showTab(tab) {
       document.getElementById('tab-lessons').classList.remove('active');
       document.getElementById('tab-class').classList.remove('active');
@@ -231,7 +415,8 @@
     }
 
     // Инициализация
-    renderLessons();
+    loadWeeks();
+    renderWeeks();
     renderChart();
   </script>
 </body>
