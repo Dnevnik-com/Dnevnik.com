@@ -52,6 +52,21 @@
       outline: none;
       background: #fff;
     }
+    .input-xs {
+      width: 80px;
+      padding: 6px 8px;
+      border: 1px solid #dbe1e8;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f8fafb;
+      margin-right: 8px;
+      transition: border .2s;
+    }
+    .input-xs:focus {
+      border-color: #3b82f6;
+      outline: none;
+      background: #fff;
+    }
     .btn {
       background: #3b82f6;
       color: #fff;
@@ -127,39 +142,31 @@
       from { opacity: 0; transform: translateY(-10px);}
       to { opacity: 1; transform: none;}
     }
-    .students-list {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 12px 0;
-    }
-    .students-list li {
+    .edit-fields {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f3f7fa;
-      border-radius: 6px;
-      padding: 8px 12px;
-      margin-bottom: 7px;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
+    .edit-fields label {
       font-size: 1rem;
-      color: #3a4660;
+      color: #234173;
     }
-    .students-list li:last-child {
-      margin-bottom: 0;
+    .edit-fields input[type="number"] {
+      width: 80px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #dbe1e8;
+      padding: 6px 8px;
+      background: #f8fafb;
+      margin-right: 12px;
+      transition: border .2s;
     }
-    .add-student-block {
-      display: flex;
-      gap: 8px;
-    }
-    .graduate-checkbox-block {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .graduate-checkbox-block label {
-      font-size: 0.97rem;
-      color: #2e3a59;
+    .edit-fields input[type="number"]:focus {
+      border-color: #3b82f6;
+      outline: none;
+      background: #fff;
     }
     @media (max-width: 600px) {
       .container { padding: 8px; }
@@ -174,36 +181,34 @@
     <h1>Управление классами</h1>
     <div class="add-class-block">
       <input id="newClassName" placeholder="Название нового класса" class="input-sm">
+      <input id="newClassCount" type="number" min="0" placeholder="Кол-во учеников" class="input-xs">
+      <input id="newClassAvg" type="number" min="0" max="5" step="0.01" placeholder="Средний балл" class="input-xs">
       <button class="btn" onclick="addClass()">Добавить класс</button>
     </div>
     <div class="class-list" id="classes"></div>
   </div>
   <script>
     // Local storage key
-    const LS_KEY = 'moder_classes_v1';
-
+    const LS_KEY = 'moder_classes_v2';
     // Классы по умолчанию
     const DEFAULT_CLASSES = [
-      { id: 1, name: '6ДЕМО', students: [], graduate: false },
-      { id: 2, name: '6-а', students: [], graduate: false },
-      { id: 3, name: '6-в', students: [], graduate: false },
-      { id: 4, name: '7-б', students: [], graduate: false },
-      { id: 5, name: '9-Ә', students: [], graduate: false },
-      { id: 6, name: '11-а', students: [], graduate: false },
-      { id: 7, name: '11ДЕМО', students: [], graduate: false },
+      { id: 1, name: '6ДЕМО', students: [], count: 0, avg: 0, graduate: false },
+      { id: 2, name: '6-а', students: [], count: 0, avg: 0, graduate: false },
+      { id: 3, name: '6-в', students: [], count: 0, avg: 0, graduate: false },
+      { id: 4, name: '7-б', students: [], count: 0, avg: 0, graduate: false },
+      { id: 5, name: '9-Ә', students: [], count: 0, avg: 0, graduate: false },
+      { id: 6, name: '11-а', students: [], count: 0, avg: 0, graduate: false },
+      { id: 7, name: '11ДЕМО', students: [], count: 0, avg: 0, graduate: false },
     ];
 
-    // Загружаем классы из localStorage, если есть
     function loadClasses() {
       try {
         const saved = JSON.parse(localStorage.getItem(LS_KEY));
-        // Если в localStorage нет классов, то загружаем по умолчанию
         if (Array.isArray(saved) && saved.length > 0) {
           classIdCounter = Math.max(1, ...saved.map(cls => cls.id)) + 1;
           return saved;
         }
       } catch (e) {}
-      // Если нет сохраненных классов или они пустые, используем дефолтные
       classIdCounter = Math.max(1, ...DEFAULT_CLASSES.map(cls => cls.id)) + 1;
       return JSON.parse(JSON.stringify(DEFAULT_CLASSES));
     }
@@ -214,17 +219,16 @@
 
     let classes = loadClasses();
     let classIdCounter = Math.max(8, ...classes.map(cls => cls.id + 1));
-    let openClassId = null; // id раскрытого класса
+    let openClassId = null;
+    let editMode = {};
 
     function renderClasses() {
       const classesDiv = document.getElementById('classes');
       classesDiv.innerHTML = '';
       classes.forEach(cls => {
-        // Block
         const block = document.createElement('div');
         block.className = 'class-block';
 
-        // Header
         const header = document.createElement('div');
         header.className = 'class-header';
         header.onclick = (e) => {
@@ -233,27 +237,37 @@
           renderClasses();
         };
 
-        // Arrow
         const arrow = document.createElement('span');
         arrow.className = 'arrow' + (openClassId === cls.id ? ' open' : '');
         arrow.innerHTML = '▶';
 
-        // Название
         const nameSpan = document.createElement('span');
         nameSpan.textContent = cls.name;
         nameSpan.style.flex = '1';
 
-        // Actions
+        // Краткая инфа по классу
+        const infoSpan = document.createElement('span');
+        infoSpan.style.marginLeft = '12px';
+        infoSpan.style.fontSize = '0.97rem';
+        infoSpan.style.color = '#3b82f6';
+        infoSpan.textContent = `Учеников: ${cls.count || cls.students.length}, Средний балл: ${cls.avg || 0}`;
+
         const actions = document.createElement('div');
         actions.className = 'class-actions';
 
         // Edit
         const editBtn = document.createElement('button');
         editBtn.className = 'btn btn-secondary';
-        editBtn.textContent = 'Переименовать';
+        editBtn.textContent = editMode[cls.id] ? 'Сохранить' : 'Редактировать';
         editBtn.onclick = (e) => {
           e.stopPropagation();
-          editClass(cls.id);
+          if (editMode[cls.id]) {
+            saveEditClass(cls.id);
+          } else {
+            editMode = {};
+            editMode[cls.id] = true;
+            renderClasses();
+          }
         };
         actions.appendChild(editBtn);
 
@@ -269,16 +283,17 @@
 
         header.appendChild(arrow);
         header.appendChild(nameSpan);
+        header.appendChild(infoSpan);
         header.appendChild(actions);
 
         block.appendChild(header);
 
-        // Students section
+        // Страница класса
         if (openClassId === cls.id) {
           const studentsSection = document.createElement('div');
           studentsSection.className = 'students-section';
 
-          // Graduate checkbox only for 9 или 11 класс
+          // Graduate checkbox для 9 и 11
           const classNum = getClassNum(cls.name);
           if (classNum === 9 || classNum === 11) {
             const gradBlock = document.createElement('div');
@@ -299,13 +314,56 @@
             studentsSection.appendChild(gradBlock);
           }
 
-          // List
+          // Редактирование класса
+          if (editMode[cls.id]) {
+            const editFields = document.createElement('div');
+            editFields.className = 'edit-fields';
+            // Название
+            const nameLabel = document.createElement('label');
+            nameLabel.textContent = 'Название класса';
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.value = cls.name;
+            nameInput.className = 'input-sm';
+            nameInput.id = `edit-name-${cls.id}`;
+            editFields.appendChild(nameLabel);
+            editFields.appendChild(nameInput);
+
+            // Кол-во учеников
+            const countLabel = document.createElement('label');
+            countLabel.textContent = 'Кол-во учеников';
+            const countInput = document.createElement('input');
+            countInput.type = 'number';
+            countInput.min = 0;
+            countInput.value = cls.count || cls.students.length;
+            countInput.className = 'input-xs';
+            countInput.id = `edit-count-${cls.id}`;
+            editFields.appendChild(countLabel);
+            editFields.appendChild(countInput);
+
+            // Средний балл
+            const avgLabel = document.createElement('label');
+            avgLabel.textContent = 'Средний балл';
+            const avgInput = document.createElement('input');
+            avgInput.type = 'number';
+            avgInput.step = "0.01";
+            avgInput.min = 0;
+            avgInput.max = 5;
+            avgInput.value = cls.avg || 0;
+            avgInput.className = 'input-xs';
+            avgInput.id = `edit-avg-${cls.id}`;
+            editFields.appendChild(avgLabel);
+            editFields.appendChild(avgInput);
+
+            studentsSection.appendChild(editFields);
+          }
+
+          // Список учеников
           const ul = document.createElement('ul');
           ul.className = 'students-list';
           cls.students.forEach((student, i) => {
             const li = document.createElement('li');
             li.textContent = student;
-            // Remove student btn
             const delBtn = document.createElement('button');
             delBtn.className = 'btn btn-secondary';
             delBtn.style.fontSize = '0.92em';
@@ -316,7 +374,7 @@
           });
           studentsSection.appendChild(ul);
 
-          // Add student
+          // Добавить ученика
           const addStudentBlock = document.createElement('div');
           addStudentBlock.className = 'add-student-block';
           const input = document.createElement('input');
@@ -336,7 +394,6 @@
 
           block.appendChild(studentsSection);
 
-          // Фокус на поле при открытии
           setTimeout(() => {
             const el = document.getElementById(`student-input-${cls.id}`);
             if (el) el.focus();
@@ -349,16 +406,28 @@
 
     function addClass() {
       const nameInput = document.getElementById('newClassName');
+      const countInput = document.getElementById('newClassCount');
+      const avgInput = document.getElementById('newClassAvg');
       const name = nameInput.value.trim();
+      const count = Number(countInput.value);
+      const avg = Number(avgInput.value);
+
       if (!name) return alert('Введите название класса');
+      if (isNaN(count) || count < 0) return alert('Введите корректное количество учеников');
+      if (isNaN(avg) || avg < 0 || avg > 5) return alert('Введите средний балл от 0 до 5');
+
       classes.push({
         id: classIdCounter++,
         name,
         students: [],
+        count,
+        avg,
         graduate: false
       });
       nameInput.value = '';
-      openClassId = classes[classes.length-1].id; // Открыть новый класс
+      countInput.value = '';
+      avgInput.value = '';
+      openClassId = classes[classes.length-1].id;
       saveClasses();
       renderClasses();
     }
@@ -371,17 +440,25 @@
       renderClasses();
     }
 
-    function editClass(id) {
+    function saveEditClass(id) {
       const cls = classes.find(cls => cls.id === id);
-      const newName = prompt('Новое название класса:', cls.name);
-      if (newName && newName.trim()) {
-        cls.name = newName.trim();
-        // Если изменился номер класса, сбросить graduate если нужно
-        const classNum = getClassNum(cls.name);
-        if (classNum !== 9 && classNum !== 11) cls.graduate = false;
-        saveClasses();
-        renderClasses();
-      }
+      const newName = document.getElementById(`edit-name-${id}`).value.trim();
+      const newCount = Number(document.getElementById(`edit-count-${id}`).value);
+      const newAvg = Number(document.getElementById(`edit-avg-${id}`).value);
+
+      if (!newName) return alert('Название не может быть пустым');
+      if (isNaN(newCount) || newCount < 0) return alert('Количество учеников должно быть >= 0');
+      if (isNaN(newAvg) || newAvg < 0 || newAvg > 5) return alert('Средний балл должен быть от 0 до 5');
+
+      cls.name = newName;
+      cls.count = newCount;
+      cls.avg = newAvg;
+      // graduate reset если класс не 9 или 11
+      const classNum = getClassNum(cls.name);
+      if (classNum !== 9 && classNum !== 11) cls.graduate = false;
+      editMode = {};
+      saveClasses();
+      renderClasses();
     }
 
     function addStudent(classId) {
@@ -392,6 +469,7 @@
       const cls = classes.find(cls => cls.id === classId);
       cls.students.push(name);
       input.value = '';
+      cls.count = cls.students.length;
       saveClasses();
       renderClasses();
       openClassId = classId;
@@ -404,19 +482,18 @@
     function removeStudent(classId, studentIndex) {
       const cls = classes.find(cls => cls.id === classId);
       cls.students.splice(studentIndex, 1);
+      cls.count = cls.students.length;
       saveClasses();
       renderClasses();
       openClassId = classId;
     }
 
-    // Возвращает номер класса (например, 9 из "9А" или "9-Б")
     function getClassNum(name) {
       const m = String(name).trim().match(/^(\d{1,2})\s?([А-ЯA-Z\-]*)/i);
       return m ? Number(m[1]) : NaN;
     }
 
     renderClasses();
-    // Всегда сохранять при изменении!
     window.addEventListener('beforeunload', saveClasses);
   </script>
 </body>
