@@ -3,43 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <title>Войти в Дневник</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
     <style>
-        body { background: #f5f7fa; font-family: Arial, sans-serif; }
-        .container { max-width: 800px; margin: 30px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px #0001; }
-        .header { background: #00b6e3; border-radius: 8px 8px 0 0; padding: 20px 30px 15px 30px; display: flex; align-items: center; justify-content: space-between; }
-        /* .header img { height: 40px; }  логотип убран */
-        .header-title { color: #fff; font-size: 2rem; font-weight: bold; margin-left: 0; }
-        .register-link { color: #fff; font-size: 1rem; text-decoration: underline; }
-        .content { padding: 30px; }
-        .info { display: flex; align-items: flex-start; margin-bottom: 18px; }
-        .info-icon { font-size: 1.5rem; margin-right: 10px; color: #2196f3; }
-        .info-text { font-size: 1rem; color: #222; }
-        .info-text a { color: #2196f3; text-decoration: underline; }
-        label { font-weight: bold; display: block; margin-bottom: 6px; margin-top: 18px; }
+        body {
+            background: linear-gradient(135deg,#a1c4fd 0%,#c2e9fb 100%);
+            font-family: 'Montserrat', Arial, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+            overflow: hidden;
+            animation: fadeIn 0.8s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+        .header {
+            background: linear-gradient(90deg,#00b6e3 0,#43e97b 100%);
+            padding: 32px 24px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+        .header-title {
+            color: #fff;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 16px #43e97b44;
+        }
+        .register-link {
+            color: #fff;
+            font-size: 1.03rem;
+            text-decoration: underline;
+            opacity: 0.92;
+            margin-top: 6px;
+            transition: color 0.18s;
+        }
+        .register-link:hover {
+            color: #333;
+            background: #e0f8ff;
+            border-radius: 5px;
+            padding: 2px 5px;
+        }
+        .content {
+            padding: 32px 24px 18px 24px;
+        }
+        .info {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 18px;
+            background: #f2fbf9;
+            border-radius: 7px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 10px #00b6e322;
+        }
+        .info-icon {
+            font-size: 1.35rem;
+            margin-right: 11px;
+            color: #00b6e3;
+            margin-top: 2px;
+        }
+        .info-text {
+            font-size: 0.99rem;
+            color: #222;
+        }
+        .info-text a {
+            color: #00b6e3;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 7px;
+            margin-top: 18px;
+            color: #2c3e50;
+            letter-spacing: 0.3px;
+        }
         input[type=text], input[type=password] {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;
-            font-size: 1rem; margin-bottom: 10px; box-sizing: border-box;
+            width: 100%;
+            padding: 11px 14px 11px 14px;
+            border: 1.5px solid #e1e6ea;
+            border-radius: 7px;
+            font-size: 1.09rem;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+            background: #f7fafd;
+            transition: border 0.18s, box-shadow 0.18s;
         }
-        .input-group { position: relative; }
+        input[type=text]:focus, input[type=password]:focus {
+            border-color: #00b6e3;
+            outline: none;
+            box-shadow: 0 2px 8px #00b6e322;
+        }
+        .input-group {
+            position: relative;
+        }
         .toggle-password {
-            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-            background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #888;
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.18rem;
+            color: #00b6e3;
+            transition: color 0.17s;
+            z-index: 2;
         }
-        .error { color: #d32f2f; margin: 10px 0 0 0; font-size: 1rem; }
+        .toggle-password:hover {
+            color: #43e97b;
+        }
+        .error {
+            color: #d32f2f;
+            margin: 10px 0 0 0;
+            font-size: 1.07rem;
+            background: #ffe8e8;
+            border-radius: 5px;
+            padding: 7px 11px;
+            box-shadow: 0 2px 10px #d32f2f15;
+            display: none;
+        }
         .btn {
-            width: 100%; padding: 12px; background: linear-gradient(0deg,#b4e391 0,#7dc242 100%);
-            color: #fff; border: none; border-radius: 5px; font-size: 1.2rem; cursor: pointer; margin-top: 18px;
-            transition: background 0.2s;
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(90deg,#00b6e3 0,#43e97b 100%);
+            color: #fff;
+            border: none;
+            border-radius: 7px;
+            font-size: 1.18rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 22px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px #00b6e322;
+            transition: background 0.2s, box-shadow 0.2s;
         }
-        .btn:hover { background: linear-gradient(0deg,#a0d87b 0,#6dbb37 100%); }
-        .footer { background: #f5f7fa; border-radius: 0 0 8px 8px; padding: 18px 30px; font-size: 1rem; color: #444; display: flex; align-items: center; }
-        .footer-icon { font-size: 1.2rem; margin-right: 8px; }
-        .footer a { color: #2196f3; text-decoration: underline; }
+        .btn:hover {
+            background: linear-gradient(90deg,#43e97b 0,#00b6e3 100%);
+            box-shadow: 0 6px 16px #43e97b33;
+        }
+        .footer {
+            background: #f7fafd;
+            border-radius: 0 0 18px 18px;
+            padding: 17px 24px;
+            font-size: 1rem;
+            color: #444;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 -2px 10px #00b6e315;
+        }
+        .footer-icon {
+            font-size: 1.15rem;
+            margin-right: 8px;
+            color: #00b6e3;
+        }
+        .footer a {
+            color: #00b6e3;
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.17s;
+        }
+        .footer a:hover {
+            color: #43e97b;
+        }
         .copyright {
             text-align: center;
-            color: #888;
-            font-size: 1rem;
-            margin: 18px 0 10px 0;
+            color: #6e8ca0;
+            font-size: 1.01rem;
+            margin: 18px 0 11px 0;
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 480px) {
+            .container { max-width: 98vw; margin: 10px; }
+            .header, .content, .footer { padding: 14px; }
         }
     </style>
 </head>
@@ -54,15 +201,15 @@
                 <span class="info-icon">ⓘ</span>
                 <div class="info-text">
                     Для входа в систему используйте только свою учетную запись.<br>
-                    Нажимая кнопку Войти, Вы подтверждаете, что прочли и согласны с <a href="#">пользовательским соглашени�[...]
+                    Нажимая кнопку Войти, Вы подтверждаете, что прочли и согласны с <a href="#">пользовательским соглашением</a>.
                 </div>
             </div>
             <form id="loginForm" autocomplete="off">
                 <label for="login">Логин</label>
-                <input type="text" id="login" name="login" required autocomplete="username">
+                <input type="text" id="login" name="login" required autocomplete="username" placeholder="Введите ваш логин">
                 <label for="password">Пароль</label>
                 <div class="input-group">
-                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                    <input type="password" id="password" name="password" required autocomplete="current-password" placeholder="Введите ваш пароль">
                     <button type="button" class="toggle-password" tabindex="-1" aria-label="Показать пароль" onclick="togglePassword()">
                         <span id="eye">&#128065;</span>
                     </button>
@@ -96,22 +243,20 @@
             const login = this.login.value.trim();
             const password = this.password.value;
             const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
             if (login === 'behruz.ah288' && password === 'behruuz29s') {
                 window.location.href = 'http://dnevnik.com1.tilda.ws/page68189337html';
             } else if (login === 'hf8548' && password === '849w8d') {
                 window.location.href = 'http://dnevnik.com-v2.tilda.ws/moya-organizacia';
             } else if (login === 'rozh0508' && password === 'rozh11') {
                 window.location.href = 'http://dnevnik.com1.tilda.ws/useruset390243969048639039';
-          } else if (login === 'admin_oo' && password === 'admin_oo00') {
-          window.location.href = 'http://dnevnik.com1.tilda.ws/sms-go-tc/bitrix24';
+            } else if (login === 'admin_oo' && password === 'admin_oo00') {
+                window.location.href = 'http://dnevnik.com1.tilda.ws/sms-go-tc/bitrix24';
             } else {
+                errorMsg.style.display = 'block';
                 errorMsg.textContent = 'Неверный логин или пароль.';
             }
         });
     </script>
 </body>
 </html>
-
-
-
-
