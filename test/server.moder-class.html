@@ -188,7 +188,7 @@
     <div class="class-list" id="classes"></div>
   </div>
   <script>
-    // Local storage key
+    // Ключ для локального хранилища
     const LS_KEY = 'moder_classes_v2';
     // Классы по умолчанию
     const DEFAULT_CLASSES = [
@@ -201,15 +201,19 @@
       { id: 7, name: '11ДЕМО', students: [], count: 0, avg: 0, graduate: false },
     ];
 
+    // Глобальные переменные
+    let classes;
+    let classIdCounter;
+    let openClassId = null;
+    let editMode = {};
+
     function loadClasses() {
       try {
         const saved = JSON.parse(localStorage.getItem(LS_KEY));
         if (Array.isArray(saved) && saved.length > 0) {
-          classIdCounter = Math.max(1, ...saved.map(cls => cls.id)) + 1;
           return saved;
         }
       } catch (e) {}
-      classIdCounter = Math.max(1, ...DEFAULT_CLASSES.map(cls => cls.id)) + 1;
       return JSON.parse(JSON.stringify(DEFAULT_CLASSES));
     }
 
@@ -217,10 +221,9 @@
       localStorage.setItem(LS_KEY, JSON.stringify(classes));
     }
 
-    let classes = loadClasses();
-    let classIdCounter = Math.max(8, ...classes.map(cls => cls.id + 1));
-    let openClassId = null;
-    let editMode = {};
+    // Инициализация массива классов и счетчика идентификаторов
+    classes = loadClasses();
+    classIdCounter = Math.max(1, ...classes.map(cls => cls.id)) + 1;
 
     function renderClasses() {
       const classesDiv = document.getElementById('classes');
@@ -424,12 +427,13 @@
         avg,
         graduate: false
       });
+
       nameInput.value = '';
       countInput.value = '';
       avgInput.value = '';
       openClassId = classes[classes.length-1].id;
       saveClasses();
-      renderClasses();
+      renderClasses(); // обязательно вызываем для обновления списка
     }
 
     function removeClass(id) {
