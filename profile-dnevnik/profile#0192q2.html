@@ -1,1 +1,470 @@
 
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        :root {
+            --main-bg: #f9fafc;
+            --card-bg: #fff;
+            --accent-gradient: linear-gradient(90deg,#7fb3ff 0%,#e3b2fa 100%);
+            --tab-active-bg: #f2f5fa;
+            --tab-hover-bg: #f2f5fa;
+            --primary: #4285f4;
+            --success: #34e69a;
+            --danger: #f44336;
+            --shadow: 0 6px 32px rgba(0,0,0,0.07);
+            --border-radius: 20px;
+        }
+        body {
+            background: var(--main-bg);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+        }
+        .profile-card {
+            max-width: 800px;
+            margin: 44px auto;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 36px 40px 32px 40px;
+            position: relative;
+        }
+        .profile-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+        .profile-main {
+            display: flex;
+            align-items: center;
+        }
+        .profile-photo {
+            position: relative;
+            margin-right: 30px;
+        }
+        .profile-photo img {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            background: #e7eaf2;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 2px 10px #e3b2fa33;
+        }
+        .online-dot {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            width: 18px;
+            height: 18px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 4px #34e69a55;
+        }
+        .edit-photo-label {
+            position: absolute;
+            bottom: -14px; left: 50%; transform: translateX(-50%);
+            background: var(--primary);
+            color: #fff;
+            font-size: 13px;
+            padding: 5px 18px;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px #4285f425;
+        }
+        .profile-photo input[type="file"] {
+            display: none;
+        }
+        .user-info {
+            margin-top: 6px;
+        }
+        .user-name {
+            font-size: 30px;
+            font-weight: 700;
+            margin-right: 14px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .online-status {
+            display: inline-block;
+            vertical-align: middle;
+            background: #d9fadd;
+            color: var(--success);
+            font-size: 16px;
+            border-radius: 9px;
+            padding: 2px 12px;
+            margin-left: 2px;
+        }
+        .user-details {
+            margin: 12px 0 0 0;
+            color: #222;
+            font-size: 17px;
+        }
+        .edit-btn {
+            display: flex;
+            align-items: center;
+            color: var(--primary);
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: color 0.2s;
+        }
+        .edit-btn:hover {
+            color: var(--success);
+        }
+        .edit-btn svg {
+            margin-right: 6px;
+        }
+        .profile-tabs {
+            display: flex;
+            gap: 36px;
+            margin: 34px 0 14px 0;
+        }
+        .profile-tab {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: #222;
+            padding: 10px 30px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.17s, color 0.17s;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            box-shadow: none;
+        }
+        .profile-tab.active, .profile-tab:hover {
+            background: var(--tab-active-bg);
+            color: var(--primary);
+        }
+        .profile-tab svg {
+            margin-right: 7px;
+        }
+        .profile-section {
+            margin-top: 20px;
+        }
+        .profile-form {
+            margin: 18px 0 0 0;
+        }
+        .profile-form label {
+            font-size: 16px;
+            color: #666;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .profile-form input[type="number"], .profile-form input[type="text"] {
+            font-size: 17px;
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid #e3e3e3;
+            background: #f7f9fb;
+            margin-bottom: 16px;
+            width: 190px;
+            display: block;
+        }
+        .save-btn {
+            background: var(--accent-gradient);
+            color: #fff;
+            border: none;
+            font-size: 16px;
+            padding: 9px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px #7fb3ff33;
+        }
+        /* Achievements */
+        .achievements-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 12px;
+        }
+        .achievement {
+            background: var(--tab-active-bg);
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-size: 15px;
+            color: #6c3dba;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            box-shadow: 0 2px 8px #e3b2fa22;
+        }
+        .achievement svg {
+            flex-shrink: 0;
+        }
+        .add-achievement-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .add-achievement-form input {
+            font-size: 15px;
+            padding: 7px 12px;
+            border-radius: 8px;
+            border: 1px solid #e3e3e3;
+            background: #f7f9fb;
+            width: 200px;
+        }
+        .add-achievement-form button {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            padding: 7px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+        /* Files */
+        .file-upload-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        .file-upload-form input[type="file"] {
+            padding: 7px 0;
+        }
+        .file-upload-form button {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            padding: 7px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+        }
+        .file-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .file-list li {
+            background: var(--tab-active-bg);
+            padding: 10px 18px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px;
+            color: #333;
+        }
+        .file-list a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 16px;
+        }
+        @media (max-width: 900px) {
+            .profile-card {
+                max-width: 98vw;
+                padding: 22px 4vw;
+            }
+            .profile-header { flex-direction: column; }
+            .profile-main { flex-direction: column; align-items: flex-start; }
+            .profile-photo { margin-right: 0; margin-bottom: 16px; }
+            .profile-tabs { gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="profile-main">
+                <div class="profile-photo">
+                    <img id="avatar" src="https://avatars.dicebear.com/api/bottts/username.svg" alt="Фото профиля">
+                    <span class="online-dot"></span>
+                    <label class="edit-photo-label" for="photo-input">Изменить фото</label>
+                    <input type="file" id="photo-input" accept="image/*">
+                </div>
+                <div>
+                    <span class="user-name" id="profile-name">Назарбаева.А.В</span>
+                    <span class="online-status">онлайн</span>
+                    <div class="user-info user-details">
+                        <div>Школа: <b>Школа Тест</b></div>
+                        <div>Должность: <b>Сотрудник</b></div>
+                        <div>Возраст: <span id="profile-age">25</span></div>
+                    </div>
+                </div>
+            </div>
+            <button class="edit-btn" id="edit-profile-btn">
+                <svg width="20" height="20" fill="#4285f4" viewBox="0 0 24 24"><path d="M5 19.25v-2.083l9.354-9.354 2.083 2.083-9.354 9.354h-2.083zm14.813-12.563c.391-.391.391-1.024 0-1.414l-1.086-1.086c-.391-.391-1.023-.391-1.414 0l-1.505 1.505 2.5 2.5 1.505-1.505zm-3.219-1.505l-11.594 11.594c-.39.391-.39 1.023 0 1.414l1.086 1.086c.391.391 1.023.391 1.414 0l11.594-11.594c.391-.391.391-1.023 0-1.414l-1.086-1.086c-.391-.391-1.023-.391-1.414 0z"/></svg>
+                Редактировать
+            </button>
+        </div>
+        <div class="profile-tabs">
+            <button class="profile-tab active" id="tab-profile">
+                <svg width="18" height="18" fill="#222" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                Профиль
+            </button>
+            <button class="profile-tab" id="tab-achievements">
+                <svg width="18" height="18" fill="#6c3dba" viewBox="0 0 24 24"><path d="M12 17.27l6.18-5.73-1.64-7.03-7.08-.61-5.46 5.36 1.64 7.03z"/></svg>
+                Достижения
+            </button>
+            <button class="profile-tab" id="tab-files">
+                <svg width="18" height="18" fill="#222" viewBox="0 0 24 24"><path d="M3 6v15h18V6H3zm16 13H5v-9h14v9zm0-11H5V8h14V8z"/></svg>
+                Файлы
+            </button>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-section" id="section-profile">
+            <form class="profile-form" id="edit-form" style="display:none;">
+                <label for="name-input">Имя:</label>
+                <input type="text" id="name-input" value="Имя">
+                <label for="age-input">Возраст:</label>
+                <input type="number" id="age-input" min="1" max="120" value="25">
+                <button type="submit" class="save-btn">Сохранить</button>
+            </form>
+        </div>
+
+        <!-- Achievements Section -->
+        <div class="profile-section" id="section-achievements" style="display:none;">
+            <form class="add-achievement-form" id="add-achievement-form">
+                <input type="text" id="achievement-input" placeholder="Добавить достижение...">
+                <button type="submit">Добавить</button>
+            </form>
+            <div class="achievements-list" id="achievements-list">
+                <!-- Achievements will be added here -->
+            </div>
+        </div>
+
+        <!-- Files Section -->
+        <div class="profile-section" id="section-files" style="display:none;">
+            <form class="file-upload-form" id="file-upload-form">
+                <input type="file" id="file-input" multiple>
+                <button type="submit">Загрузить</button>
+            </form>
+            <ul class="file-list" id="file-list">
+                <!-- Uploaded files will be listed here -->
+            </ul>
+        </div>
+    </div>
+    <script>
+        // Tab switching logic
+        const tabs = [
+            { btn: document.getElementById('tab-profile'), section: document.getElementById('section-profile') },
+            { btn: document.getElementById('tab-achievements'), section: document.getElementById('section-achievements') },
+            { btn: document.getElementById('tab-files'), section: document.getElementById('section-files') }
+        ];
+        tabs.forEach((tab, idx) => {
+            tab.btn.addEventListener('click', () => {
+                tabs.forEach((t, i) => {
+                    t.btn.classList.toggle('active', i === idx);
+                    t.section.style.display = i === idx ? '' : 'none';
+                });
+            });
+        });
+
+        // Profile edit form logic
+        const editBtn = document.getElementById('edit-profile-btn');
+        const editForm = document.getElementById('edit-form');
+        const profileName = document.getElementById('profile-name');
+        const profileAge = document.getElementById('profile-age');
+        const nameInput = document.getElementById('name-input');
+        const ageInput = document.getElementById('age-input');
+        editBtn.addEventListener('click', () => {
+            editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+            nameInput.value = profileName.textContent;
+            ageInput.value = profileAge.textContent;
+        });
+        editForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            profileName.textContent = nameInput.value;
+            profileAge.textContent = ageInput.value;
+            editForm.style.display = 'none';
+        });
+
+        // Photo change logic
+        const photoInput = document.getElementById('photo-input');
+        const avatar = document.getElementById('avatar');
+        document.querySelector('.edit-photo-label').addEventListener('click', () => {
+            photoInput.click();
+        });
+        photoInput.addEventListener('change', function(){
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    avatar.src = e.target.result;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Achievements logic
+        const achievementsList = document.getElementById('achievements-list');
+        const addAchievementForm = document.getElementById('add-achievement-form');
+        const achievementInput = document.getElementById('achievement-input');
+        let achievements = [];
+        addAchievementForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            const text = achievementInput.value.trim();
+            if(text){
+                achievements.push(text);
+                renderAchievements();
+                achievementInput.value = "";
+            }
+        });
+        function renderAchievements(){
+            achievementsList.innerHTML = "";
+            achievements.forEach((ach, idx) => {
+                const div = document.createElement('div');
+                div.className = "achievement";
+                div.innerHTML = `<svg width="18" height="18" fill="#6c3dba" viewBox="0 0 24 24"><path d="M12 17.27l6.18-5.73-1.64-7.03-7.08-.61-5.46 5.36 1.64 7.03z"/></svg>
+                    <span>${ach}</span>
+                    <button class="delete-btn" title="Удалить" onclick="deleteAchievement(${idx})">&times;</button>`;
+                achievementsList.appendChild(div);
+            });
+        }
+        window.deleteAchievement = function(idx){
+            achievements.splice(idx,1);
+            renderAchievements();
+        }
+
+        // File upload logic
+        const fileUploadForm = document.getElementById('file-upload-form');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        let files = [];
+        fileUploadForm.addEventListener('submit', function(e){
+            e.preventDefault();
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                files.push(file);
+            }
+            renderFiles();
+            fileInput.value = "";
+        });
+        function renderFiles(){
+            fileList.innerHTML = "";
+            files.forEach((file, idx) => {
+                const url = URL.createObjectURL(file);
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="${url}" download="${file.name}">${file.name}</a>
+                    <span style="font-size:12px;color:#888;">(${Math.round(file.size/1024)} KB)</span>
+                    <button class="delete-btn" title="Удалить" onclick="deleteFile(${idx})">&times;</button>`;
+                fileList.appendChild(li);
+            });
+        }
+        window.deleteFile = function(idx){
+            files.splice(idx,1);
+            renderFiles();
+        }
+    </script>
+</body>
+</html>
