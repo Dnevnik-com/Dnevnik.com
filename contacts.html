@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Контакты | Компания "Дневник"</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: radial-gradient(ellipse at top left, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+      min-height: 100vh;
+    }
+    .wrapper {
+      max-width: 430px;
+      margin: 60px auto;
+      background: rgba(255,255,255,0.93);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(127,127,213,0.16);
+      padding: 40px 30px 32px;
+      position: relative;
+      overflow: hidden;
+      animation: fade-in 1s cubic-bezier(0.4,0,0.2,1);
+    }
+    @keyframes fade-in {
+      0% { opacity: 0; transform: translateY(24px);}
+      100% { opacity: 1; transform: none;}
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 22px;
+      width: 120px;
+      border-radius: 18px;
+      box-shadow: 0 4px 16px #91EAE466;
+      transition: box-shadow .3s;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 700;
+      font-size: 2.1rem;
+      margin-bottom: 10px;
+      color: #4469a0;
+      letter-spacing: 0.03em;
+      text-shadow: 0 2px 8px #86A8E740;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 1.1rem;
+      color: #63707a;
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
+    }
+    .contact-list {
+      margin-bottom: 32px;
+      padding: 0;
+      list-style: none;
+    }
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(90deg, #e7f0fd 0%, #fafdff 100%);
+      border-radius: 12px;
+      padding: 15px 18px;
+      font-size: 1.09rem;
+      color: #2d4059;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px #c0d3ee22;
+      transition: box-shadow .3s;
+    }
+    .contact-list li:hover {
+      box-shadow: 0 8px 24px #91EAE455;
+    }
+    .contact-list a {
+      color: #4469a0;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .2s;
+    }
+    .contact-list a:hover {
+      color: #2d4059;
+      text-decoration: underline;
+    }
+    .contact-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      fill: #7F7FD5;
+      filter: drop-shadow(0 2px 6px #7F7FD533);
+    }
+    .offices {
+      margin-top: 16px;
+    }
+    .offices-title {
+      font-weight: 700;
+      color: #4469a0;
+      margin-bottom: 12px;
+      font-size: 1.13rem;
+      letter-spacing: 0.02em;
+    }
+    .office-list {
+      padding: 0;
+      list-style: none;
+    }
+    .office-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(90deg, #e1efff 0%, #f7fafc 100%);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 1.05rem;
+      color: #2d4059;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px #91EAE433;
+    }
+    .office-icon {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      fill: #4469a0;
+    }
+    .wave {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 70px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @media (max-width: 520px) {
+      .wrapper { padding: 18px 5px; }
+      h1 { font-size: 1.3rem; }
+      .logo { width: 90px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <img src="https://optim.tildacdn.pub/tild3565-3663-4461-b765-363339653863/-/resize/170x/-/format/webp/d_NEW_LOGO_2-Photoro.png.webp" alt="Логотип Dневник" class="logo">
+    <h1>Контакты компании «Дневник»</h1>
+    <div class="subtitle">Свяжитесь с нами удобным способом</div>
+    <ul class="contact-list">
+      <li>
+        <svg class="contact-icon" viewBox="0 0 24 24"><path d="M19.5 4h-15A2.5 2.5 0 002 6.5v11A2.5 2.5 0 004.5 20h15a2.5 2.5 0 002.5-2.5v-11A2.5 2.5 0 0019.5 4zm0 2c.28 0 .5.22.5.5v.31l-8 5.55-8-5.55V6.5c0-.28.22-.5.5-.5h15zm.5 2.92v8.58c0 .28-.22.5-.5.5h-15a.5.5 0 01-.5-.5V8.92l7.61 5.29a1 1 0 001.18 0L20 8.92z"/></svg>
+        <span><b>Email:</b> <a href="mailto:team.company-dnevnik@mail.ru">team.company-dnevnik@mail.ru</a></span>
+      </li>
+      <li>
+        <svg class="contact-icon" viewBox="0 0 24 24"><path d="M17.707 16.293l-2.52-2.52a1 1 0 00-1.414 0l-1.36 1.36a11.72 11.72 0 01-5.657-5.657l1.36-1.36a1 1 0 000-1.414l-2.52-2.52a1 1 0 00-1.414 0l-1.23 1.23a3.003 3.003 0 00-.88 2.58c.29 2.32 1.37 5.12 5.1 8.85s6.53 4.81 8.85 5.1c.98.13 1.97-.12 2.58-.88l1.23-1.23a1 1 0 000-1.414z"/></svg>
+        <span><b>Телефон:</b> <a href="tel:+792945339910">+8 929 453 399 10</a></span>
+      </li>
+    </ul>
+    <div class="offices">
+      <div class="offices-title">Главные офисы:</div>
+      <ul class="office-list">
+        <li>
+          <svg class="office-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.5 7 13 7 13s7-8.5 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <span>Москва, Россия</span>
+        </li>
+        <li>
+          <svg class="office-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.5 7 13 7 13s7-8.5 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <span>Астана, Казахстан</span>
+        </li>
+      </ul>
+    </div>
+    <svg class="wave" viewBox="0 0 500 80" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 500,40 L500,80 L0,80 Z" fill="#7F7FD5" fill-opacity="0.12"></path></svg>
+  </div>
+</body>
+</html>
