@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Технические работы</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 60% 40%, #e3e8f0 0%, #f1f5fa 100%);
+      font-family: 'Montserrat', Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .maintenance-card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(67,93,162,0.09);
+      max-width: 340px;
+      width: 100%;
+      padding: 36px 28px 28px 28px;
+      text-align: center;
+      position: relative;
+      animation: cardFade 1s cubic-bezier(.51,.92,.24,1.01);
+    }
+    @keyframes cardFade {
+      0% { opacity: 0; transform: scale(.97);}
+      100% {opacity: 1; transform: scale(1);}
+    }
+    .logo {
+      width: 82px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      background: #f6f6f8;
+      padding: 8px;
+      transition: box-shadow 0.3s;
+    }
+    .maintenance-status {
+      display: inline-block;
+      background: #f2f6fe;
+      color: #4a5fa2;
+      border-radius: 13px;
+      font-weight: 600;
+      font-size: 1.02rem;
+      padding: 8px 18px;
+      margin-bottom: 16px;
+      letter-spacing: 0.01em;
+      box-shadow: 0 1px 10px rgba(67,93,162,0.07);
+    }
+    h1 {
+      font-size: 1.42rem;
+      font-weight: 700;
+      margin: 0 0 14px 0;
+      color: #2a355b;
+      letter-spacing: -.5px;
+    }
+    .desc {
+      font-size: 1.02rem;
+      color: #505a82;
+      margin-bottom: 14px;
+      margin-top: 0;
+      line-height: 1.5;
+    }
+    .footer {
+      font-size: .92rem;
+      color: #9aa3c3;
+      margin-top: 18px;
+      letter-spacing: .01em;
+    }
+    .icon-bg {
+      position: absolute;
+      right: -24px;
+      bottom: -42px;
+      opacity: .11;
+      width: 120px;
+      height: 120px;
+      background: url('https://cdn-icons-png.flaticon.com/512/565/565340.png') center/contain no-repeat;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="maintenance-card">
+    <img src="https://optim.tildacdn.pub/tild6539-3262-4636-b334-326130356633/-/resize/188x/-/format/webp/d_NEW_LOGO-Photoroom.png.webp" class="logo" alt="Логотип">
+    <div class="maintenance-status">Технические работы</div>
+    <h1>Мы скоро вернемся!</h1>
+    <p class="desc">
+      Сайт временно недоступен.<br>
+      Мы обновляем сервис для вашего удобства.<br>
+      Пожалуйста, попробуйте зайти позже.
+    </p>
+    <div class="footer">
+      Спасибо за понимание &mdash; команда сайта
+    </div>
+    <div class="icon-bg"></div>
+  </div>
+</body>
+</html>
