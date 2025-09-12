@@ -122,6 +122,28 @@
       height: 18px;
       fill: #4469a0;
     }
+    .office-soon {
+      color: #888 !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-left: 6px;
+      background: none;
+    }
+    .office-list li.soon {
+      color: #aaa;
+      background: linear-gradient(90deg, #f3f4f6 0%, #f7fafc 100%);
+    }
+    .office-list li.soon .office-icon {
+      fill: #bcbcbc;
+    }
+    .office-list li.soon span {
+      color: #888;
+    }
+    @media (max-width: 520px) {
+      .wrapper { padding: 18px 5px; }
+      h1 { font-size: 1.3rem; }
+      .logo { width: 90px;}
+    }
     .wave {
       position: absolute;
       left: 0;
@@ -130,11 +152,6 @@
       height: 70px;
       pointer-events: none;
       z-index: 0;
-    }
-    @media (max-width: 520px) {
-      .wrapper { padding: 18px 5px; }
-      h1 { font-size: 1.3rem; }
-      .logo { width: 90px;}
     }
   </style>
 </head>
@@ -163,6 +180,16 @@
         <li>
           <svg class="office-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.5 7 13 7 13s7-8.5 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
           <span>Астана, Казахстан</span>
+        </li>
+        <li class="soon">
+          <svg class="office-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.5 7 13 7 13s7-8.5 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <span>Ташкент, Узбекистан</span>
+          <span class="office-soon">СКОРО</span>
+        </li>
+        <li class="soon">
+          <svg class="office-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 4.5 7 13 7 13s7-8.5 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <span>Минск, Беларусь</span>
+          <span class="office-soon">СКОРО</span>
         </li>
       </ul>
     </div>
