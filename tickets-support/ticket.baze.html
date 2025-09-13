@@ -1,1 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Система тикетов с безопасной админ-панелью</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { margin: 0; background: #f3f6fc; font-family: 'Segoe UI', Arial, sans-serif; }
+    .wrapper { display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 32px; max-width: 1400px; margin: 0 auto; padding: 40px 16px;}
+    .sidebar { background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 24px; }
+    .sidebar h2 { margin-top: 0; font-size: 1.3em;}
+    .ticket-list { padding: 0; list-style: none; }
+    .ticket-list li { margin-bottom: 12px; padding: 12px; border-radius: 8px; background: #eef3fa; cursor: pointer; transition: background .2s;}
+    .ticket-list li.selected { background: #90cdf4; color: #fff;}
+    .new-ticket input { padding: 8px; border-radius: 6px; border: 1px solid #ccd; width: 70%; margin-right: 4px;}
+    .new-ticket button { padding: 8px 14px; border-radius: 6px; border: none; background: #3182ce; color: #fff; font-weight: 500; cursor: pointer;}
+    .main { background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0002; padding: 24px; min-height: 500px; display: flex; flex-direction: column;}
+    .main h3 { margin-top: 0;}
+    .chat-window { flex: 1; overflow-y: auto; margin-bottom: 18px; padding-right: 12px;}
+    .bubble { display: inline-block; max-width: 65%; padding: 12px 18px; border-radius: 20px; margin-bottom: 12px; position: relative; word-break: break-word;}
+    .bubble.user { background: #3182ce; color: #fff; align-self: flex-start; border-bottom-left-radius: 5px;}
+    .bubble.agent { background: #e2e8f0; color: #29334d; align-self: flex-end; border-bottom-right-radius: 5px;}
+    .meta { font-size: 11px; color: #888; margin-top: 3px;}
+    .chat-form { display: flex; gap: 12px;}
+    .chat-form textarea { flex: 1; border-radius: 10px; border: 1px solid #ccd; font-size: 1em; padding: 10px;}
+    .chat-form button { padding: 10px 24px; border-radius: 10px; border: none; background: #3182ce; color: #fff; font-weight: 500; cursor: pointer;}
+    .agent-panel { background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #0001; padding: 24px; position: relative; }
+    .agent-panel h2 { margin-top: 0; font-size: 1.1em;}
+    .agent-panel textarea { width: 100%; border-radius: 10px; border: 1px solid #ccd; font-size: 1em; padding: 10px;}
+    .agent-panel button { margin-top: 8px; padding: 10px 24px; border-radius: 10px; border: none; background: #2d3748; color: #fff; font-weight: 500; cursor: pointer;}
+    .agent-login-btn { margin-top:24px; display:block; padding:10px 18px; border-radius:8px; border:none; background:#2d3748; color:#fff; font-weight:500; cursor:pointer;}
+    .logout-btn { position:absolute; top:24px; right:24px; background: #e53e3e; color: #fff; border:none; border-radius:8px; padding:8px 12px; font-weight:500; cursor:pointer;}
+    .agent-login-modal { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.25); display:flex; align-items:center; justify-content:center; z-index:10;}
+    .agent-login-box { background:#fff; padding:32px 28px; border-radius:14px; box-shadow:0 4px 24px #0003; min-width:320px;}
+    .agent-login-box h3 { margin-top:0;}
+    .agent-login-box input { display:block; width:100%; margin:12px 0; padding:10px; border-radius:8px; border:1px solid #ccd;}
+    .agent-login-box button { padding:10px 24px; border-radius:8px; border:none; background:#2d3748; color:#fff; font-weight:500; cursor:pointer;}
+    .agent-login-error { color:#e53e3e; font-size:14px;}
+    @media (max-width: 900px){
+      .wrapper { grid-template-columns: 1fr; gap: 16px; }
+      .sidebar, .main, .agent-panel { margin-bottom: 22px; }
+      .logout-btn { position:static; float:right; margin-left:12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- User Sidebar -->
+    <div class="sidebar">
+      <h2>Ваши тикеты</h2>
+      <ul class="ticket-list" id="ticketList"></ul>
+      <div class="new-ticket" style="margin-top:24px;">
+        <input type="text" id="newSubject" placeholder="Тема нового тикета">
+        <button onclick="createTicket()">+</button>
+      </div>
+      <button class="agent-login-btn" onclick="showAgentLoginModal()">Войти как агент</button>
+    </div>
 
+    <!-- Main Ticket View -->
+    <div class="main">
+      <div id="ticketView"></div>
+      <form class="chat-form" onsubmit="sendMessage(event)">
+        <textarea id="messageText" placeholder="Ваше сообщение..." rows="2"></textarea>
+        <button type="button" onclick="sendMessageUser()">Отправить</button>
+      </form>
+    </div>
+
+    <!-- Agent Panel (hidden by default) -->
+    <div class="agent-panel" id="agentPanel" style="display:none;">
+      <h2>Панель агента</h2>
+      <button class="logout-btn" onclick="logoutAgent()">Выйти</button>
+      <div id="agentTicketView"></div>
+      <textarea id="agentMessageText" placeholder="Сообщение агента..." rows="2"></textarea>
+      <button onclick="sendMessageAgent()">Ответить пользователю</button>
+    </div>
+  </div>
+
+  <!-- Agent Login Modal -->
+  <div class="agent-login-modal" id="agentLoginModal" style="display:none;">
+    <div class="agent-login-box">
+      <h3>Вход агента</h3>
+      <input type="text" id="agentLogin" placeholder="Логин">
+      <input type="password" id="agentPassword" placeholder="Пароль">
+      <button onclick="loginAgent()">Войти</button>
+      <div class="agent-login-error" id="agentLoginError"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- Constants
+    const AGENT_LOGIN = 'dnevnik251801';
+    const AGENT_PASSWORD = 'dn.180125';
+
+    // --- State
+    let tickets = [];
+    let selectedTicketId = null;
+    let isAgent = false;
+
+    // --- LocalStorage helpers
+    function saveTickets() {
+      localStorage.setItem('tickets_v2', JSON.stringify(tickets));
+    }
+    function loadTickets() {
+      const saved = localStorage.getItem('tickets_v2');
+      if (saved) {
+        try { tickets = JSON.parse(saved); }
+        catch { tickets = []; }
+      } else {
+        // initial demo ticket
+        tickets = [
+          {
+            id: '1',
+            subject: 'Проблема с доступом',
+            status: 'open',
+            messages: [
+              { sender: 'user', text: 'Здравствуйте! Не могу войти.', timestamp: '2025-09-13 10:00' },
+              { sender: 'agent', text: 'Добрый день! Уточните, какой ошибки?', timestamp: '2025-09-13 10:05' }
+            ]
+          }
+        ];
+        saveTickets();
+      }
+      selectedTicketId = tickets[0]?.id || null;
+    }
+
+    // --- UI rendering
+    function renderTickets() {
+      const ticketList = document.getElementById('ticketList');
+      ticketList.innerHTML = '';
+      tickets.forEach(ticket => {
+        const li = document.createElement('li');
+        li.textContent = `${ticket.subject} (${ticket.status})`;
+        li.className = (ticket.id === selectedTicketId) ? "selected" : "";
+        li.onclick = () => {
+          selectedTicketId = ticket.id;
+          renderTicketView();
+          if (isAgent) renderAgentTicketView();
+          renderTickets();
+        };
+        ticketList.appendChild(li);
+      });
+    }
+    function renderTicketView() {
+      const container = document.getElementById('ticketView');
+      const ticket = tickets.find(t => t.id === selectedTicketId);
+      if (!ticket) {
+        container.innerHTML = '<p>Выберите тикет для просмотра переписки.</p>';
+        return;
+      }
+      let html = `<h3>${ticket.subject}</h3>
+        <div class="chat-window" id="chatWindow">`;
+      ticket.messages.forEach(msg => {
+        html += `<div class="bubble ${msg.sender}">
+          ${msg.text}
+          <div class="meta">${msg.sender === 'user' ? 'Пользователь' : 'Агент'} · ${msg.timestamp}</div>
+        </div>`;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+      setTimeout(() => {
+        const chatWindow = document.getElementById('chatWindow');
+        if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
+      }, 50);
+    }
+    function renderAgentTicketView() {
+      const container = document.getElementById('agentTicketView');
+      const ticket = tickets.find(t => t.id === selectedTicketId);
+      if (!ticket) {
+        container.innerHTML = '<p>Нет выбранного тикета.</p>';
+        return;
+      }
+      let html = `<b>Тикет:</b> ${ticket.subject}
+        <div class="chat-window" style="height:160px;margin-top:8px;">`;
+      ticket.messages.forEach(msg => {
+        html += `<div class="bubble ${msg.sender}" style="margin-bottom:3px;">
+          ${msg.text}
+          <div class="meta">${msg.sender === 'user' ? 'Пользователь' : 'Агент'} · ${msg.timestamp}</div>
+        </div>`;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+      setTimeout(() => {
+        const chatWindow = container.querySelector('.chat-window');
+        if (chatWindow) chatWindow.scrollTop = chatWindow.scrollHeight;
+      }, 50);
+    }
+    function showAgentPanel(show) {
+      document.getElementById('agentPanel').style.display = show ? '' : 'none';
+      if (show) renderAgentTicketView();
+    }
+    function showAgentLoginModal() {
+      document.getElementById('agentLoginModal').style.display = '';
+      document.getElementById('agentLogin').value = '';
+      document.getElementById('agentPassword').value = '';
+      document.getElementById('agentLoginError').textContent = '';
+    }
+    function hideAgentLoginModal() {
+      document.getElementById('agentLoginModal').style.display = 'none';
+    }
+
+    // --- Actions
+    function createTicket() {
+      const subject = document.getElementById('newSubject').value.trim();
+      if (!subject) return;
+      const newTicket = {
+        id: Date.now().toString() + Math.random().toString().slice(2,8),
+        subject,
+        status: 'open',
+        messages: []
+      };
+      tickets.unshift(newTicket);
+      selectedTicketId = newTicket.id;
+      document.getElementById('newSubject').value = '';
+      saveTickets();
+      renderTickets();
+      renderTicketView();
+      if (isAgent) renderAgentTicketView();
+    }
+    function sendMessageUser() {
+      sendMessageGeneric('user', 'messageText');
+    }
+    function sendMessageAgent() {
+      sendMessageGeneric('agent', 'agentMessageText');
+    }
+    function sendMessageGeneric(sender, textareaId) {
+      const textarea = document.getElementById(textareaId);
+      const text = textarea.value.trim();
+      if (!text || !selectedTicketId) return;
+      const ticket = tickets.find(t => t.id === selectedTicketId);
+      ticket.messages.push({
+        sender,
+        text,
+        timestamp: new Date().toLocaleString()
+      });
+      textarea.value = '';
+      saveTickets();
+      renderTicketView();
+      if (isAgent) renderAgentTicketView();
+    }
+    function sendMessage(event) {
+      event.preventDefault();
+    }
+
+    // --- Agent Auth
+    function loginAgent() {
+      const login = document.getElementById('agentLogin').value;
+      const pwd = document.getElementById('agentPassword').value;
+      if (login === AGENT_LOGIN && pwd === AGENT_PASSWORD) {
+        isAgent = true;
+        hideAgentLoginModal();
+        showAgentPanel(true);
+      } else {
+        document.getElementById('agentLoginError').textContent = 'Неверные данные!';
+      }
+    }
+    function logoutAgent() {
+      isAgent = false;
+      showAgentPanel(false);
+    }
+
+    // --- Init
+    loadTickets();
+    renderTickets();
+    renderTicketView();
+    showAgentPanel(false);
+
+    // --- Keyboard shortcut for agent login (Alt+A)
+    document.addEventListener('keydown', function(e){
+      if (e.altKey && e.key.toLowerCase() === 'a') showAgentLoginModal();
+    });
+  </script>
+</body>
+</html>
