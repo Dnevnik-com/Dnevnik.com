@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Школа тест — Профиль</title>
+  <meta name="viewport" content="width=1200">
+  <style>
+    body {
+      background: #F4F7FA;
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+      background: #fff;
+      border-bottom: 1px solid #e5eaf2;
+      box-shadow: 0 2px 8px rgba(30,194,139,0.04);
+    }
+    .school-logo {
+      width: 38px;
+      height: 38px;
+      margin-right: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+    }
+    .school-logo img {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #1EC28B;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .user-icon {
+      margin-left: auto;
+      width: 38px;
+      height: 38px;
+      background: #e5eaf2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .user-icon:after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      background: #b7c2d0;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .tabs {
+      display: flex;
+      padding: 0 40px;
+      background: #fff;
+      border-bottom: 1px solid #e5eaf2;
+      font-size: 16px;
+    }
+    .tab {
+      padding: 14px 30px;
+      color: #7d8592;
+      cursor: pointer;
+      font-weight: 500;
+      transition: color 0.2s, border 0.2s;
+    }
+    .tab.active {
+      color: #1ec28b;
+      border-bottom: 2.5px solid #1ec28b;
+      background: rgba(30,194,139,0.04);
+    }
+    .container {
+      display: flex;
+      gap: 34px;
+      padding: 38px;
+      max-width: 1350px;
+      margin: 0 auto;
+    }
+    .main {
+      flex: 2;
+      min-width: 0;
+    }
+    .school-info-section, .news-section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 28px 34px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 18px rgba(180,196,222,0.07);
+    }
+    .school-info-section h2,
+    .news-section h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 22px;
+      color: #1ec28b;
+      letter-spacing: 0.5px;
+    }
+    .info-grid {
+      display: flex;
+      gap: 56px;
+      font-size: 16px;
+    }
+    .info-grid > div {
+      flex: 1;
+    }
+    .label {
+      font-size: 13px;
+      color: #7d8592;
+      margin-top: 15px;
+      margin-bottom: 2px;
+      letter-spacing: 0.2px;
+    }
+    .news-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #7d8592;
+      margin-top: 38px;
+      font-size: 16px;
+    }
+    .calendar-icon {
+      width: 68px;
+      height: 68px;
+      background: linear-gradient(135deg, #e5eaf2 70%, #d1e6ef 100%);
+      border-radius: 13px;
+      margin-bottom: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .calendar-icon:before {
+      content: "";
+      width: 36px;
+      height: 36px;
+      background: #fff;
+      border-radius: 7px;
+      border: 2px solid #c6d2e3;
+      position: absolute;
+      top: 16px;
+      left: 16px;
+    }
+    .calendar-icon:after {
+      content: "";
+      width: 22px;
+      height: 4px;
+      background: #1ec28b;
+      border-radius: 2px;
+      position: absolute;
+      top: 28px;
+      left: 23px;
+    }
+
+    .sidebar {
+      flex: 1;
+      min-width: 270px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .pages-section, .management-section, .admin-section, .contacts-section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 24px 18px 24px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 14px rgba(180,196,222,0.06);
+    }
+    .pages-section h3,
+    .management-section h3,
+    .admin-section h3,
+    .contacts-section h3 {
+      font-size: 16px;
+      color: #1ec28b;
+      margin-bottom: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    .pages-section ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .pages-section li {
+      margin-bottom: 10px;
+      color: #1ec28b;
+      cursor: pointer;
+      font-size: 15px;
+      transition: text-decoration 0.2s;
+    }
+    .pages-section li:hover {
+      text-decoration: underline;
+    }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 13px;
+      object-fit: cover;
+      background: #e5eaf2;
+    }
+    .management-section .user-info,
+    .admin-section .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .management-section span,
+    .admin-section span {
+      font-weight: 500;
+      margin-right: 7px;
+    }
+    .contacts-section a {
+      color: #1ec28b;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .contacts-section a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 900px) {
+      .container {
+        flex-direction: column;
+        padding: 14px;
+      }
+      .sidebar {
+        min-width: unset;
+        flex-direction: row;
+        gap: 10px;
+      }
+      .main {
+        margin-bottom: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="school-logo">
+      <img src="https://cdn-icons-png.flaticon.com/512/8873/8873582.png" alt="Аватарка школы">
+    </div>
+    <span class="title">Школа тест</span>
+    <div class="user-icon"></div>
+  </header>
+  <nav class="tabs">
+    <span class="tab active">Профиль</span>
+    <span class="tab">Файлы</span>
+  </nav>
+  <div class="container">
+    <main class="main">
+      <section class="school-info-section">
+        <h2>О школе</h2>
+        <div class="info-grid">
+          <div>
+            <div class="label">Название</div>
+            <div>Муниципальное бюджетное общеобразовательное учреждение</div>
+            <div class="label">Тип ОУ</div>
+            <div>Общеобразовательная организация (273-ФЗ)</div>
+            <div class="label">Форма собственности</div>
+            <div>Муниципальная собственность</div>
+            <div class="label">Село</div>
+            <div>Село Тестовое (Тестовский район, Тестовская область)</div>
+            <div class="label">Управляющая орг-я</div>
+            <div>МСКУ Тестовского района</div>
+            <div class="label">Учеников</div>
+            <div>35</div>
+          </div>
+          <div>
+            <div class="label">Организационно-правовая форма ОУ</div>
+            <div>Муниципальное бюджетное образовательное учреждение</div>
+            <div class="label">Структура</div>
+            <div>Структурное подразделение отсутствует</div>
+            <div class="label">Код ОКПО</div>
+            <div>43003687</div>
+            <div class="label">Тип поселения</div>
+            <div>Тестовский район (Тестовская область)</div>
+            <div class="label">Сотрудников</div>
+            <div>12</div>
+            <div class="label">Рейтинг</div>
+            <div>0</div>
+          </div>
+        </div>
+      </section>
+      <section class="news-section">
+        <h2>Новости школы</h2>
+        <div class="news-empty">
+          <div class="calendar-icon"></div>
+          <div>В этом разделе ещё никто не создавал записи.</div>
+        </div>
+      </section>
+    </main>
+    <aside class="sidebar">
+      <section class="pages-section">
+        <h3>Страницы</h3>
+        <ul>
+          <li>Финансовая отчетность</li>
+          <li>О результатах приема по каждому направлению обучения</li>
+          <li>Материально-техническое обеспечение</li>
+          <li>Электронные образовательные ресурсы</li>
+          <li>Образовательные программы</li>
+          <li>Структура</li>
+          <li>Материальная поддержка обучающихся</li>
+          <li>Педагогический состав</li>
+        </ul>
+      </section>
+      <section class="management-section">
+        <h3>Руководство</h3>
+        <div class="user-info">
+          <img class="avatar" src="https://t3.ftcdn.net/jpg/11/50/33/88/360_F_1150338892_6YQkt6nG2lwPAlDPHXltsDVps2UdbM7f.jpg" alt="Пользователь">
+          <span>Администратор</span>
+        </div>
+        <div>Директор, Учитель</div>
+      </section>
+      <section class="admin-section">
+        <h3>Администраторы</h3>
+        <div class="user-info">
+          <img class="avatar" src="https://t3.ftcdn.net/jpg/11/50/33/88/360_F_1150338892_6YQkt6nG2lwPAlDPHXltsDVps2UdbM7f.jpg" alt="Пользователь">
+          <span>Александр Рождественский</span>
+        </div>
+        <div>Администратор</div>
+      </section>
+      <section class="contacts-section">
+        <h3>Контактные данные</h3>
+        <div>Телефон: <a href="tel:88315654156">8(831)654-1-56</a></div>
+        <div>Email: <a href="mailto:shkola-test@yandex.ru">shkola-test@yandex.ru</a></div>
+        <div>Сайт: <a href="http://shkola-test.ucoz.ru">shkola-test.ucoz.ru</a></div>
+        <div>Адрес:</div>
+      </section>
+    </aside>
+  </div>
+</body>
+</html>
