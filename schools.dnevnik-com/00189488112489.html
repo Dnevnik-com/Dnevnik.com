@@ -159,14 +159,13 @@
       font-weight: 600;
       font-size: 16px;
     }
-    .news-card-author .check {
-      margin-left: 6px;
+    .news-card-school {
+      display: inline-flex;
+      align-items: center;
+      color: #1371cc;
+      font-weight: 600;
       font-size: 16px;
-      color: #1ec28b;
-      vertical-align: middle;
-      width: 16px;
-      height: 16px;
-      display: inline-block;
+      margin-bottom: 3px;
     }
     .news-card-date {
       color: #7d8592;
@@ -421,7 +420,29 @@
       <section class="news-section">
         <h2>Новости школы</h2>
         <div class="news-list">
-          <!-- NEWS CARD -->
+          <!-- NEWS CARD 3 - новый пост -->
+          <div class="news-card">
+            <div class="news-card-header">
+              <img class="news-card-avatar" src="https://t3.ftcdn.net/jpg/11/50/33/88/360_F_1150338892_6YQkt6nG2lwPAlDPHXltsDVps2UdbM7f.jpg" alt="Пользователь">
+              <div class="news-card-info">
+                <span class="news-card-school">Школа Тест №0</span>
+                <div class="news-card-date">23 сент. в 22:18. Александр Владимирович Рождественский</div>
+              </div>
+            </div>
+            <div class="news-card-content">
+              <div class="news-card-text">Уважаемые коллеги! Прошу всех пройти аттестацию 26.09 в 16:00-22:00 по мск.</div>
+              <img class="news-post-image" src="https://optim.tildacdn.com/tild3864-3534-4134-a264-346333663038/-/resize/177x/-/format/webp/IMG_5245.jpg.webp" alt="Фото в посте">
+            </div>
+            <div class="news-card-footer">
+              <span class="read-status"><span class="read-icon">✔️</span> Прочитано</span>
+              <span class="comments-count"><span class="comments-icon">💬</span> 0 комментариев</span>
+            </div>
+            <div class="news-card-comment">
+              <img class="comment-avatar" src="https://t3.ftcdn.net/jpg/11/50/33/88/360_F_1150338892_6YQkt6nG2lwPAlDPHXltsDVps2UdbM7f.jpg" alt="Пользователь">
+              <input type="text" placeholder="Написать комментарий...">
+            </div>
+          </div>
+          <!-- NEWS CARD 1 -->
           <div class="news-card">
             <div class="news-card-header">
               <img class="news-card-avatar" src="https://optim.tildacdn.pub/tild3565-3663-4461-b765-363339653863/-/resize/170x/-/format/webp/d_NEW_LOGO_2-Photoro.png.webp" alt="Аватарка автора">
@@ -445,7 +466,6 @@
               <input type="text" placeholder="Написать комментарий...">
             </div>
           </div>
-          <!-- END NEWS CARD -->
         </div>
       </section>
     </main>
