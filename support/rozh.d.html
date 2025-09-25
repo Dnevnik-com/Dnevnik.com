@@ -1,50 +1,662 @@
-<html lang="en"><head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin="" src="/assets/index-Bno5s__0.js"></script>
-    <link rel="stylesheet" crossorigin="" href="/assets/index-9v3p4yI-.css">
-  </head>
-  <body>
-    <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Управление заявками на подключение ОО</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      padding: 28px 24px;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.45em;
+    }
+    .filter-bar {
+      margin-bottom: 20px;
+    }
+    .filter-btn {
+      border: none;
+      background: #ededed;
+      padding: 8px 18px;
+      border-radius: 18px;
+      cursor: pointer;
+      margin-right: 10px;
+      font-size: 1em;
+      color: #222;
+      transition: background 0.2s;
+    }
+    .filter-btn.active {
+      background: #1976d2;
+      color: #fff;
+    }
+    .new-application-btn {
+      border: none;
+      background: #4f3dfc;
+      color: #fff;
+      font-size: 1em;
+      border-radius: 8px;
+      padding: 10px 26px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.2s;
+    }
+    .new-application-btn:hover {
+      background: #382bbf;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px #eee;
+      margin-bottom: 24px;
+      padding: 22px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1.15em;
+      margin-bottom: 6px;
+    }
+    .status-badge {
+      font-size: 0.98em;
+      padding: 6px 14px;
+      border-radius: 18px;
+      font-weight: 500;
+      margin-left: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-pending {
+      background: #fff7cc;
+      color: #8a7200;
+      border: 1px solid #fde993;
+    }
+    .status-accepted {
+      background: #eafde7;
+      color: #138c31;
+      border: 1px solid #b1f3bb;
+    }
+    .status-rejected {
+      background: #ffe6eb;
+      color: #ba3246;
+      border: 1px solid #f8b1c9;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #aaa;
+      font-size: 1.3em;
+      margin-left: 12px;
+      transition: color 0.2s;
+    }
+    .delete-btn:hover {
+      color: #e00;
+    }
+    .card-body {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+    }
+    .card-info p, .card-contact p {
+      margin: 6px 0;
+      font-size: 1em;
+    }
+    .card-info strong {
+      font-weight: 600;
+    }
+    .card-actions {
+      margin-top: 22px;
+      text-align: right;
+    }
+    .action-btn {
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      padding: 10px 22px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .action-accept {
+      background: #22c55e;
+      color: #fff;
+    }
+    .action-accept:hover {
+      background: #1da94a;
+    }
+    .action-reject {
+      background: #f43f5e;
+      color: #fff;
+    }
+    .action-reject:hover {
+      background: #c81e3d;
+    }
+    .profile-panel {
+      position: absolute;
+      right: 38px;
+      top: 16px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px #eee;
+      padding: 14px 22px;
+      min-width: 180px;
+      z-index: 10;
+      display: none;
+    }
+    .profile-trigger {
+      position: absolute;
+      right: 38px;
+      top: 16px;
+      border: 2px solid #222;
+      background: #fff;
+      border-radius: 8px;
+      padding: 7px 18px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .profile-trigger .avatar {
+      width: 30px;
+      height: 30px;
+      background: #eee;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .profile-trigger .arrow {
+      font-size: 1em;
+      margin-left: 6px;
+    }
+    .profile-panel .avatar {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 8px;
+      border-radius: 50%;
+      background: #eee;
+      display: block;
+    }
+    .profile-panel .role {
+      font-size: 0.98em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .profile-panel .profile-action {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.98em;
+      color: #1976d2;
+      cursor: pointer;
+      margin-bottom: 7px;
+    }
+    .profile-panel .profile-close {
+      font-size: 0.96em;
+      color: #e00;
+      cursor: pointer;
+    }
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      overflow: auto;
+      background: rgba(0,0,0,0.18);
+    }
+    .modal-content {
+      background: #fff;
+      margin: 60px auto;
+      padding: 32px 38px 24px 38px;
+      border-radius: 14px;
+      max-width: 520px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+      position: relative;
+    }
+    .modal-content h3 {
+      margin-top: 0;
+      margin-bottom: 22px;
+      font-size: 1.2em;
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 1.35em;
+      cursor: pointer;
+      color: #888;
+    }
+    .modal-content label {
+      margin-bottom: 4px;
+      font-weight: 500;
+      display: block;
+      font-size: 1em;
+    }
+    .modal-content input, .modal-content select, .modal-content textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      margin-bottom: 14px;
+      font-size: 1em;
+      background: #fafbfc;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .modal-content input:focus, .modal-content textarea:focus, .modal-content select:focus {
+      border: 1.5px solid #4f3dfc;
+    }
+    .modal-row {
+      display: flex;
+      gap: 18px;
+    }
+    .modal-row > div {
+      flex: 1;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 18px;
+      margin-top: 10px;
+    }
+    .modal-cancel {
+      background: none;
+      border: none;
+      color: #777;
+      font-size: 1em;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .modal-submit {
+      background: #4f3dfc;
+      color: #fff;
+      border: none;
+      font-size: 1em;
+      font-weight: 500;
+      padding: 8px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .modal-submit:hover {
+      background: #382bbf;
+    }
+    .modal-required {
+      color: #f43f5e;
+      font-size: 1.1em;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 7vw 2vw; }
+      .modal-content { padding: 18px 6vw; }
+      .modal-row { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="position:relative;">
+      <button class="profile-trigger" onclick="toggleProfilePanel()">
+        <span class="avatar"></span>
+        Рождественский.А.В
+        <span class="arrow">&#9662;</span>
+      </button>
+      <div class="profile-panel" id="profilePanel">
+        <span class="avatar"></span>
+        <div><b>Рождественский.А.В</b></div>
+        <div class="role">модератор</div>
+        <div class="profile-action">&#9998; Редактировать профиль</div>
+        <div class="profile-close" onclick="toggleProfilePanel()">Закрыть</div>
+      </div>
+    </div>
+    <h2>Управление заявками на подключение образовательных организаций</h2>
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterCards('all')">Все</button>
+      <button class="filter-btn" onclick="filterCards('pending')">В ожидании</button>
+      <button class="filter-btn" onclick="filterCards('accepted')">Принято</button>
+      <button class="filter-btn" onclick="filterCards('rejected')">Отклонено</button>
+    </div>
+    <button class="new-application-btn" onclick="openModal()">
+      <span style="font-size:1.1em;">&#43;</span>
+      Новая заявка
+    </button>
+    <div id="cardsArea">
+      <!-- Cards will be rendered here -->
+    </div>
+  </div>
 
-</body></html>
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin="" src="/assets/index-Bno5s__0.js"></script>
-    <link rel="stylesheet" crossorigin="" href="/assets/index-9v3p4yI-.css">
-  </head>
-  <body>
-    <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  
+  <!-- Модальное окно добавления заявки -->
+  <div class="modal" id="newApplicationModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+      <h3>Новая заявка</h3>
+      <form id="applicationForm" autocomplete="off" onsubmit="submitApplication(event)">
+        <div class="modal-row">
+          <div>
+            <label>Тип заявки <span class="modal-required">*</span></label>
+            <select name="type" required>
+              <option value="">Выберите тип заявки</option>
+              <option value="organization">Подключение организации</option>
+              <option value="support">Запрос на поддержку</option>
+            </select>
+          </div>
+          <div>
+            <label>Регион <span class="modal-required">*</span></label>
+            <input name="region" type="text" required placeholder="Укажите регион" />
+          </div>
+        </div>
+        <div class="modal-row">
+          <div>
+            <label>Название образовательной организации <span class="modal-required">*</span></label>
+            <input name="orgName" type="text" required placeholder="Введите название организации" />
+          </div>
+          <div>
+            <label>ИНН <span class="modal-required">*</span></label>
+            <input name="inn" type="text" required placeholder="Введите ИНН организации" />
+          </div>
+        </div>
+        <div class="modal-row">
+          <div>
+            <label>ФИО ответственного лица <span class="modal-required">*</span></label>
+            <input name="fio" type="text" required placeholder="Введите ФИО полностью" />
+          </div>
+          <div>
+            <label>Должность <span class="modal-required">*</span></label>
+            <input name="position" type="text" required placeholder="Укажите должность" />
+          </div>
+        </div>
+        <div class="modal-row">
+          <div>
+            <label>Email <span class="modal-required">*</span></label>
+            <input name="email" type="email" required placeholder="example@domain.com" />
+          </div>
+          <div>
+            <label>Номер телефона <span class="modal-required">*</span></label>
+            <input name="phone" type="tel" required placeholder="+7 (___) ___-__-__" />
+          </div>
+        </div>
+        <label>Дополнительная информация</label>
+        <textarea name="info" rows="3" placeholder="Укажите дополнительную информацию при необходимости..."></textarea>
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel" onclick="closeModal()">Отмена</button>
+          <button type="submit" class="modal-submit">Отправить заявку</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
+  <script>
+    // --- LocalStorage helpers ---
+    const STORAGE_KEY = "dnevnik_applications";
+
+    function loadApplications() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultApplications();
+        return JSON.parse(raw);
+      } catch (e) {
+        return getDefaultApplications();
+      }
+    }
+
+    function saveApplications(apps) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(apps));
+    }
+
+    function getDefaultApplications() {
+      return [
+        {
+          id: 1,
+          orgName: 'ewtwt',
+          inn: '542626',
+          fio: 'regeye',
+          position: 'uyeyey',
+          region: 'rengr',
+          email: 'team.company-dnevnik@mail.ru',
+          phone: '4363463463',
+          info: 'ert',
+          date: '26.09.2025',
+          status: 'pending',
+          type: 'organization',
+        },
+        {
+          id: 2,
+          orgName: 'ewtwt',
+          inn: '542626',
+          fio: 'regeye',
+          position: 'uyeyey',
+          region: 'rengr',
+          email: 'team.company-dnevnik@mail.ru',
+          phone: '4363463463',
+          info: 'ert',
+          date: '26.09.2025',
+          status: 'accepted',
+          type: 'organization',
+        },
+        {
+          id: 3,
+          orgName: 'wtwtwtw',
+          inn: 'w6463463',
+          fio: 'yteye',
+          position: '6y363',
+          region: 'rgrwt',
+          email: 'eryeyrw@enrvt.co',
+          phone: 'у345 7 574u',
+          info: '',
+          date: '26.09.2025',
+          status: 'rejected',
+          type: 'support',
+        },
+      ];
+    }
+
+    // --- Application Logic ---
+    let applications = loadApplications();
+    let currentFilter = 'all';
+
+    function renderCards() {
+      const area = document.getElementById('cardsArea');
+      area.innerHTML = '';
+      let filtered = applications;
+      if (currentFilter !== 'all') filtered = applications.filter(a => a.status === currentFilter);
+
+      filtered.forEach(app => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        // Header
+        const header = document.createElement('div');
+        header.className = 'card-header';
+
+        const title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = app.type === 'support' || app.status === 'rejected'
+          ? 'Запрос на поддержку'
+          : 'Заявка на подключение Образовательной организации';
+
+        const statusBadge = document.createElement('span');
+        statusBadge.className = 'status-badge status-' + app.status;
+        if (app.status === 'pending') statusBadge.innerHTML = '&#x23F3; В ожидании';
+        if (app.status === 'accepted') statusBadge.innerHTML = '&#x2714; Принято';
+        if (app.status === 'rejected') statusBadge.innerHTML = '&#x2716; Отклонено';
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'delete-btn';
+        delBtn.innerHTML = '&#128465;';
+        delBtn.title = 'Удалить';
+        delBtn.onclick = () => { deleteCard(app.id); };
+
+        header.appendChild(title);
+        header.appendChild(statusBadge);
+        header.appendChild(delBtn);
+
+        // Body
+        const body = document.createElement('div');
+        body.className = 'card-body';
+
+        // Info
+        const info = document.createElement('div');
+        info.className = 'card-info';
+        info.innerHTML =
+          `<p><strong>Организация:</strong> ${app.orgName}</p>
+          <p><strong>ИНН:</strong> ${app.inn}</p>
+          <p><strong>ФИО:</strong> ${app.fio}</p>
+          <p><strong>Должность:</strong> ${app.position}</p>
+          <p><strong>Регион:</strong> ${app.region}</p>
+          ${app.info ? `<p><strong>Дополнительная информация:</strong><br>${app.info}</p>` : ''}
+          <p style="margin-top:12px;color:#666;">Отправлено: ${app.date}</p>`;
+
+        // Contact
+        const contact = document.createElement('div');
+        contact.className = 'card-contact';
+        contact.innerHTML =
+          `<p><strong>Email:</strong> ${app.email}</p>
+           <p><strong>Телефон:</strong> ${app.phone}</p>`;
+
+        body.appendChild(info);
+        body.appendChild(contact);
+
+        card.appendChild(header);
+        card.appendChild(body);
+
+        // Actions (only for pending)
+        if (app.status === 'pending') {
+          const actions = document.createElement('div');
+          actions.className = 'card-actions';
+
+          const acceptBtn = document.createElement('button');
+          acceptBtn.className = 'action-btn action-accept';
+          acceptBtn.textContent = 'Принять';
+          acceptBtn.onclick = () => { updateStatus(app.id, 'accepted'); };
+
+          const rejectBtn = document.createElement('button');
+          rejectBtn.className = 'action-btn action-reject';
+          rejectBtn.textContent = 'Отклонить';
+          rejectBtn.onclick = () => { updateStatus(app.id, 'rejected'); };
+
+          actions.appendChild(acceptBtn);
+          actions.appendChild(rejectBtn);
+
+          card.appendChild(actions);
+        }
+
+        area.appendChild(card);
+      });
+    }
+
+    function filterCards(status) {
+      currentFilter = status;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.filter-btn')[['all','pending','accepted','rejected'].indexOf(status)].classList.add('active');
+      renderCards();
+    }
+
+    function updateStatus(id, status) {
+      const app = applications.find(a => a.id === id);
+      if (app) app.status = status;
+      saveApplications(applications);
+      renderCards();
+    }
+
+    function deleteCard(id) {
+      const idx = applications.findIndex(a => a.id === id);
+      if (idx !== -1) applications.splice(idx, 1);
+      saveApplications(applications);
+      renderCards();
+    }
+
+    // Добавление новой заявки
+    function openModal() {
+      document.getElementById('newApplicationModal').style.display = 'block';
+    }
+    function closeModal() {
+      document.getElementById('newApplicationModal').style.display = 'none';
+      document.getElementById('applicationForm').reset();
+    }
+    function submitApplication(e) {
+      e.preventDefault();
+      const form = document.getElementById('applicationForm');
+      const data = new FormData(form);
+      const type = data.get('type');
+      const region = data.get('region');
+      const orgName = data.get('orgName');
+      const inn = data.get('inn');
+      const fio = data.get('fio');
+      const position = data.get('position');
+      const email = data.get('email');
+      const phone = data.get('phone');
+      const info = data.get('info');
+      // Simple validation
+      if(!type || !region || !orgName || !inn || !fio || !position || !email || !phone) {
+        alert('Пожалуйста, заполните все обязательные поля!');
+        return;
+      }
+      // Add new application to the list
+      const newApp = {
+        id: Date.now(),
+        orgName,
+        inn,
+        fio,
+        position,
+        region,
+        email,
+        phone,
+        info,
+        date: new Date().toLocaleDateString('ru-RU'),
+        status: 'pending',
+        type,
+      };
+      applications.unshift(newApp);
+      saveApplications(applications);
+      closeModal();
+      renderCards();
+    }
+
+    // Profile panel logic
+    function toggleProfilePanel() {
+      const panel = document.getElementById('profilePanel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+    document.addEventListener('click', function(e){
+      const panel = document.getElementById('profilePanel');
+      const trigger = document.querySelector('.profile-trigger');
+      if (panel && panel.style.display === 'block' && !panel.contains(e.target) && e.target !== trigger) {
+        panel.style.display = 'none';
+      }
+    });
+
+    // Initial render
+    renderCards();
+  </script>
 </body>
-  <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  <div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div>
-  <header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header>
-  <main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main>
-  <div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div>
-  <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  <body>
-    <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  
-
-</body>
-  <html lang="en"><head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite + React + TS</title>
-    <script type="module" crossorigin="" src="/assets/index-Bno5s__0.js"></script>
-    <link rel="stylesheet" crossorigin="" href="/assets/index-9v3p4yI-.css">
-  </head>
-  <body>
-    <div id="root"><div class="min-h-screen bg-gray-50"><header class="bg-white shadow-sm"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><h1 class="text-xl font-semibold text-gray-900">Заявки</h1><div class="flex items-center gap-4"><button class="relative"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell w-6 h-6 text-gray-600"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span></button><div class="relative"><button class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-md"><div class="w-8 h-8 rounded-full overflow-hidden"><img src="https://i.ibb.co/TqQ7PXL/a-l.jpg" alt="Profile" class="w-full h-full object-cover"></div><div class="text-left"><div class="font-medium">Рождественский.А.В</div><div class="text-sm text-gray-600">модератор</div></div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down w-4 h-4"><path d="m6 9 6 6 6-6"></path></svg></button></div></div></div></header><main class="max-w-7xl mx-auto px-4 py-6"><div class="flex justify-between items-center mb-6"><div class="flex gap-4"><button class="px-4 py-2 rounded-full bg-indigo-600 text-white">Все (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">В ожидании (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Принято (0)</button><button class="px-4 py-2 rounded-full text-gray-600 hover:bg-gray-100">Отклонено (0)</button></div><button class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus w-5 h-5"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Новая заявка</button></div><div class="space-y-4"></div></main></div></div>
-  
-
-</body></html>
+</html>
