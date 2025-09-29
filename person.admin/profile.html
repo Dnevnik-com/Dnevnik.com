@@ -16,16 +16,72 @@
         table { width:100%; border-collapse:collapse; margin-top:10px;}
         th, td { text-align:left; padding:6px 10px;}
         th { width:185px; color:#888; font-weight:normal;}
+        .actions { float:right; margin-top:-32px;}
+        .edit-btn { background:#a770a2; color:#fff; border:none; padding:8px 19px; border-radius:6px; font-weight:600; font-size:1rem; cursor:pointer;}
         .reset-password { border:1.6px solid #d9c6e3; background:#fcf8ff;}
         .reset-password button { background:#a770a2; color:#fff; border:none; padding:12px 26px; border-radius:6px; font-weight:600; font-size:1.02rem; cursor:pointer; margin-top:16px;}
         .msg { background:#e8ffe8; color:#228b22; padding:13px 18px; border-radius:7px; margin-bottom:16px; font-size:1.03rem; border:1px solid #bdf2bd;}
+        .edit-form {background:#f5e7ff; border-radius:8px; padding:18px 14px 10px 14px; margin-bottom:18px; box-shadow:0 .5px 2px #eee;}
+        .edit-form label {display:inline-block; width:160px; color:#888; margin-bottom:6px;}
+        .edit-form input {padding:5px 8px; border:1px solid #d0b6e2; border-radius:5px; margin-bottom:10px;}
+        .edit-form .save-btn {background:#a770a2; color:#fff; border:none; padding:8px 24px; border-radius:6px; font-weight:600; font-size:1rem; cursor:pointer; margin-top:10px;}
+        .edit-form .cancel-btn {background:#eee; color:#333; border:none; padding:8px 20px; border-radius:6px; font-weight:500; cursor:pointer; margin-left:10px;}
         @media(max-width:700px){.container{padding:15px;}}
     </style>
     <script>
+        // Данные пользователя
+        let person = {
+            fullName: 'Шаваев Дамир Хизырович',
+            gender: 'Мужской',
+            age: '13 лет',
+            birthDate: '1 мая 2012 г.',
+            email: 'damir@mail.ru',
+            homePhone: '8-495-000-00-00',
+            mobilePhone: '8-900-123-45-67',
+            workPhone: '-',
+            class: '7а',
+            position: 'Ученик',
+            createdAt: 'Сегодня',
+            arrivalDate: '1 сентября 2025 г.',
+            profile: 'Дамир Шаваев',
+            login: 'damirshavaev',
+            registeredAt: '12 сентября 2025',
+            lastVisit: '12 сентября 2025 в 21:13'
+        };
+
+        // Показать/скрыть форму редактирования
+        function showEditForm() {
+            document.getElementById('personal-data').style.display = 'none';
+            document.getElementById('edit-form').style.display = 'block';
+            document.getElementById('edit-email').value = person.email;
+            document.getElementById('edit-homePhone').value = person.homePhone;
+            document.getElementById('edit-mobilePhone').value = person.mobilePhone;
+            document.getElementById('edit-workPhone').value = person.workPhone;
+        }
+        function hideEditForm() {
+            document.getElementById('edit-form').style.display = 'none';
+            document.getElementById('personal-data').style.display = '';
+        }
+        function saveEditForm() {
+            person.email = document.getElementById('edit-email').value;
+            person.homePhone = document.getElementById('edit-homePhone').value;
+            person.mobilePhone = document.getElementById('edit-mobilePhone').value;
+            person.workPhone = document.getElementById('edit-workPhone').value;
+            document.getElementById('personal-email').innerText = person.email;
+            document.getElementById('personal-homePhone').innerText = person.homePhone;
+            document.getElementById('personal-mobilePhone').innerText = person.mobilePhone;
+            document.getElementById('personal-workPhone').innerText = person.workPhone;
+            hideEditForm();
+        }
+
+        // Сброс пароля: генерация 8-значного цифрового пароля
         function resetPassword() {
+            let password = '';
+            for(let i=0; i<8; i++) password += Math.floor(Math.random()*10);
             const msg = document.getElementById('reset-msg');
+            msg.innerHTML = 'Пароль успешно сброшен! Новый временный пароль: <b style="font-size:1.2em;color:#a770a2;">'+password+'</b>';
             msg.style.display = 'block';
-            setTimeout(() => { msg.style.display = 'none'; }, 4000);
+            setTimeout(() => { msg.style.display = 'none'; }, 7000);
         }
     </script>
 </head>
@@ -45,19 +101,38 @@
         <button>Родственники</button>
     </div>
 
-    <div class="card">
+    <div class="card actions">
+        <button class="edit-btn" onclick="showEditForm()">Редактировать</button>
+    </div>
+
+    <!-- Основные данные -->
+    <div class="card" id="personal-data">
         <h3>Личные данные</h3>
         <table>
             <tr><th>ФИО</th><td>Шаваев Дамир Хизырович</td></tr>
             <tr><th>Пол</th><td>Мужской</td></tr>
             <tr><th>Возраст</th><td>13 лет</td></tr>
             <tr><th>Дата рождения</th><td>1 мая 2012 г.</td></tr>
-            <tr><th>Email</th><td>-</td></tr>
-            <tr><th>Дом. телефон</th><td>-</td></tr>
-            <tr><th>Моб. телефон</th><td>-</td></tr>
-            <tr><th>Раб. телефон</th><td>-</td></tr>
+            <tr><th>Email</th><td id="personal-email">damir@mail.ru</td></tr>
+            <tr><th>Дом. телефон</th><td id="personal-homePhone">8-495-000-00-00</td></tr>
+            <tr><th>Моб. телефон</th><td id="personal-mobilePhone">8-900-123-45-67</td></tr>
+            <tr><th>Раб. телефон</th><td id="personal-workPhone">-</td></tr>
         </table>
     </div>
+    <!-- Форма редактирования -->
+    <form class="edit-form" id="edit-form" style="display:none;" onsubmit="event.preventDefault(); saveEditForm();">
+        <h3>Редактирование личных данных</h3>
+        <label for="edit-email">Email</label>
+        <input type="email" id="edit-email" required><br>
+        <label for="edit-homePhone">Дом. телефон</label>
+        <input type="text" id="edit-homePhone"><br>
+        <label for="edit-mobilePhone">Моб. телефон</label>
+        <input type="text" id="edit-mobilePhone"><br>
+        <label for="edit-workPhone">Раб. телефон</label>
+        <input type="text" id="edit-workPhone"><br>
+        <button type="submit" class="save-btn">Сохранить</button>
+        <button type="button" class="cancel-btn" onclick="hideEditForm()">Отмена</button>
+    </form>
 
     <div class="card">
         <h3>В школе</h3>
@@ -81,7 +156,7 @@
 
     <div class="reset-password card">
         <h3>Сброс пароля</h3>
-        <div id="reset-msg" class="msg" style="display:none;">Пароль успешно сброшен! Новый временный пароль отправлен на email пользователя.</div>
+        <div id="reset-msg" class="msg" style="display:none;"></div>
         <button onclick="resetPassword()">Сбросить пароль</button>
         <p style="margin-top:10px;color:#998;">Для первого входа в Дневник.ру необходимы логин и временный пароль.<br>
             Предоставьте пользователю указанные данные или вышлите приглашение на его электронную почту.</p>
