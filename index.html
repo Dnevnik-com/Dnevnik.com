@@ -10,19 +10,12 @@
     <style>
         :root {
             --dark-bg: #0f1014;
-            --glass-bg: rgba(255,255,255,0.12);
-            --glass-light-bg: rgba(255,255,255,0.22);
-            --glass-border: 1.3px solid #35374d;
-            --glass-blur: blur(18px);
+            --modal-bg: rgba(20,20,30,0.85);
+            --modal-panel: #16171d;
             --primary: #6c63ff;
             --accent: #00ff7a;
             --cta: #3abff8;
             --white: #fff;
-            --radius: 22px;
-            --feature-bg: #23242a;
-            --feature-title: #fff;
-            --feature-desc: #e9e9ea;
-            --icon-bg: #23242a;
         }
         html, body {
             margin: 0;
@@ -32,7 +25,6 @@
             color: var(--white);
             min-height: 100vh;
         }
-        a {text-decoration: none;}
         /* HEADER */
         header {
             width: 100vw;
@@ -73,6 +65,7 @@
             letter-spacing: 1px;
             transition: color 0.18s;
             position: relative;
+            text-decoration: none !important; /* Убираем подчеркивание */
         }
         .nav-link:hover, .nav-link:focus {
             color: var(--primary);
@@ -89,11 +82,13 @@
             transition: background 0.19s, color 0.19s;
             box-shadow: 0 2px 14px #6c63ff18;
             font-family: inherit;
+            text-decoration: none !important; /* Убираем подчеркивание */
         }
         .nav-action:hover {
             background: var(--primary);
             color: #fff;
         }
+
         /* HERO */
         .hero {
             display: flex;
@@ -134,12 +129,12 @@
             margin-top: 10px;
         }
         .hero-cta, .hero-connect {
-            background: var(--glass-light-bg);
+            background: var(--glass-light-bg, rgba(255,255,255,0.22));
             color: #fff;
             font-weight: 800;
             font-size: 1.13rem;
             border-radius: 22px;
-            border: var(--glass-border);
+            border: 1.3px solid #35374d;
             padding: 12px 34px;
             cursor: pointer;
             box-shadow: 0 3px 18px #6c63ff44;
@@ -148,9 +143,10 @@
             display: inline-flex;
             align-items: center;
             gap: 9px;
-            backdrop-filter: var(--glass-blur);
+            backdrop-filter: blur(18px);
             position: relative;
             overflow: hidden;
+            text-decoration: none !important; /* Убираем подчеркивание */
         }
         .hero-cta:hover, .hero-connect:hover {
             background: var(--primary);
@@ -182,91 +178,8 @@
             0% { transform: translateY(0);}
             100% { transform: translateY(-18px);}
         }
-        /* TEAM UNDER ARC */
-        .team-section {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 82px 0 48px 0;
-            position: relative;
-            text-align: center;
-            margin-top: 64px;
-        }
-        .team-title {
-            font-size: 2.6rem;
-            font-weight: 900;
-            color: #fff;
-            position: relative;
-            z-index: 2;
-            font-family: 'Montserrat', Arial, sans-serif;
-            margin-bottom: 0;
-        }
-        .team-arc {
-            position: absolute;
-            top: 14px;
-            left: 0;
-            width: 100%;
-            height: 340px;
-            pointer-events: none;
-            z-index: 1;
-        }
-        .team-avatars {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 36px;
-            margin-top: 120px;
-            margin-bottom: 36px;
-            z-index: 2;
-            position: relative;
-        }
-        .team-avatar {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 2px 16px #6c63ff22;
-            background: #262626;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 3px solid #6c63ff44;
-        }
-        .team-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-        }
-        .team-btn {
-            margin-top: 40px;
-            background: linear-gradient(90deg,#6c63ff 0,#c084fc 100%);
-            color: #fff;
-            font-weight: 800;
-            font-size: 1.25rem;
-            border-radius: 24px;
-            padding: 13px 40px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 18px #6c63ff33;
-            font-family: 'Manrope', 'Montserrat', Arial, sans-serif;
-            transition: background 0.16s, transform 0.16s;
-        }
-        .team-btn:hover {
-            background: linear-gradient(90deg,#c084fc 0,#6c63ff 100%);
-            transform: scale(1.05);
-        }
-        @media (max-width:900px) {
-            .team-avatars { gap: 18px; margin-top: 60px; margin-bottom: 18px; }
-            .team-avatar { width: 72px; height: 72px; }
-        }
-        @media (max-width:700px) {
-            .hero-demo { min-width: 0; width: 100%; }
-            .demo-platform-img-big { width: 75px; height: 75px;}
-            .team-avatars { gap: 10px; margin-top: 30px; margin-bottom: 10px;}
-            .team-avatar { width: 46px; height: 46px;}
-        }
-        /* FEATURES (compact style) */
+
+        /* FEATURES */
         .features-section {
             max-width: 1340px;
             margin: 0 auto;
@@ -339,7 +252,165 @@
             text-align: center;
             margin-top: 2px;
         }
-        /* Team info block (footer style) */
+
+        /* TEAM UNDER ARC */
+        .team-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 82px 0 48px 0;
+            position: relative;
+            text-align: center;
+            margin-top: 64px;
+        }
+        .team-title {
+            font-size: 2.6rem;
+            font-weight: 900;
+            color: #fff;
+            position: relative;
+            z-index: 2;
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin-bottom: 0;
+        }
+        .team-arc {
+            position: absolute;
+            top: 14px;
+            left: 0;
+            width: 100%;
+            height: 340px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .team-avatars {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 36px;
+            margin-top: 120px;
+            margin-bottom: 36px;
+            z-index: 2;
+            position: relative;
+        }
+        .team-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 16px #6c63ff22;
+            background: #262626;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #6c63ff44;
+            cursor: pointer;
+            transition: box-shadow 0.19s, transform 0.17s;
+        }
+        .team-avatar:hover {
+            box-shadow: 0 8px 38px #6c63ff44;
+            transform: scale(1.07);
+        }
+        .team-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        .team-btn {
+            margin: 40px auto 0 auto;
+            display: block;
+            background: linear-gradient(90deg,#6c63ff 0,#c084fc 100%);
+            color: #fff;
+            font-weight: 800;
+            font-size: 1.25rem;
+            border-radius: 24px;
+            padding: 13px 40px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 18px #6c63ff33;
+            font-family: 'Manrope', 'Montserrat', Arial, sans-serif;
+            transition: background 0.16s, transform 0.16s;
+            text-decoration: none !important; /* Убираем подчеркивание */
+        }
+        .team-btn:hover {
+            background: linear-gradient(90deg,#c084fc 0,#6c63ff 100%);
+            transform: scale(1.05);
+        }
+
+        /* MODAL CARD */
+        .team-modal-bg {
+            position: fixed; top: 0; left: 0; right:0; bottom:0;
+            width: 100vw; height: 100vh;
+            background: var(--modal-bg);
+            backdrop-filter: blur(16px);
+            z-index: 99;
+            transition: opacity 0.2s;
+        }
+        .team-modal {
+            position: fixed;
+            top: 0; right: 0;
+            width: 340px;
+            height: 100vh;
+            background: var(--modal-panel);
+            box-shadow: -4px 0 38px #6c63ff38;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: modalSlideIn 0.26s;
+        }
+        @keyframes modalSlideIn {
+            0% { right: -380px; opacity: 0;}
+            100% { right: 0; opacity: 1;}
+        }
+        .team-modal-close {
+            position: absolute;
+            top: 18px; right: 18px;
+            background: none;
+            color: #fff;
+            font-size: 2.1rem;
+            border: none;
+            cursor: pointer;
+            z-index: 101;
+            opacity: 0.7;
+            transition: opacity 0.17s;
+        }
+        .team-modal-close:hover { opacity: 1;}
+        .team-modal-content {
+            margin-top: 68px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .team-modal-avatar {
+            width: 92px; height: 92px;
+            border-radius: 50%;
+            margin-bottom: 18px;
+            object-fit: cover;
+            box-shadow: 0 6px 32px #6c63ff33;
+        }
+        .team-modal-name {
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 6px;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        .team-modal-role {
+            font-size: 1.12rem;
+            font-weight: 700;
+            color: #6c63ff;
+            margin-bottom: 18px;
+        }
+        .team-modal-desc {
+            color: #fff;
+            font-size: 1.09rem;
+            text-align: left;
+            margin-top: 12px;
+            opacity: 0.87;
+            font-family: 'Manrope', Arial, sans-serif;
+        }
+        /* FOOTER INFO BLOCK (стиль фото 2) */
         .footer-info {
             width: 100vw;
             background: #0f1014;
@@ -366,6 +437,7 @@
             color: #767676;
             font-family: 'Montserrat', Arial, sans-serif;
             letter-spacing: 1.5px;
+            text-transform: uppercase;
         }
         .footer-email {
             font-size: 1.25rem;
@@ -376,6 +448,8 @@
         }
         @media (max-width:900px) {
             .features-grid { grid-template-columns: 1fr 1fr;}
+            .team-avatars { gap: 18px; margin-top: 60px; margin-bottom: 18px; }
+            .team-avatar { width: 72px; height: 72px; }
             .footer-row { flex-direction: column; align-items: flex-start; gap: 16px;}
         }
         @media (max-width:700px) {
@@ -386,14 +460,13 @@
             .feature-icon { width: 28px; height: 28px; font-size: 1.05rem;}
             .feature-title { font-size:0.93rem;}
             .feature-desc { font-size: 0.8rem;}
-            .footer-row { padding: 0 12px;}
-            .team-title { font-size: 1.55rem;}
-        }
-        .material-symbols-rounded {
-            font-family: 'Material Symbols Rounded';
-            font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 48;
-            font-size: 2.7rem;
-            vertical-align: middle;
+            .team-avatars { gap: 10px; margin-top: 30px; margin-bottom: 10px;}
+            .team-avatar { width: 46px; height: 46px;}
+            .team-title { font-size: 1.35rem;}
+            .team-modal { width: 97vw; min-width: 0;}
+            .team-modal-content { margin-top: 38px;}
+            .team-modal-avatar { width: 62px; height: 62px;}
+            .team-modal-name { font-size: 1.2rem;}
         }
     </style>
 </head>
@@ -475,26 +548,32 @@
         </svg>
         <div class="team-title">Наша команда</div>
         <div class="team-avatars">
-            <div class="team-avatar">
-                <img src="https://i.ibb.co/rRXQpCvz/photo-2025-06-21-21-41-19.jpg" alt="Команда фото 1" />
+            <div class="team-avatar" onclick="openTeamModal(0)">
+                <img src="https://i.ibb.co/rRXQpCvz/photo-2025-06-21-21-41-19.jpg" alt="Участник 1" />
             </div>
-            <div class="team-avatar">
-                <img src="https://i.ibb.co/pBznBjbQ/206e5f5ee0be7f49c9909c574556f068.jpg" alt="Команда фото 2" />
+            <div class="team-avatar" onclick="openTeamModal(1)">
+                <img src="https://i.ibb.co/pBznBjbQ/206e5f5ee0be7f49c9909c574556f068.jpg" alt="Участник 2" />
             </div>
-            <div class="team-avatar">
-                <img src="https://i.ibb.co/rGWGSd5Y/a075678b8799382509578295efe905bf.jpg" alt="Команда фото 3" />
+            <div class="team-avatar" onclick="openTeamModal(2)">
+                <img src="https://i.ibb.co/rGWGSd5Y/a075678b8799382509578295efe905bf.jpg" alt="Участник 3" />
             </div>
-            <div class="team-avatar">
-                <img src="https://i.pinimg.com/736x/d3/a6/d1/d3a6d1ef63850c78a46379f7b3e60008.jpg" alt="Команда фото 4" />
+            <div class="team-avatar" onclick="openTeamModal(3)">
+                <img src="https://i.pinimg.com/736x/d3/a6/d1/d3a6d1ef63850c78a46379f7b3e60008.jpg" alt="Участник 4" />
             </div>
-            <div class="team-avatar">
-                <img src="https://i.pinimg.com/736x/b5/b0/42/b5b042d7871d6e94e140266ee7823cdc.jpg" alt="Команда фото 5" />
+            <div class="team-avatar" onclick="openTeamModal(4)">
+                <img src="https://i.pinimg.com/736x/b5/b0/42/b5b042d7871d6e94e140266ee7823cdc.jpg" alt="Участник 5" />
             </div>
         </div>
-        <a href="mailto:team.company-dnevnik@mail.ru"><button class="team-btn">К нам →</button></a>
+        <button class="team-btn" onclick="location.href='mailto:team.company-dnevnik@mail.ru'">К нам →</button>
     </section>
-    <!-- Футер с инфой о команде/контактами -->
-    <footer class="footer-info">
+    <!-- MODAL CARD -->
+    <div id="team-modal-bg" class="team-modal-bg" onclick="closeTeamModal()" style="display:none;"></div>
+    <div id="team-modal" class="team-modal" style="display:none;">
+        <button class="team-modal-close" onclick="closeTeamModal()">×</button>
+        <div class="team-modal-content" id="team-modal-content"></div>
+    </div>
+    <!-- Футер с инфой о команде/контактами (восстановлен стиль фото 2) -->
+    <footer class="footer-info" style="margin-top:32px;">
         <div class="footer-row">
             <div>
                 <div class="footer-title">Дневник 2025</div>
@@ -504,5 +583,55 @@
         </div>
     </footer>
 </main>
+<script>
+const team = [
+    {
+        name: "reverse",
+        role: "Frontend + Design UI/UX",
+        img: "https://i.ibb.co/rRXQpCvz/photo-2025-06-21-21-41-19.jpg",
+        desc: "Создаёт пользовательские интерфейсы и отвечает за UX/UI.<br>Работает с современными фреймворками и библиотеками."
+    },
+    {
+        name: "designcat",
+        role: "UI Designer",
+        img: "https://i.ibb.co/pBznBjbQ/206e5f5ee0be7f49c9909c574556f068.jpg",
+        desc: "Отвечает за графику, подбор цветовой схемы и иллюстрации для проекта."
+    },
+    {
+        name: "rumprog",
+        role: "Backend Developer",
+        img: "https://i.ibb.co/rGWGSd5Y/a075678b8799382509578295efe905bf.jpg",
+        desc: "Разрабатывает серверную часть, API и интеграции с внешними сервисами."
+    },
+    {
+        name: "penguin",
+        role: "QA Engineer",
+        img: "https://i.pinimg.com/736x/d3/a6/d1/d3a6d1ef63850c78a46379f7b3e60008.jpg",
+        desc: "Проводит тестирование, отвечает за стабильность и качество продукта."
+    },
+    {
+        name: "devwolf",
+        role: "Fullstack Developer",
+        img: "https://i.pinimg.com/736x/b5/b0/42/b5b042d7871d6e94e140266ee7823cdc.jpg",
+        desc: "Ведёт разработку новых функций, занимается поддержкой и оптимизацией."
+    }
+];
+function openTeamModal(idx) {
+    var m = team[idx];
+    var html = `
+        <img class="team-modal-avatar" src="${m.img}" alt="${m.name}">
+        <div class="team-modal-name">${m.name}</div>
+        <div class="team-modal-role">${m.role}</div>
+        <div class="team-modal-desc">${m.desc}</div>
+    `;
+    document.getElementById('team-modal-content').innerHTML = html;
+    document.getElementById('team-modal-bg').style.display = 'block';
+    document.getElementById('team-modal').style.display = 'flex';
+}
+function closeTeamModal() {
+    document.getElementById('team-modal-bg').style.display = 'none';
+    document.getElementById('team-modal').style.display = 'none';
+}
+</script>
 </body>
 </html>
