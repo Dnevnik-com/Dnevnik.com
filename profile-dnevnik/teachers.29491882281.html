@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Профиль пользователя</title>
+  <meta name="viewport" content="width=700">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #fafafd;
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin: 0;
+      color: #27314c;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px 0 rgba(34,41,84,.08);
+      padding: 32px 32px 24px 32px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .avatar {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .avatar img {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      background: #e8eaf6;
+      object-fit: cover;
+      display: block;
+      border: 2px solid #f7f9fc;
+    }
+    .avatar .online {
+      position: absolute;
+      right: 7px;
+      top: 7px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #40d97f;
+      border: 2px solid #fff;
+    }
+    .avatar input[type="file"] {
+      display: none;
+    }
+    .avatar .change-photo-btn {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.85);
+      color: #213c6d;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      padding: 3px 10px;
+      cursor: pointer;
+      transition: background .2s;
+      box-shadow: 0 2px 8px rgba(34,41,84,.10);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .user-info {
+      flex: 1;
+    }
+    .user-name {
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+    .user-status {
+      background: #d9fce2;
+      color: #40d97f;
+      font-size: 16px;
+      border-radius: 12px;
+      padding: 3px 14px;
+      font-weight: 600;
+    }
+    .user-detail {
+      margin-bottom: 3px;
+      font-size: 17px;
+    }
+    .user-age {
+      margin-top: 6px;
+      font-size: 17px;
+    }
+    .user-age input[type="number"] {
+      width: 60px;
+      font-size: 16px;
+      padding: 3px;
+      border-radius: 6px;
+      border: 1px solid #bfc8df;
+      margin-right: 4px;
+    }
+    .edit-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #213c6d;
+      font-size: 15px;
+      margin-left: 4px;
+    }
+    .save-btn, .cancel-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      margin-left: 2px;
+      color: #40d97f;
+      vertical-align: middle;
+    }
+    .cancel-btn {
+      color: #eb5757;
+    }
+    .edit-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      min-width: 120px;
+    }
+    .edit-section label {
+      cursor: pointer;
+      color: #213c6d;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin: 32px 0 22px 0;
+    }
+    .tab {
+      padding: 8px 28px;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      color: #27314c;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow .2s;
+      display: flex;
+      gap: 7px;
+      align-items: center;
+      box-shadow: none;
+    }
+    .tab.active {
+      border: 2px solid #27314c;
+      box-shadow: 0 2px 16px 0 rgba(34,41,84,.08);
+      background: #f8fafd;
+    }
+    .tab svg {
+      vertical-align: middle;
+      font-size: 20px;
+      color: #bfc8df;
+    }
+    .tab.active svg {
+      color: #27314c;
+    }
+    .tab-content {
+      min-height: 220px;
+      margin-top: 14px;
+    }
+    .comment-box {
+      margin-bottom: 16px;
+      color: #7a819b;
+      font-size: 16px;
+    }
+    .comment-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #e6eaf4;
+      font-size: 16px;
+      background: #fafafa;
+    }
+    .send-btn {
+      background: linear-gradient(90deg,#b8cafe,#e6cbf7 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0 32px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(34,41,84,.10);
+      transition: opacity .2s;
+      opacity: 0.8;
+    }
+    .send-btn:active {
+      opacity: 1;
+    }
+    .empty-block {
+      text-align: center;
+      margin-top: 55px;
+      color: #7a819b;
+    }
+    .empty-block svg {
+      font-size: 42px;
+      color: #bfc8df;
+      margin-bottom: 8px;
+    }
+    .empty-title {
+      margin: 10px 0 5px 0;
+      font-size: 19px;
+      font-weight: 600;
+    }
+    .empty-desc {
+      font-size: 15px;
+      color: #bfc8df;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Top panel -->
+    <div class="topbar">
+      <div class="avatar" id="avatar-block">
+        <img id="avatar-img" src="https://optim.tildacdn.pub/tild3565-3663-4461-b765-363339653863/-/resize/170x/-/format/webp/d_NEW_LOGO_2-Photoro.png.webp" alt="Avatar">
+        <span class="online"></span>
+        <label class="change-photo-btn" for="avatar-upload">
+          <span style="font-size:14px;">&#128247;</span> Сменить
+        </label>
+        <input type="file" id="avatar-upload" accept="image/*">
+      </div>
+      <div class="user-info">
+        <div class="user-name">
+          Ахмедов.Б.-
+          <span class="user-status">онлайн</span>
+        </div>
+        <div class="user-detail"><b>Школа:</b> Школа Тест</div>
+        <div class="user-detail"><b>Должность:</b> Сотрудник</div>
+        <div class="user-age" id="age-block">
+          <b>Возраст:</b> <span id="age-value">25</span>
+          <button class="edit-btn" id="edit-age-btn" title="Редактировать возраст">&#9998;</button>
+        </div>
+      </div>
+      <div class="edit-section">
+        <label for="edit-main-btn" title="Редактировать">
+          <span style="font-size:18px">&#9998;</span>
+          Редактировать
+        </label>
+      </div>
+    </div>
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" id="tab-profile">
+        <span style="font-size:20px">&#128100;</span>
+        Профиль
+      </button>
+      <button class="tab" id="tab-achievements">
+        <span style="font-size:20px">&#127942;</span>
+        Достижения
+      </button>
+      <button class="tab" id="tab-files">
+        <span style="font-size:20px">&#128196;</span>
+        Файлы
+      </button>
+    </div>
+    <!-- Tab Content -->
+    <div class="tab-content" id="profile-content">
+      <div class="comment-box">Написать комментарий...</div>
+      <div class="comment-row">
+        <input class="comment-input" type="text" placeholder="Написать комментарий..." disabled>
+        <button class="send-btn" disabled>Отправить</button>
+      </div>
+      <div class="empty-block">
+        <span style="font-size:42px">&#128172;</span>
+        <div class="empty-title">Нет комментариев</div>
+        <div class="empty-desc">Станьте первым, кто оставит комментарий</div>
+      </div>
+    </div>
+    <div class="tab-content" id="achievements-content" style="display:none;">
+      <div class="empty-block">
+        <span style="font-size:48px">&#127942;</span>
+        <div class="empty-title">Достижения</div>
+        <div class="empty-desc">Здесь будут отображаться ваши достижения</div>
+      </div>
+    </div>
+    <div class="tab-content" id="files-content" style="display:none;">
+      <div class="empty-block">
+        <span style="font-size:48px">&#128196;</span>
+        <div class="empty-title">Файлы</div>
+        <div class="empty-desc">Здесь будут отображаться ваши файлы</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Tabs logic
+    const tabProfile = document.getElementById('tab-profile');
+    const tabAchievements = document.getElementById('tab-achievements');
+    const tabFiles = document.getElementById('tab-files');
+    const profileContent = document.getElementById('profile-content');
+    const achievementsContent = document.getElementById('achievements-content');
+    const filesContent = document.getElementById('files-content');
+    tabProfile.onclick = function() {
+      tabProfile.classList.add('active');
+      tabAchievements.classList.remove('active');
+      tabFiles.classList.remove('active');
+      profileContent.style.display = '';
+      achievementsContent.style.display = 'none';
+      filesContent.style.display = 'none';
+    };
+    tabAchievements.onclick = function() {
+      tabAchievements.classList.add('active');
+      tabProfile.classList.remove('active');
+      tabFiles.classList.remove('active');
+      profileContent.style.display = 'none';
+      achievementsContent.style.display = '';
+      filesContent.style.display = 'none';
+    };
+    tabFiles.onclick = function() {
+      tabFiles.classList.add('active');
+      tabProfile.classList.remove('active');
+      tabAchievements.classList.remove('active');
+      profileContent.style.display = 'none';
+      achievementsContent.style.display = 'none';
+      filesContent.style.display = '';
+    };
+
+    // Age edit logic
+    const ageBlock = document.getElementById('age-block');
+    const ageValue = document.getElementById('age-value');
+    const editAgeBtn = document.getElementById('edit-age-btn');
+    let savedAge = 25;
+    editAgeBtn.onclick = function() {
+      ageBlock.innerHTML = `
+        <b>Возраст:</b>
+        <input type="number" id="age-input" value="${savedAge}" min="1" max="120">
+        <button class="save-btn" id="save-age-btn" title="Сохранить">&#10003;</button>
+        <button class="cancel-btn" id="cancel-age-btn" title="Отменить">&#10005;</button>
+      `;
+      document.getElementById('age-input').focus();
+      document.getElementById('save-age-btn').onclick = function() {
+        let inputAge = parseInt(document.getElementById('age-input').value, 10);
+        if (isNaN(inputAge) || inputAge < 1 || inputAge > 120) inputAge = savedAge;
+        savedAge = inputAge;
+        ageBlock.innerHTML = `
+          <b>Возраст:</b> <span id="age-value">${savedAge}</span>
+          <button class="edit-btn" id="edit-age-btn" title="Редактировать возраст">&#9998;</button>
+        `;
+        document.getElementById('edit-age-btn').onclick = editAgeBtn.onclick;
+        // Здесь можно добавить сохранение на сервер через fetch/AJAX
+      };
+      document.getElementById('cancel-age-btn').onclick = function() {
+        ageBlock.innerHTML = `
+          <b>Возраст:</b> <span id="age-value">${savedAge}</span>
+          <button class="edit-btn" id="edit-age-btn" title="Редактировать возраст">&#9998;</button>
+        `;
+        document.getElementById('edit-age-btn').onclick = editAgeBtn.onclick;
+      };
+    };
+
+    // Avatar change logic
+    const avatarUpload = document.getElementById('avatar-upload');
+    const avatarImg = document.getElementById('avatar-img');
+    avatarUpload.onchange = function(event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatarImg.src = e.target.result;
+          // Здесь можно добавить загрузку файла на сервер
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert('Пожалуйста, выберите изображение.');
+      }
+    };
+  </script>
+</body>
+</html>
